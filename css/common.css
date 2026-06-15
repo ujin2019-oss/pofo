@@ -185,7 +185,16 @@ section {
   backdrop-filter: saturate(180%) blur(12px);
   -webkit-backdrop-filter: saturate(180%) blur(12px);
   border-bottom: 1px solid var(--color-line);
-  transition: background-color var(--duration-normal) var(--ease-out);
+  transition: background-color var(--duration-normal) var(--ease-out),
+    transform var(--duration-normal) var(--ease-out),
+    opacity var(--duration-normal) var(--ease-out);
+}
+
+/* 첫 섹션에서는 헤더를 숨김 (위로 슬라이드 아웃) */
+.header.is-hidden {
+  transform: translateY(-100%);
+  opacity: 0;
+  pointer-events: none;
 }
 
 .header__inner {
@@ -200,7 +209,7 @@ section {
   letter-spacing: -0.02em;
 }
 .header__logo-point {
-  color: var(--color-main);
+  color: #0033FF;
 }
 
 .header__nav {
@@ -223,14 +232,28 @@ section {
   bottom: -6px;
   width: 0;
   height: 2px;
-  background-color: var(--color-main);
+  background-color: #0033FF;
   transition: width var(--duration-normal) var(--ease-out);
 }
 .header__link:hover {
-  color: var(--color-main);
+  color: #0033FF;
 }
 .header__link:hover::after {
   width: 100%;
+}
+
+/* CONTACT 버튼 (검정 알약형) */
+.header__cta {
+  padding: 9px 20px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-text);
+  color: #fff;
+  font-size: var(--fs-body);
+  font-weight: var(--fw-medium);
+  transition: background-color var(--duration-fast) var(--ease-out);
+}
+.header__cta:hover {
+  background-color: var(--color-main);
 }
 
 /* 모바일 햄버거 버튼 */
@@ -346,6 +369,18 @@ section {
   }
   .header__link::after {
     display: none;
+  }
+  /* 모바일에선 CONTACT 도 일반 메뉴 항목처럼 표시 */
+  .header__cta {
+    width: 100%;
+    padding: 18px var(--container-padding);
+    border-radius: 0;
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    text-align: left;
+  }
+  .header__cta:hover {
+    background-color: var(--color-bg-soft);
   }
 
   /* 푸터: 세로 스택 */

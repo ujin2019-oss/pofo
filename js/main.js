@@ -25,7 +25,6 @@
     if (hasGSAP && !prefersReduced) {
       gsap.registerPlugin(ScrollTrigger);
       initReveal();
-      initHeroExit();
       initSloganScene();
     } else {
       // 모션을 쓰지 않을 때: 숨겨둔 요소들을 즉시 보이게
@@ -69,77 +68,58 @@
   }
 
   /* -----------------------------------------------------------
-     2) HERO EXIT : 1번 Hero 가 위로 빠질 때 자연스럽게 사라짐
-        - 스크롤(scrub)에 맞춰 PORTFOLIO 글자는 위로 페이드아웃,
-          원형 이미지는 점점 작아지며 사라져 2번 구체로 이어집니다.
-     ----------------------------------------------------------- */
-  function initHeroExit() {
-    const hero = document.querySelector(".hero");
-    const title = document.querySelector(".hero__title");
-    const visual = document.querySelector(".hero__visual");
-    if (!hero) return;
-
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: hero,
-        start: "top top",
-        end: "bottom top", // Hero 가 화면에서 빠지는 구간 전체
-        scrub: 1,
-      },
-    });
-
-    if (title) tl.to(title, { y: -100, opacity: 0, ease: "none" }, 0);
-    // 스크롤을 내리면 원형 이미지가 점점 작아지며 사라짐
-    if (visual) tl.to(visual, { scale: 0.35, opacity: 0, ease: "none" }, 0);
-  }
-
-  /* -----------------------------------------------------------
-     3) SLOGAN SCENE : 구체가 커지고 그 안에서 텍스트가 등장
+     2) SLOGAN SCENE : 구체가 커지고 그 안에서 텍스트가 등장
         - 섹션을 고정(pin)하고 스크롤에 맞춰(scrub) 진행
         - (1) 작은 구체가 나타나며 점점 커짐
-          (2) BEYOND BEAUTY / TO THE / ESSENCE 가 순서대로 등장
-          (3) 텍스트 아래 세로 라인이 그려짐
+          (2) PORTFOLIO 텍스트가 등장
+          (3) 스크롤이 시작되면 스크롤 안내 아이콘은 사라짐
      ----------------------------------------------------------- */
   function initSloganScene() {
     const section = document.querySelector(".slogan");
     const sphere = document.querySelector(".slogan__sphere");
+    const text = document.querySelector(".slogan__text");
     const lines = gsap.utils.toArray(".slogan__line");
-    const deco = document.querySelector(".slogan__deco");
+    const scrollCue = document.querySelector(".scroll-cue");
     if (!section || !sphere) return;
 
     // 초기 상태
-    // - 구체: 화면 중앙 정렬(xPercent/yPercent) + 작게/투명하게 시작
-    gsap.set(sphere, { xPercent: -50, yPercent: -50, scale: 0.45, opacity: 0 });
-    gsap.set(lines, { y: 40, opacity: 0 });
-    if (deco) {
-      gsap.set(deco, { scaleY: 0, opacity: 0, transformOrigin: "top center" });
-    }
+    // - 구체: 화면 중앙 정렬 + 처음 접속 시 원본 크기(scale 1)로 그대로 보임
+    gsap.set(sphere, { xPercent: -50, yPercent: -50, scale: 1, opacity: 1 });
+    // - 텍스트: 처음 접속 시 70px(scale 0.5)로 보였다가 140px(scale 1)로 커짐
+    gsap.set(text, { scale: 0.5, transformOrigin: "center center" });
+    gsap.set(lines, { opacity: 1, y: 0 });
 
     const tl = gsap.timeline({
+      defaults: { ease: "none" },
       scrollTrigger: {
         trigger: section,
         start: "top top",
-        end: "+=200%", // 고정되는 스크롤 길이 (값이 클수록 천천히 진행)
+        end: "+=170%", // 고정되는 스크롤 길이 (값이 클수록 천천히 진행)
         pin: true,
         scrub: 1,
         anticipatePin: 1,
       },
     });
 
-    // (1) 구체 등장 -> 점점 커짐
-    tl.to(sphere, { opacity: 1, scale: 1, ease: "none", duration: 1 }, 0);
-    tl.to(sphere, { scale: 1.5, ease: "none", duration: 2.2 }, 1);
+    /* 타임라인 총 길이 = 3
+       - 구체/텍스트는 끝까지 "커지면서 동시에" 서서히 사라지고,
+         그 사라짐이 핀 해제(progress 1) 시점과 정확히 맞물립니다.
+       - 별도의 위치 이동(점프) 없이 자연스럽게 다음 섹션으로 이어집니다. */
 
-    // (2) 텍스트가 구체 안에서 순서대로 등장
-    tl.to(
-      lines,
-      { y: 0, opacity: 1, stagger: 0.3, ease: "none", duration: 1.4 },
-      1.2
-    );
+    // (1) 구체: 원본 크기 -> 계속 커짐 (끝까지)
+    tl.to(sphere, { scale: 2.8, duration: 3 }, 0);
 
-    // (3) 세로 데코 라인이 그려짐
-    if (deco) {
-      tl.to(deco, { scaleY: 1, opacity: 1, ease: "none", duration: 1 }, 2);
+    // (2) 텍스트: 70px(scale 0.5) -> 140px(scale 1)로 커짐 (조금 더 일찍 마무리)
+    tl.to(text, { scale: 1, duration: 2 }, 0);
+
+    // (3) 마지막 구간: 커지는 동안 그대로 페이드아웃 -> 끝(progress 1)에 완전히 사라짐
+    //     위치 이동 없이 제자리에서 사라져 다음 섹션과 부드럽게 크로스됨
+    tl.to(sphere, { opacity: 0, ease: "power2.in", duration: 1.1 }, 1.9);
+    tl.to(text, { opacity: 0, ease: "power2.in", duration: 1.1 }, 1.9);
+
+    // (4) 스크롤이 시작되면 스크롤 안내 아이콘이 먼저 사라짐
+    if (scrollCue) {
+      tl.to(scrollCue, { opacity: 0, y: 20, duration: 0.6 }, 0);
     }
   }
 
