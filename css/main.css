@@ -296,18 +296,23 @@
   align-items: stretch;
   min-height: 100vh; /* 섹션 높이를 브라우저 화면에 맞춤 */
 }
-/* 왼쪽 비주얼 (배경 이미지 교체) */
+/* 왼쪽 비주얼 (배경 이미지는 각 섹션 HTML 의 인라인 style 에서 지정) */
 .project__visual {
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  /* JEJU STAY 프로젝트 비주얼 이미지 */
-  background-color: #1b2530;
-  background-image: url("../images/jejustay.png");
+  background-color: #1b2530; /* 이미지 없을 때 표시되는 기본 배경 */
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+}
+/* 레이아웃 좌우 반전 (이미지 오른쪽 / 정보 왼쪽) */
+.project--reverse .project__visual {
+  order: 2;
+}
+.project--reverse .project__info {
+  order: 1;
 }
 .project__visual-label {
   font-size: var(--fs-caption);
@@ -431,12 +436,17 @@
     margin-bottom: 4px;
   }
 
-  /* 프로젝트: 비주얼 위 / 정보 아래로 스택 */
+  /* 프로젝트: 비주얼 위 / 정보 아래로 스택 (반전 섹션도 동일) */
   .project__inner {
     grid-template-columns: 1fr;
   }
-  .project__visual {
+  .project__visual,
+  .project--reverse .project__visual {
     min-height: 360px;
+    order: 0;
+  }
+  .project--reverse .project__info {
+    order: 0;
   }
   .project__list {
     column-gap: 20px;
