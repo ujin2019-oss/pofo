@@ -8,6 +8,7 @@
        3) sloganScene   : 2번 슬로건 - 구체가 커지고 텍스트가 등장
        4) webappCarousel: 웹앱 섹션 썸네일/화살표 캐러셀
        5) compareSlider : UX 개선 Before/After 비교 슬라이더
+       6) projectToggle : 프로젝트 이미지 Before/After 토글
    ============================================================= */
 
 (function () {
@@ -39,6 +40,7 @@
     // 캐러셀/슬라이더는 모션 설정과 무관하게 동작 (기능성 UI)
     initWebappCarousel();
     initCompareSlider();
+    initProjectImageToggle();
   }
 
   /* -----------------------------------------------------------
@@ -171,6 +173,43 @@
 
     range.addEventListener("input", (e) => setPos(e.target.value));
     setPos(range.value);
+  }
+
+  /* -----------------------------------------------------------
+     6) PROJECT IMAGE TOGGLE : 프로젝트 Before / After 이미지 전환
+        - 기본은 After 이미지
+        - 버튼을 누르면 같은 섹션 안의 이미지가 Before 이미지로 바뀜
+     ----------------------------------------------------------- */
+  function initProjectImageToggle() {
+    const toggles = Array.from(document.querySelectorAll(".project-toggle"));
+    if (!toggles.length) return;
+
+    toggles.forEach((toggle) => {
+      const section = toggle.closest(".project");
+      const image = section && section.querySelector(".project-modoo__image");
+      if (!image) return;
+
+      const afterImage = image.dataset.afterImage;
+      const beforeImage = image.dataset.beforeImage;
+      const afterAlt = image.dataset.afterAlt || image.alt;
+      const beforeAlt = image.dataset.beforeAlt || image.alt;
+      if (!afterImage || !beforeImage) return;
+
+      function setBefore(isBefore) {
+        image.src = isBefore ? beforeImage : afterImage;
+        image.alt = isBefore ? beforeAlt : afterAlt;
+        toggle.setAttribute("aria-pressed", String(isBefore));
+        toggle.setAttribute(
+          "aria-label",
+          isBefore ? "모두매쓰 After 이미지 보기" : "모두매쓰 Before 이미지 보기"
+        );
+      }
+
+      toggle.addEventListener("click", () => {
+        setBefore(toggle.getAttribute("aria-pressed") !== "true");
+      });
+      setBefore(false);
+    });
   }
 
   /* -----------------------------------------------------------
