@@ -68,7 +68,7 @@
   flex-direction: column;
   align-items: center;
   gap: 6px;
-  font-size: 140px; /* 처음 70px(JS scale 0.5) → 140px 로 커짐 */
+  font-size: var(--fs-slogan); /* 처음 70px(JS scale 0.5) → 140px 로 커짐 */
   font-weight: var(--fw-bold);
   line-height: var(--lh-tight);
   letter-spacing: 0.01em;
@@ -214,10 +214,15 @@
 /* =====================================================
    4) SECTION : PROFILE
    ===================================================== */
+/* 프로필 아래 여백은 0 으로 두고, 경력 섹션의 위 여백(--gap-profile-exp)으로
+   프로필 ↔ 경력 사이 간격을 한 곳에서 제어합니다. */
+.profile {
+  padding-bottom: 0;
+}
 .profile__inner {
   display: grid;
-  grid-template-columns: 320px 1fr; /* 사진 / 정보 */
-  gap: calc(var(--content-gap) * 1.5);
+  grid-template-columns: var(--profile-photo) 1fr; /* 사진 / 정보 */
+  gap: var(--profile-gap);
   align-items: start;
 }
 /* 프로필 사진 (원형) */
@@ -262,6 +267,20 @@
 /* =====================================================
    5) SECTION : EXPERIENCE
    ===================================================== */
+/* 프로필 바로 아래 섹션이라 위 여백을 좁게 (간격은 --gap-profile-exp 로 조절) */
+.experience {
+  padding-top: var(--gap-profile-exp);
+}
+/* Experience 본문을 프로필 정보 열(Contact/Tools 열)과 같은 라인에 정렬 */
+.experience .container {
+  display: grid;
+  grid-template-columns: var(--profile-photo) 1fr; /* 빈 사진 열 / 내용 */
+  gap: var(--profile-gap);
+}
+.experience .section-label,
+.experience .exp-list {
+  grid-column: 2; /* 둘 다 두 번째 열에 배치 → 프로필 본문과 좌측 정렬 일치 */
+}
 .experience .section-label {
   margin-bottom: 28px;
 }
@@ -302,7 +321,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #1b2530; /* 이미지 없을 때 표시되는 기본 배경 */
+  background-color: var(--color-dark-visual); /* 이미지 없을 때 표시되는 기본 배경 */
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -318,7 +337,7 @@
   font-size: var(--fs-caption);
   font-weight: var(--fw-medium);
   letter-spacing: 0.18em;
-  color: rgba(255, 255, 255, 0.55);
+  color: var(--color-on-dark-faint);
 }
 /* 오른쪽 정보 */
 .project__info {
@@ -331,7 +350,7 @@
   font-size: var(--fs-h2);
   font-weight: var(--fw-bold);
   letter-spacing: 0.02em;
-  color: var(--color-main);
+  color: var(--color-sub); /* #9780FF — MODOO 등 다른 프로젝트 제목과 동일 위계 */
   margin-bottom: 32px;
 }
 .project__list {
@@ -383,7 +402,7 @@
 }
 .btn-outline:hover {
   background-color: var(--color-main);
-  color: #fff;
+  color: var(--color-white);
 }
 
 /* PROJECT 03 : MODOO 리뉴얼 섹션 */
@@ -413,19 +432,32 @@
 .project-modoo__device {
   width: min(100%, 616px);
   aspect-ratio: 616 / 650;
-  padding: clamp(26px, 3vw, 38px);
+  padding: var(--device-bezel);
   padding-bottom: 0;
-  border-radius: 18px 18px 0 0;
-  background-color: #000;
+  border-radius: var(--radius-device) var(--radius-device) 0 0;
+  background-color: var(--color-black);
   overflow: hidden;
 }
 .project-modoo__image {
   width: 100%;
   height: 100%;
-  border-radius: 18px 18px 0 0;
+  border-radius: var(--radius-device) var(--radius-device) 0 0;
   object-fit: cover;
-  object-position: top center;
+  object-position: center top; /* 기본: 긴 이미지의 맨 위가 보임 */
   background-color: var(--color-bg-gray);
+  /* 마우스 올리면 보이는 영역이 위→아래로 천천히 이동(자동 스크롤) */
+  transition: object-position var(--scroll-duration) linear;
+}
+/* hover 시 긴 이미지의 맨 아래까지 스크롤 */
+.project-modoo__device:hover .project-modoo__image,
+.project-modoo__device:focus-within .project-modoo__image {
+  object-position: center bottom;
+}
+/* 동작 줄이기 설정 시 자동 스크롤 비활성화 */
+@media (prefers-reduced-motion: reduce) {
+  .project-modoo__image {
+    transition: none;
+  }
 }
 .project-modoo__info {
   align-self: center;
@@ -435,29 +467,33 @@
 .project-toggle {
   position: relative;
   display: block;
-  width: 106px;
-  height: 48px;
-  margin-bottom: 30px;
+  width: var(--toggle-w);
+  height: var(--toggle-h);
+  margin-bottom: 26px;
   border-radius: var(--radius-full);
-  background-color: var(--color-sub);
+  background-color: var(--color-point); /* off: 라이트 그레이 */
   transition: background-color var(--duration-normal) var(--ease-out);
 }
 .project-toggle::before {
   content: "";
   position: absolute;
-  top: 7px;
-  left: 10px;
-  width: 34px;
-  height: 34px;
+  top: var(--toggle-pad);
+  left: var(--toggle-pad);
+  width: var(--toggle-knob);
+  height: var(--toggle-knob);
   border-radius: var(--radius-full);
-  background-color: #fff;
+  background-color: var(--color-white);
+  box-shadow: var(--shadow-knob);
   transition: transform var(--duration-normal) var(--ease-out);
 }
 .project-toggle[aria-pressed="true"] {
-  background-color: var(--color-main);
+  background-color: var(--color-main); /* on: 메인 퍼플 */
 }
+/* 손잡이 이동거리 = 전체너비 - 손잡이 - (안쪽여백 × 2) → 크기 바꿔도 자동 정렬 */
 .project-toggle[aria-pressed="true"]::before {
-  transform: translateX(52px);
+  transform: translateX(
+    calc(var(--toggle-w) - var(--toggle-knob) - var(--toggle-pad) * 2)
+  );
 }
 .project-modoo__title {
   display: flex;
@@ -465,7 +501,7 @@
   gap: 14px;
   margin-bottom: 24px;
   color: var(--color-sub);
-  font-size: clamp(34px, 3.3vw, 48px);
+  font-size: var(--fs-modoo-title);
   font-weight: var(--fw-bold);
   line-height: 1.2;
   letter-spacing: 0;
@@ -484,28 +520,29 @@
   margin-top: clamp(42px, 6vh, 78px);
 }
 .project-modoo__actions .btn-outline {
-  min-width: 190px;
+  min-width: 140px;
+  padding: 10px 18px;
   justify-content: center;
   border-color: var(--color-sub);
   border-radius: 0;
   color: var(--color-sub);
-  font-size: clamp(18px, 1.4vw, 24px);
+  font-size: var(--fs-modoo-btn);
   line-height: 1;
 }
 .project-modoo__actions .btn-outline:hover {
   background-color: var(--color-sub);
-  color: #fff;
+  color: var(--color-white);
 }
 .project-modoo__meta {
   width: 100%;
-  background-color: var(--color-sub);
-  color: #fff;
+  background-color: var(--color-meta-bar);
+  color: var(--color-white);
 }
 .project-modoo__meta-inner {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: clamp(56px, 9vw, 150px);
-  max-width: 1180px;
+  max-width: var(--container-max); /* 위 상세페이지(.project-modoo__body) 폭에 맞춤 */
   margin: 0 auto;
   padding: 34px var(--container-padding) 26px;
 }
@@ -520,13 +557,14 @@
   display: contents;
 }
 .project-modoo__details dt {
-  color: rgba(255, 255, 255, 0.76);
+  color: var(--color-on-dark-strong);
   font-weight: var(--fw-regular);
   white-space: nowrap;
 }
 .project-modoo__details dd {
-  color: #fff;
+  color: var(--color-white);
   font-weight: var(--fw-regular);
+  word-break: keep-all; /* 한글 단어 중간에서 줄바꿈되어 깨지지 않도록 */
 }
 .project-modoo__swatches li {
   width: 46px;
@@ -541,10 +579,8 @@
    7) 반응형 - 태블릿 (768 ~ 1199px)
    ============================================================= */
 @media (max-width: 1199px) {
-  .profile__inner {
-    grid-template-columns: 260px 1fr;
-    gap: var(--content-gap);
-  }
+  /* 프로필/경력 열 너비·간격은 variables.css 의 --profile-photo / --profile-gap
+     (태블릿 값)으로 자동 조절됩니다. */
   .project-modoo__body {
     grid-template-columns: 0.95fr 1.05fr;
     gap: var(--content-gap);
@@ -581,6 +617,15 @@
   .profile__photo {
     max-width: 240px;
     margin: 0 auto;
+  }
+
+  /* 경력: 모바일에선 들여쓰기 해제하고 전체 폭 사용 */
+  .experience .container {
+    grid-template-columns: 1fr;
+  }
+  .experience .section-label,
+  .experience .exp-list {
+    grid-column: auto;
   }
   .profile__body {
     grid-template-columns: 1fr; /* 정보도 1열 */
@@ -637,23 +682,14 @@
     max-width: none;
     padding-bottom: 0;
   }
+  /* 토글 크기는 variables.css 의 --toggle-* (모바일 값)로 자동 조절,
+     손잡이 이동거리도 calc 로 자동 계산됩니다. */
   .project-toggle {
-    width: 82px;
-    height: 40px;
     margin-bottom: 22px;
-  }
-  .project-toggle::before {
-    top: 6px;
-    left: 8px;
-    width: 28px;
-    height: 28px;
-  }
-  .project-toggle[aria-pressed="true"]::before {
-    transform: translateX(38px);
   }
   .project-modoo__title {
     gap: 8px;
-    font-size: clamp(28px, 9vw, 38px);
+    font-size: clamp(22px, 7vw, 30px);
   }
   .project-modoo__desc {
     max-width: none;
@@ -663,10 +699,10 @@
     margin-top: 32px;
   }
   .project-modoo__actions .btn-outline {
-    flex: 1 1 160px;
+    flex: 1 1 140px;
     min-width: 0;
-    padding: 12px 14px;
-    font-size: 16px;
+    padding: 10px 12px;
+    font-size: 14px;
   }
   .project-modoo__device {
     width: min(100%, 420px);

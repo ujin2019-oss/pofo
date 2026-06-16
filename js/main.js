@@ -177,8 +177,8 @@
 
   /* -----------------------------------------------------------
      6) PROJECT IMAGE TOGGLE : 프로젝트 Before / After 이미지 전환
-        - 기본은 After 이미지
-        - 버튼을 누르면 같은 섹션 안의 이미지가 Before 이미지로 바뀜
+        - 기본은 토글 ON(켜짐) + After(리뉴얼 후) 이미지
+        - 버튼을 누르면(OFF) 같은 섹션 안의 이미지가 Before 이미지로 바뀜
      ----------------------------------------------------------- */
   function initProjectImageToggle() {
     const toggles = Array.from(document.querySelectorAll(".project-toggle"));
@@ -198,7 +198,8 @@
       function setBefore(isBefore) {
         image.src = isBefore ? beforeImage : afterImage;
         image.alt = isBefore ? beforeAlt : afterAlt;
-        toggle.setAttribute("aria-pressed", String(isBefore));
+        // 토글 ON(pressed=true) = After(리뉴얼 후, 현재 기본 이미지)
+        toggle.setAttribute("aria-pressed", String(!isBefore));
         toggle.setAttribute(
           "aria-label",
           isBefore ? "모두매쓰 After 이미지 보기" : "모두매쓰 Before 이미지 보기"
@@ -206,9 +207,10 @@
       }
 
       toggle.addEventListener("click", () => {
-        setBefore(toggle.getAttribute("aria-pressed") !== "true");
+        // 현재 ON(After)이면 클릭 시 Before, OFF면 After 로 전환
+        setBefore(toggle.getAttribute("aria-pressed") === "true");
       });
-      setBefore(false);
+      setBefore(false); // 기본: After 이미지 + 토글 ON(켜짐)
     });
   }
 
