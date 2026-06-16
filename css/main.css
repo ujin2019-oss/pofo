@@ -575,6 +575,260 @@
   height: 38px;
 }
 
+/* =====================================================
+   SECTION : APP PROJECT (TRACKSY)
+   - 러닝 기록 앱 소개 / APP 디자인 & 개발
+   - 왼쪽: 폰 목업 + 마스코트 레이어 / 오른쪽: 소개·메타
+   ===================================================== */
+.tracksy {
+  background: var(--gradient-tracksy);
+  overflow: hidden;
+}
+.tracksy__inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* 비주얼 / 정보 */
+  gap: clamp(40px, 6vw, 96px);
+  align-items: center;
+}
+
+/* 왼쪽 비주얼 (절대배치 레이어) */
+.tracksy__visual {
+  position: relative;
+  min-height: clamp(420px, 46vw, 620px);
+}
+/* 메인: 홈 화면 UI (흰 프레임) */
+.tracksy__phone {
+  position: absolute;
+  top: 50%;
+  left: 6%;
+  transform: translateY(-50%);
+  width: clamp(190px, 22vw, 280px);
+  padding: 8px;
+  border-radius: clamp(26px, 2.4vw, 40px);
+  background: var(--color-white);
+  box-shadow: var(--shadow-app);
+}
+.tracksy__phone img {
+  width: 100%;
+  display: block;
+  border-radius: clamp(20px, 2vw, 32px);
+}
+/* 보조: 각진 폰 목업 (자체 투명배경) */
+.tracksy__angled {
+  position: absolute;
+  right: 0;
+  bottom: 2%;
+  width: clamp(220px, 27vw, 360px);
+  filter: drop-shadow(0 24px 50px rgba(60, 30, 160, 0.25));
+}
+/* 마스코트: 떠다니는 브랜드 악센트 */
+.tracksy__mascot {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: clamp(92px, 12vw, 150px);
+  filter: drop-shadow(0 16px 26px rgba(60, 30, 160, 0.22));
+  animation: tracksy-float 3.4s var(--ease-in-out) infinite;
+}
+@keyframes tracksy-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-14px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tracksy__mascot { animation: none; }
+}
+
+/* 오른쪽 정보 */
+.tracksy__title {
+  font-size: var(--fs-h1);
+  font-weight: var(--fw-bold);
+  letter-spacing: 0.06em;
+  line-height: 1;
+  color: var(--color-tracksy);
+  margin: 6px 0 12px;
+}
+.tracksy__tagline {
+  font-size: var(--fs-h3);
+  font-weight: var(--fw-medium);
+  color: var(--color-text);
+  margin-bottom: 20px;
+}
+.tracksy__desc {
+  max-width: 560px;
+  margin-bottom: 28px;
+  color: var(--color-text-sub);
+  line-height: var(--lh-loose);
+  word-break: keep-all;
+}
+.tracksy__list {
+  margin-bottom: 32px;
+}
+.tracksy__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.tracksy .btn-outline {
+  border-color: var(--color-tracksy);
+  color: var(--color-tracksy);
+}
+.tracksy .btn-outline:hover {
+  background-color: var(--color-tracksy);
+  color: var(--color-white);
+}
+
+/* =====================================================
+   SECTION : WEB RENEWAL (시스템치과) — TRACKSY형 레이아웃
+   - 토글(Before/After) + hover 자동 스크롤은
+     .project-modoo__device / .project-modoo__image / .project-toggle
+     메커니즘을 그대로 재사용합니다.
+   ===================================================== */
+.dental {
+  /* 한 화면(100vh) 안에 인트로 + 하단 바가 모두 들어오도록 세로 플렉스 구성 */
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: var(--header-height) 0 0; /* .project 의 padding:0 덮음 + 고정헤더 회피 */
+  background: var(--gradient-dental);
+  overflow: hidden;
+}
+/* 인트로: 남은 공간을 채우고 가운데 정렬 */
+.dental__inner {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* 비주얼 / 정보 */
+  gap: clamp(40px, 5vw, 96px);
+  align-items: center;
+  padding-top: clamp(16px, 2.5vh, 40px);
+  padding-bottom: clamp(16px, 2.5vh, 40px);
+}
+
+/* 하단 정보 바: 모두매쓰 메타 구조를 재사용하고 딥 버건디로 채색 (바닥 고정) */
+.dental__meta {
+  margin-top: 0;
+}
+.dental .project-modoo__meta {
+  background-color: var(--color-dental-bar);
+}
+.dental .project-modoo__meta-inner {
+  padding-top: clamp(18px, 2.2vh, 28px);
+  padding-bottom: clamp(16px, 2vh, 24px);
+}
+.dental .project-modoo__details {
+  row-gap: clamp(10px, 1.6vh, 18px);
+}
+/* 딥 버건디 바 위에서 스와치 테두리로 또렷하게 */
+.dental .project-modoo__swatches li {
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.35);
+}
+
+/* 왼쪽 비주얼: 디바이스 + 토글 */
+.dental__visual {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(14px, 2vh, 22px);
+}
+/* 디바이스: 가운데 떠 있는 형태로 사방 라운드 + 하단 베젤 + 그림자
+   높이를 뷰포트 기준으로 제한해 한 화면 안에 들어오게 함 */
+.dental .project-modoo__device {
+  width: auto;
+  height: min(64vh, 660px);
+  border-radius: var(--radius-device);
+  padding-bottom: var(--device-bezel);
+  box-shadow: var(--shadow-dental);
+}
+.dental .project-modoo__image {
+  border-radius: calc(var(--radius-device) - 2px);
+}
+/* 안내 멘트 배지 (마우스 올리면 자동 스크롤) */
+.dental__hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #ADA9A3; /* 연회색 (배경/도형 없이 텍스트만) */
+  font-size: var(--fs-caption);
+  font-weight: var(--fw-medium);
+  letter-spacing: 0.01em;
+  word-break: keep-all;
+  text-align: center;
+}
+.dental__hint-icon {
+  font-size: 1.1em;
+  line-height: 1;
+  animation: dental-hint-bounce 1.6s var(--ease-in-out) infinite;
+}
+@keyframes dental-hint-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(3px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .dental__hint-icon { animation: none; }
+}
+
+/* 토글 + BEFORE/AFTER 라벨 (제목 위에 배치) */
+.dental__toggle {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 18px;
+  font-size: var(--fs-caption);
+  font-weight: var(--fw-bold);
+  letter-spacing: 0.14em;
+  color: var(--color-text-sub);
+}
+.dental .project-toggle {
+  margin-bottom: 0; /* 라벨과 한 줄 정렬 */
+}
+.dental .project-toggle[aria-pressed="true"] {
+  background-color: var(--color-dental); /* on: 치과 블루 */
+}
+
+/* 오른쪽 정보 */
+.dental .section-label {
+  color: var(--color-dental); /* 치과 섹션 라벨: 버건디 */
+}
+.dental__title {
+  font-size: var(--fs-h2);
+  font-weight: var(--fw-bold);
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  color: var(--color-dental);
+  margin: 6px 0 12px;
+  word-break: keep-all;
+}
+.dental__tagline {
+  font-size: var(--fs-h3);
+  font-weight: var(--fw-medium);
+  color: var(--color-text);
+  margin-bottom: 20px;
+  word-break: keep-all;
+}
+.dental__desc {
+  max-width: 560px;
+  margin-bottom: 28px;
+  color: var(--color-text-sub);
+  line-height: var(--lh-loose);
+  word-break: keep-all;
+}
+.dental__list {
+  margin-bottom: 32px;
+}
+.dental__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.dental .btn-outline {
+  border-color: var(--color-dental);
+  color: var(--color-dental);
+}
+.dental .btn-outline:hover {
+  background-color: var(--color-dental-soft);
+  border-color: var(--color-dental-soft);
+  color: var(--color-white);
+}
+
 /* =============================================================
    7) 반응형 - 태블릿 (768 ~ 1199px)
    ============================================================= */
@@ -594,6 +848,11 @@
   }
   .project-modoo__details {
     column-gap: 28px;
+  }
+  /* 앱(TRACKSY)/치과: 간격만 축소 */
+  .tracksy__inner,
+  .dental__inner {
+    gap: var(--content-gap);
   }
 }
 
@@ -725,6 +984,47 @@
   .project-modoo__swatches li {
     width: 34px;
     height: 34px;
+  }
+
+  /* 앱(TRACKSY): 세로 스택 + 비주얼 단순화 */
+  .tracksy__inner {
+    grid-template-columns: 1fr;
+  }
+  .tracksy__visual {
+    min-height: 0;
+    display: flex;
+    justify-content: center;
+    padding: 16px 0 8px;
+  }
+  .tracksy__phone {
+    position: static;
+    transform: none;
+    width: min(72%, 260px);
+  }
+  .tracksy__angled {
+    display: none; /* 모바일에선 메인 화면만 노출 */
+  }
+  .tracksy__mascot {
+    width: 84px;
+    top: 0;
+    left: 6%;
+  }
+
+  /* 치과(시스템치과): 모바일은 100vh 해제하고 세로 스택 */
+  .dental {
+    min-height: 0;
+    display: block;
+    padding-top: var(--section-gap);
+  }
+  .dental__inner {
+    grid-template-columns: 1fr;
+  }
+  .dental .project-modoo__device {
+    width: min(100%, 460px);
+    height: auto;
+  }
+  .dental__meta {
+    margin-top: clamp(40px, 8vw, 72px);
   }
 }
 

@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<!--
+  =====================================================================
+  시스템치과의원 홈페이지 리뉴얼 — 케이스 스터디(서브페이지)
+  - 순수 HTML + Vanilla CSS + Vanilla JS (외부 CSS 라이브러리 없음)
+  - 스크롤 인터랙션: GSAP + ScrollTrigger (CDN)
+  - 수정 포인트: ① 아래 <style> 최상단 :root 변수  ② 각 이미지 슬롯의 src
+  =====================================================================
+-->
+<html lang="ko" class="js">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>시스템치과 홈페이지 리뉴얼 | Case Study</title>
+  <meta name="description" content="시스템치과의원 홈페이지 리뉴얼 케이스 스터디 — 가격이 아닌 신뢰를 전하는 병원 웹사이트로의 재설계 과정" />
+
+  <!-- ===== 폰트 =====
+       'A2Z font' 를 1순위로 지정합니다. A2Z 웹폰트(CDN/@font-face)가 있으면
+       아래 <link> 또는 @font-face 로 추가하세요. 없을 경우 Pretendard(CDN) → 시스템 sans-serif 로 폴백됩니다. -->
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css"
+  />
+
+  <style>
+    /* =================================================================
+       1) DESIGN TOKENS — 여기 값만 바꾸면 사이트 전체에 반영됩니다.
+       ================================================================= */
+    :root {
+      /* ---------- 브랜드 컬러 ---------- */
+      --color-burgundy: #A12D2E;     /* 메인 컬러 */
+      --color-soft-red: #D33B3B;     /* 서브/포인트 컬러 */
+      --color-light-gray: #E9E6E2;   /* 기본 배경 / 밝은 섹션 */
+      --color-dark-text: #243B53;    /* 어두운 본문 텍스트 */
+      --color-white: #FFFFFF;        /* 카드 / 반전 배경 */
+
+      /* ---------- 역할 기반 토큰 ---------- */
+      --color-bg: var(--color-light-gray);   /* 페이지 기본 배경 */
+      --color-deep: #5A1C1D;                  /* 딥 버건디 (푸터/강조 반전) */
+      --color-text-muted: #6B7280;            /* 보조 텍스트 (회색) */
+      --color-line: rgba(36, 59, 83, 0.12);   /* 옅은 구분선 */
+
+      /* ---------- 타이포그래피 ---------- */
+      --font-base: "A2Z font", "Pretendard", -apple-system, BlinkMacSystemFont,
+        system-ui, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+
+      /* 크기: clamp 로 화면 폭에 따라 유기적으로 확대/축소 */
+      --fs-display: clamp(34px, 7vw, 76px);   /* 히어로 대제목 */
+      --fs-h1: clamp(28px, 4.4vw, 52px);      /* 섹션 대제목 */
+      --fs-h2: clamp(22px, 3vw, 36px);        /* 중제목 */
+      --fs-h3: clamp(18px, 1.9vw, 24px);      /* 소제목 / 카드 제목 */
+      --fs-body: clamp(15px, 1.15vw, 18px);   /* 본문 */
+      --fs-small: clamp(13px, 0.95vw, 15px);  /* 라벨 / 캡션 */
+
+      /* 두께 */
+      --fw-regular: 400;
+      --fw-medium: 500;
+      --fw-bold: 700;
+      --fw-black: 800;
+
+      /* 행간 */
+      --lh-tight: 1.15;
+      --lh-normal: 1.6;
+      --lh-loose: 1.85;
+
+      /* ---------- 레이아웃: 간격 / 여백 ---------- */
+      --section-gap: clamp(72px, 11vw, 160px); /* 섹션 상하 간격 */
+      --block-gap: clamp(28px, 4vw, 56px);     /* 블록 사이 간격 */
+      --pad-x: clamp(20px, 5vw, 80px);         /* 컨테이너 좌우 여백 */
+      --container: 1200px;                      /* 콘텐츠 최대 폭 */
+
+      /* ---------- 모서리 둥글기 (부드러운 무드) ---------- */
+      --radius-sm: 10px;
+      --radius-md: 18px;
+      --radius-lg: 28px;
+      --radius-xl: 40px;
+      --radius-pill: 999px;
+
+      /* ---------- 그림자 / 모션 ---------- */
+      --shadow-card: 0 18px 50px rgba(36, 59, 83, 0.10);
+      --shadow-soft: 0 10px 30px rgba(36, 59, 83, 0.08);
+      --ease: cubic-bezier(0.16, 1, 0.3, 1);
+
+      --header-h: 68px;
+    }
+
+    /* =================================================================
+       2) RESET
+       ================================================================= */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+    body {
+      font-family: var(--font-base);
+      font-size: var(--fs-body);
+      font-weight: var(--fw-regular);
+      line-height: var(--lh-normal);
+      color: var(--color-dark-text);
+      background-color: var(--color-bg);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+    img { display: block; max-width: 100%; height: auto; }
+    ul { list-style: none; }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+    :focus-visible { outline: 2px solid var(--color-burgundy); outline-offset: 3px; border-radius: var(--radius-sm); }
+
+    /* =================================================================
+       3) 공통 유틸 / 레이아웃
+       ================================================================= */
+    .container {
+      width: 100%;
+      max-width: var(--container);
+      margin: 0 auto;
+      padding-left: var(--pad-x);
+      padding-right: var(--pad-x);
+    }
+    .section { padding-top: var(--section-gap); padding-bottom: var(--section-gap); }
+
+    .eyebrow {
+      display: inline-block;
+      font-size: var(--fs-small);
+      font-weight: var(--fw-bold);
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-burgundy);
+      margin-bottom: 16px;
+    }
+    .section-title {
+      font-size: var(--fs-h1);
+      font-weight: var(--fw-black);
+      line-height: var(--lh-tight);
+      letter-spacing: -0.02em;
+      word-break: keep-all;
+    }
+    .lead {
+      max-width: 60ch;
+      margin-top: 18px;
+      font-size: var(--fs-body);
+      line-height: var(--lh-loose);
+      color: var(--color-text-muted);
+      word-break: keep-all;
+    }
+
+    /* 버튼 */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 26px;
+      border-radius: var(--radius-pill);
+      font-size: var(--fs-body);
+      font-weight: var(--fw-bold);
+      transition: transform var(--ease) .3s, background-color .25s, color .25s, box-shadow .25s;
+    }
+    .btn--primary { background-color: var(--color-burgundy); color: var(--color-white); }
+    .btn--primary:hover { background-color: var(--color-soft-red); transform: translateY(-2px); box-shadow: var(--shadow-soft); }
+    .btn--ghost { border: 1.5px solid var(--color-burgundy); color: var(--color-burgundy); }
+    .btn--ghost:hover { background-color: var(--color-burgundy); color: var(--color-white); }
+    .btn__arrow { font-size: 1.1em; line-height: 1; }
+
+    /* =================================================================
+       4) IMAGE SLOT — 이미지 들어갈 자리(플레이스홀더)
+          실제 이미지를 넣으려면 슬롯 안에 <img src="..."> 를 추가하거나
+          .img-slot 을 <img> 로 교체하세요. (각 슬롯 주석에 추천 파일명 기재)
+       ================================================================= */
+    .img-slot {
+      position: relative;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #DEDAD4;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      color: #8A847C;
+      font-size: var(--fs-small);
+      font-weight: var(--fw-bold);
+      letter-spacing: 0.12em;
+      text-align: center;
+      /* 빈 슬롯 표시용 대각선 패턴 */
+      background-image: repeating-linear-gradient(
+        45deg, transparent, transparent 14px,
+        rgba(36, 59, 83, 0.03) 14px, rgba(36, 59, 83, 0.03) 28px
+      );
+    }
+    .img-slot::after {
+      content: "🖼  " attr(data-label);
+      padding: 0 16px;
+      opacity: 0.8;
+    }
+    .img-slot > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+    /* 비율 변형 */
+    .img-slot--hero { aspect-ratio: 16 / 8.5; }
+    .img-slot--wide { aspect-ratio: 16 / 10; }
+    .img-slot--card { aspect-ratio: 4 / 3; }
+    .img-slot--tall { aspect-ratio: 4 / 5; }
+    .img-slot--dark { background-color: #2C2526; color: #B8AFAE; }
+
+    /* =================================================================
+       5) HEADER (공통 — 다른 페이지에서 재사용 가능하도록 분리)
+       ================================================================= */
+    .site-header {
+      position: fixed; top: 0; left: 0; width: 100%; height: var(--header-h);
+      display: flex; align-items: center; z-index: 1000;
+      background-color: rgba(233, 230, 226, 0.82);
+      backdrop-filter: saturate(180%) blur(12px);
+      -webkit-backdrop-filter: saturate(180%) blur(12px);
+      border-bottom: 1px solid var(--color-line);
+    }
+    .site-header__inner { display: flex; align-items: center; justify-content: space-between; width: 100%; }
+    .site-header__logo { font-size: var(--fs-h3); font-weight: var(--fw-black); letter-spacing: -0.02em; }
+    .site-header__logo b { color: var(--color-burgundy); }
+    .site-nav { display: none; align-items: center; gap: clamp(18px, 2.4vw, 36px); }
+    .site-nav a { font-size: var(--fs-small); font-weight: var(--fw-medium); letter-spacing: 0.02em; transition: color .2s; }
+    .site-nav a:hover { color: var(--color-burgundy); }
+    .site-header__back {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 8px 16px; border-radius: var(--radius-pill);
+      background-color: var(--color-burgundy); color: var(--color-white);
+      font-size: var(--fs-small); font-weight: var(--fw-bold);
+      transition: background-color .25s;
+    }
+    .site-header__back:hover { background-color: var(--color-soft-red); }
+
+    /* =================================================================
+       6) SECTION 1 — HERO
+       ================================================================= */
+    .hero { padding-top: calc(var(--header-h) + clamp(48px, 9vw, 120px)); padding-bottom: var(--section-gap); }
+    .hero__title { font-size: var(--fs-display); font-weight: var(--fw-black); line-height: var(--lh-tight); letter-spacing: -0.03em; word-break: keep-all; }
+    .hero__title em { color: var(--color-burgundy); font-style: normal; }
+    .hero__summary { max-width: 56ch; margin-top: 22px; font-size: clamp(16px, 1.6vw, 22px); line-height: var(--lh-loose); color: var(--color-text-muted); word-break: keep-all; }
+
+    .hero__meta {
+      display: grid; grid-template-columns: 1fr; gap: 18px;
+      margin-top: var(--block-gap); padding-top: 28px;
+      border-top: 1px solid var(--color-line);
+    }
+    .hero__meta dt { font-size: var(--fs-small); font-weight: var(--fw-bold); letter-spacing: 0.06em; color: var(--color-burgundy); margin-bottom: 6px; }
+    .hero__meta dd { font-size: var(--fs-body); font-weight: var(--fw-medium); }
+    .hero__visual { margin-top: var(--block-gap); }
+
+    /* =================================================================
+       7) SECTION 2 — BACKGROUND (문제 정의 / 대비 효과)
+       ================================================================= */
+    .background { background-color: var(--color-white); }
+    .background__grid { display: grid; grid-template-columns: 1fr; gap: var(--block-gap); align-items: center; }
+    .background__text .lead { color: var(--color-dark-text); }
+    .problem-list { margin-top: 28px; display: flex; flex-direction: column; gap: 16px; }
+    .problem-item {
+      display: flex; gap: 14px; align-items: flex-start;
+      padding: 18px 20px; border-radius: var(--radius-md);
+      background-color: var(--color-light-gray);
+    }
+    .problem-item .num {
+      flex: 0 0 auto; width: 30px; height: 30px; border-radius: var(--radius-pill);
+      display: grid; place-items: center; background-color: var(--color-burgundy);
+      color: var(--color-white); font-size: var(--fs-small); font-weight: var(--fw-bold);
+    }
+    .problem-item p { font-size: var(--fs-body); line-height: var(--lh-normal); word-break: keep-all; }
+    .problem-item b { color: var(--color-soft-red); }
+
+    /* =================================================================
+       8) SECTION 3 — STRATEGY (3~4 그리드 카드)
+       ================================================================= */
+    .strategy__head { max-width: 760px; margin-bottom: var(--block-gap); }
+    .cards {
+      display: grid; grid-template-columns: 1fr; gap: clamp(16px, 2vw, 28px);
+    }
+    .card {
+      background-color: var(--color-white);
+      border-radius: var(--radius-lg);
+      padding: clamp(26px, 3vw, 40px);
+      box-shadow: var(--shadow-card);
+      border: 1px solid var(--color-line);
+      transition: transform var(--ease) .4s, box-shadow .3s;
+    }
+    .card:hover { transform: translateY(-6px); box-shadow: 0 26px 60px rgba(36,59,83,.14); }
+    .card__no { font-size: var(--fs-small); font-weight: var(--fw-bold); letter-spacing: 0.14em; color: var(--color-soft-red); }
+    .card__title { margin: 12px 0 12px; font-size: var(--fs-h3); font-weight: var(--fw-black); letter-spacing: -0.01em; }
+    .card__title span { color: var(--color-burgundy); }
+    .card__desc { font-size: var(--fs-body); line-height: var(--lh-loose); color: var(--color-text-muted); word-break: keep-all; }
+
+    /* =================================================================
+       9) SECTION 4 — PROCESS & SOLUTION (텍스트 + 이미지 슬롯 나란히)
+       ================================================================= */
+    .process { background-color: var(--color-white); }
+    .process__row {
+      display: grid; grid-template-columns: 1fr; gap: clamp(24px, 4vw, 64px);
+      align-items: center;
+    }
+    .process__row + .process__row { margin-top: clamp(48px, 7vw, 110px); }
+    .process__step { font-size: var(--fs-small); font-weight: var(--fw-bold); letter-spacing: 0.16em; color: var(--color-soft-red); margin-bottom: 12px; }
+    .process__title { font-size: var(--fs-h2); font-weight: var(--fw-black); line-height: var(--lh-tight); letter-spacing: -0.02em; word-break: keep-all; }
+    .process__desc { margin-top: 16px; font-size: var(--fs-body); line-height: var(--lh-loose); color: var(--color-text-muted); word-break: keep-all; }
+
+    /* =================================================================
+       10) SECTION 5 — OUTCOMES (결과 + 사이트 바로가기)
+       ================================================================= */
+    .outcomes { background-color: var(--color-deep); color: var(--color-white); text-align: center; }
+    .outcomes .eyebrow { color: var(--color-light-gray); }
+    .outcomes__title { font-size: var(--fs-h1); font-weight: var(--fw-black); line-height: var(--lh-tight); letter-spacing: -0.02em; word-break: keep-all; }
+    .outcomes__lead { max-width: 60ch; margin: 18px auto 0; line-height: var(--lh-loose); color: rgba(255,255,255,0.78); word-break: keep-all; }
+    .stats {
+      display: grid; grid-template-columns: 1fr; gap: 16px;
+      max-width: 900px; margin: var(--block-gap) auto 0;
+    }
+    .stat {
+      padding: 26px 18px; border-radius: var(--radius-lg);
+      background-color: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12);
+    }
+    .stat__num { font-size: clamp(28px, 4vw, 44px); font-weight: var(--fw-black); color: var(--color-light-gray); line-height: 1; }
+    .stat__label { margin-top: 10px; font-size: var(--fs-small); color: rgba(255,255,255,0.72); word-break: keep-all; }
+    .outcomes__cta { margin-top: var(--block-gap); display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; }
+    .outcomes .btn--ghost { border-color: var(--color-light-gray); color: var(--color-light-gray); }
+    .outcomes .btn--ghost:hover { background-color: var(--color-light-gray); color: var(--color-deep); }
+
+    /* =================================================================
+       11) FOOTER (공통 — 재사용 가능하도록 분리)
+       ================================================================= */
+    .site-footer { background-color: #1B1112; color: rgba(255,255,255,0.7); padding: clamp(48px, 7vw, 80px) 0 40px; }
+    .site-footer__inner { display: flex; flex-wrap: wrap; gap: var(--block-gap); justify-content: space-between; align-items: flex-end; }
+    .site-footer__brand { font-size: var(--fs-h2); font-weight: var(--fw-black); color: var(--color-white); letter-spacing: -0.02em; }
+    .site-footer__brand b { color: var(--color-soft-red); }
+    .site-footer__contact { display: flex; flex-direction: column; gap: 8px; font-size: var(--fs-small); }
+    .site-footer__contact a:hover { color: var(--color-white); }
+    .site-footer__copy { width: 100%; margin-top: 36px; padding-top: 22px; border-top: 1px solid rgba(255,255,255,0.14); font-size: var(--fs-small); color: rgba(255,255,255,0.45); }
+
+    /* =================================================================
+       12) SCROLL REVEAL — JS(GSAP) 동작 전 초기 상태
+          GSAP 로드 실패 시를 대비해, JS 가 .no-anim 을 붙이면 즉시 보이게 함
+       ================================================================= */
+    .js [data-reveal] { opacity: 0; transform: translateY(42px); will-change: transform, opacity; }
+    .js [data-reveal-scale] { opacity: 0; transform: scale(0.92); will-change: transform, opacity; }
+    .no-anim [data-reveal], .no-anim [data-reveal-scale] { opacity: 1 !important; transform: none !important; }
+    @media (prefers-reduced-motion: reduce) {
+      .js [data-reveal], .js [data-reveal-scale] { opacity: 1 !important; transform: none !important; }
+    }
+
+    /* =================================================================
+       13) 반응형 — 모바일 우선, 화면이 넓어질수록 확장
+       ================================================================= */
+    /* 태블릿 이상 */
+    @media (min-width: 768px) {
+      .site-nav { display: flex; }
+      .hero__meta { grid-template-columns: repeat(3, 1fr); gap: 28px; }
+      .background__grid { grid-template-columns: 1.05fr 0.95fr; }
+      .cards { grid-template-columns: repeat(3, 1fr); }
+      .stats { grid-template-columns: repeat(3, 1fr); }
+      /* 프로세스: 텍스트/이미지 2열, 짝수 행은 좌우 반전 */
+      .process__row { grid-template-columns: 1fr 1fr; }
+      .process__row--reverse .process__media { order: -1; }
+    }
+    /* 데스크탑 확장 */
+    @media (min-width: 1100px) {
+      .hero__grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: clamp(40px, 5vw, 80px); align-items: end; }
+      .hero__visual { margin-top: 0; }
+      .background__grid { gap: clamp(48px, 6vw, 96px); }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- =================================================================
+       HEADER (공통 컴포넌트) — 추후 header.html 등으로 분리 가능
+       ================================================================= -->
+  <header class="site-header" id="top">
+    <div class="container site-header__inner">
+      <a class="site-header__logo" href="./index.html" aria-label="포트폴리오 홈으로">PORT<b>FOLIO</b></a>
+      <nav class="site-nav" aria-label="섹션 이동">
+        <a href="#background">Background</a>
+        <a href="#strategy">Strategy</a>
+        <a href="#process">Process</a>
+        <a href="#outcomes">Outcomes</a>
+      </nav>
+      <a class="site-header__back" href="./index.html"><span aria-hidden="true">←</span> PORTFOLIO</a>
+    </div>
+  </header>
+
+  <main>
+    <!-- =================================================================
+         SECTION 1 — HERO
+         ================================================================= -->
+    <section class="hero">
+      <div class="container">
+        <div class="hero__grid">
+          <div class="hero__intro">
+            <span class="eyebrow" data-reveal>Web Renewal · Case Study</span>
+            <h1 class="hero__title" data-reveal>
+              가격이 아닌 <em>신뢰</em>를 전하는<br />시스템치과 홈페이지 리뉴얼
+            </h1>
+            <p class="hero__summary" data-reveal>
+              할인과 전후사진 중심이던 병원 홈페이지를, 의료진·장비·진료 프로세스 중심의
+              ‘신뢰 경험’으로 재설계한 UX/UI 리디자인 &amp; 퍼블리싱 프로젝트입니다.
+            </p>
+
+            <dl class="hero__meta" data-reveal>
+              <div>
+                <dt>참여도</dt>
+                <dd>기획 · UX · 디자인 · 퍼블리싱 (단독 진행)</dd>
+              </div>
+              <div>
+                <dt>기간</dt>
+                <!-- 실제 기간으로 수정하세요 -->
+                <dd>2026 · 약 4주</dd>
+              </div>
+              <div>
+                <dt>도구</dt>
+                <dd>Figma · HTML/CSS/JS · GitHub · Vercel · AI</dd>
+              </div>
+            </dl>
+          </div>
+
+          <!-- 이미지 슬롯: 히어로 대표 비주얼
+               추천: system_img/main_home.png (리뉴얼 메인 화면) 또는 sub_banner.png -->
+          <div class="hero__visual" data-reveal-scale>
+            <div class="img-slot img-slot--hero" data-label="HERO IMAGE (main_home.png)">
+              <!-- <img src="./system_img/main_home.png" alt="시스템치과 리뉴얼 메인 화면" /> -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================================================================
+         SECTION 2 — BACKGROUND (배경 / 문제 정의)
+         ================================================================= -->
+    <section class="section background" id="background">
+      <div class="container">
+        <div class="background__grid">
+          <div class="background__text">
+            <span class="eyebrow" data-reveal>Background</span>
+            <h2 class="section-title" data-reveal>강점은 분명한데,<br />홈페이지가 그것을 가리고 있었습니다.</h2>
+            <p class="lead" data-reveal>
+              시스템치과는 서울대 출신 의료진과 디지털 장비라는 분명한 경쟁력을 갖추고 있었습니다.
+              하지만 홈페이지는 그 강점을 전달하기보다, 할인과 자극적인 콘텐츠를 먼저 노출하며
+              전문성과 신뢰를 스스로 희석시키고 있었습니다. 그래서 ‘가장 큰 개선 효과를 만들 수 있는
+              대상’으로 이 프로젝트를 선정했습니다.
+            </p>
+
+            <div class="problem-list">
+              <div class="problem-item" data-reveal>
+                <span class="num">1</span>
+                <p>메인 상단에서 <b>“임플란트 최대 할인”</b> 메시지가 반복 노출되어 가격 경쟁 인상만 강조됨</p>
+              </div>
+              <div class="problem-item" data-reveal>
+                <span class="num">2</span>
+                <p>서울대 출신 의료진·디지털 장비라는 <b>핵심 강점이 충분히 전달되지 않음</b></p>
+              </div>
+              <div class="problem-item" data-reveal>
+                <span class="num">3</span>
+                <p>예약·문의로 이어지는 <b>CTA 동선이 불명확</b>해 사용자 이탈 가능성이 높음</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- 이미지 슬롯: 기존 사이트 문제 화면(Before)
+               추천: system_img/section_01.png 또는 sub2_2_before_1.png -->
+          <div class="background__media" data-reveal-scale>
+            <div class="img-slot img-slot--wide img-slot--dark" data-label="BEFORE 화면 (section_01.png)">
+              <!-- <img src="./system_img/section_01.png" alt="기존 홈페이지 문제 화면" /> -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================================================================
+         SECTION 3 — STRATEGY (리서치 & UX 전략 카드)
+         ================================================================= -->
+    <section class="section strategy" id="strategy">
+      <div class="container">
+        <div class="strategy__head">
+          <span class="eyebrow" data-reveal>Strategy</span>
+          <h2 class="section-title" data-reveal>신뢰를 다시 설계하기 위한 3가지 원칙</h2>
+          <p class="lead" data-reveal>
+            문제 분석 이후, 모든 디자인 의사결정의 기준이 된 세 가지 핵심 전략을 세웠습니다.
+          </p>
+        </div>
+
+        <div class="cards">
+          <article class="card" data-reveal>
+            <p class="card__no">01</p>
+            <h3 class="card__title"><span>가독성</span> · Readability</h3>
+            <p class="card__desc">필요한 정보를 빠르게 이해할 수 있도록 정보 위계를 재설계하고, 핵심 메시지를 먼저 읽히게 정리했습니다.</p>
+          </article>
+          <article class="card" data-reveal>
+            <p class="card__no">02</p>
+            <h3 class="card__title"><span>통일성</span> · Consistency</h3>
+            <p class="card__desc">컬러·레이아웃·컴포넌트를 하나의 디자인 시스템으로 통합해, 일관된 브랜드 경험을 만들었습니다.</p>
+          </article>
+          <article class="card" data-reveal>
+            <p class="card__no">03</p>
+            <h3 class="card__title"><span>전문성</span> · Expertise</h3>
+            <p class="card__desc">의료진·장비·진료 프로세스를 중심으로 강점을 보여주어, 자연스럽게 신뢰가 형성되도록 설계했습니다.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================================================================
+         SECTION 4 — PROCESS & SOLUTION (디자인 과정)
+         ================================================================= -->
+    <section class="section process" id="process">
+      <div class="container">
+        <div class="strategy__head">
+          <span class="eyebrow" data-reveal>Process &amp; Solution</span>
+          <h2 class="section-title" data-reveal>전략을 화면으로 옮긴 핵심 과정</h2>
+        </div>
+
+        <!-- ROW 1 : 디자인 시스템 -->
+        <div class="process__row">
+          <div class="process__text" data-reveal>
+            <p class="process__step">STEP 01 — Design System</p>
+            <h3 class="process__title">자극적인 레드에서<br />차분한 버건디로</h3>
+            <p class="process__desc">
+              채도 높은 레드는 자극적인 인상을 주었습니다. 레드의 정체성은 유지하되 차분한 버건디 톤으로
+              조정하고, 통일된 타이포그래피 시스템을 구축해 안정감과 프리미엄 이미지를 강화했습니다.
+            </p>
+          </div>
+          <!-- 이미지 슬롯: 컬러/타이포 시스템 정리 — 추천: system_img/section_02.png -->
+          <div class="process__media" data-reveal-scale>
+            <div class="img-slot img-slot--card" data-label="DESIGN SYSTEM (section_02.png)">
+              <!-- <img src="./system_img/section_02.png" alt="디자인 시스템 컬러·타이포" /> -->
+            </div>
+          </div>
+        </div>
+
+        <!-- ROW 2 : 정보 구조 재설계 (반전) -->
+        <div class="process__row process__row--reverse">
+          <div class="process__text" data-reveal>
+            <p class="process__step">STEP 02 — Information Architecture</p>
+            <h3 class="process__title">사용자 중심으로<br />다시 짠 정보 구조</h3>
+            <p class="process__desc">
+              전문 용어 위주의 메뉴를 사용자 언어로 바꾸고, 흩어져 있던 장비 콘텐츠는
+              ‘디지털 진료 시스템’으로 통합했습니다. ‘심미치료 → 심미보철’처럼 기능적 가치와
+              전문성이 함께 전달되도록 메뉴를 재구성했습니다.
+            </p>
+          </div>
+          <!-- 이미지 슬롯: IA / 메뉴 구조 다이어그램 — 추천: system_img/sub3_1_1.png -->
+          <div class="process__media" data-reveal-scale>
+            <div class="img-slot img-slot--card" data-label="IA 재설계 (sub3_1_1.png)">
+              <!-- <img src="./system_img/sub3_1_1.png" alt="정보 구조 재설계" /> -->
+            </div>
+          </div>
+        </div>
+
+        <!-- ROW 3 : 콘텐츠 전환 -->
+        <div class="process__row">
+          <div class="process__text" data-reveal>
+            <p class="process__step">STEP 03 — Content Strategy</p>
+            <h3 class="process__title">결과 사진에서<br />과정의 신뢰로</h3>
+            <p class="process__desc">
+              전후 사진·할인 중심의 콘텐츠를, 서울대 출신 의료진·디지털 장비·진료 프로세스 중심으로
+              전환했습니다. AI로 수술 모션 영상과 장비 이미지를 제작해 더 전문적이고 신뢰감 있는
+              콘텐츠를 구성했습니다.
+            </p>
+          </div>
+          <!-- 이미지 슬롯: 콘텐츠/장비 비주얼 — 추천: system_img/section_03_ob.png -->
+          <div class="process__media" data-reveal-scale>
+            <div class="img-slot img-slot--card" data-label="CONTENT (section_03_ob.png)">
+              <!-- <img src="./system_img/section_03_ob.png" alt="전문 콘텐츠 전환" /> -->
+            </div>
+          </div>
+        </div>
+
+        <!-- ROW 4 : 사용자 흐름 / CTA (반전) -->
+        <div class="process__row process__row--reverse">
+          <div class="process__text" data-reveal>
+            <p class="process__step">STEP 04 — User Flow &amp; CTA</p>
+            <h3 class="process__title">신뢰 형성에서<br />예약 전환까지 하나의 여정</h3>
+            <p class="process__desc">
+              병원 소개 → 의료진 신뢰 → 진료 강점 → 디지털 장비 → 환자 안심 콘텐츠 순으로 배치하고,
+              마지막에 상담·예약 CTA를 연결했습니다. 단순한 정보 나열이 아닌 ‘신뢰 → 전환’의
+              사용자 여정으로 설계했습니다.
+            </p>
+          </div>
+          <!-- 이미지 슬롯: 사용자 흐름/주요 화면 — 추천: system_img/sub_banner.png -->
+          <div class="process__media" data-reveal-scale>
+            <div class="img-slot img-slot--card" data-label="USER FLOW (sub_banner.png)">
+              <!-- <img src="./system_img/sub_banner.png" alt="사용자 흐름 및 CTA" /> -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================================================================
+         SECTION 5 — OUTCOMES (결과 + 사이트 바로가기)
+         ================================================================= -->
+    <section class="section outcomes" id="outcomes">
+      <div class="container">
+        <span class="eyebrow" data-reveal>Outcomes</span>
+        <h2 class="outcomes__title" data-reveal>홈페이지를 넘어,<br />병원의 브랜드 경쟁력으로</h2>
+        <p class="outcomes__lead" data-reveal>
+          의료진·장비 중심 콘텐츠로 신뢰도를 높이고, 통일된 디자인 시스템으로 고급스러운 브랜드
+          이미지를 전달합니다. 정보 구조와 CTA 개선으로 이탈을 줄이고 상담·예약 전환 효율을
+          높이는 것을 목표로 했습니다.
+        </p>
+
+        <div class="stats">
+          <div class="stat" data-reveal>
+            <div class="stat__num">3</div>
+            <p class="stat__label">핵심 전략 (가독성·통일성·전문성)</p>
+          </div>
+          <div class="stat" data-reveal>
+            <div class="stat__num">100%</div>
+            <p class="stat__label">기획부터 퍼블리싱까지 단독 진행</p>
+          </div>
+          <div class="stat" data-reveal>
+            <div class="stat__num">AI</div>
+            <p class="stat__label">AI 협업 기반 개발 &amp; 콘텐츠 제작</p>
+          </div>
+        </div>
+
+        <div class="outcomes__cta" data-reveal>
+          <!-- 실제 배포 사이트로 연결 -->
+          <a class="btn btn--primary" href="https://kkm15921598.github.io/system_dental/index.html" target="_blank" rel="noopener">
+            웹사이트 바로가기 <span class="btn__arrow" aria-hidden="true">→</span>
+          </a>
+          <a class="btn btn--ghost" href="./index.html">← 포트폴리오로 돌아가기</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- =================================================================
+       FOOTER (공통 컴포넌트) — 추후 footer.html 등으로 분리 가능
+       ================================================================= -->
+  <footer class="site-footer">
+    <div class="container site-footer__inner">
+      <p class="site-footer__brand">PORT<b>FOLIO</b></p>
+      <address class="site-footer__contact">
+        <a href="mailto:ujin2019@gmail.com">ujin2019@gmail.com</a>
+        <a href="tel:01020774869">010.2077.4869</a>
+        <span>Seoul, Korea</span>
+      </address>
+      <p class="site-footer__copy">© 2026 PORTFOLIO. System Dental Renewal Case Study.</p>
+    </div>
+  </footer>
+
+  <!-- ===== GSAP (CDN) ===== -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script>
+    (function () {
+      var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      // GSAP 로드 실패 또는 모션 줄이기 → 즉시 보이게 하고 종료
+      if (typeof gsap === "undefined" || reduce) {
+        document.documentElement.classList.add("no-anim");
+        return;
+      }
+
+      gsap.registerPlugin(ScrollTrigger);
+
+      // 1) 페이드 + 업 리빌
+      gsap.utils.toArray("[data-reveal]").forEach(function (el) {
+        gsap.to(el, {
+          opacity: 1, y: 0, duration: 0.9, ease: "power3.out",
+          scrollTrigger: { trigger: el, start: "top 85%", toggleActions: "play none none none" }
+        });
+      });
+
+      // 2) 스케일 인 (이미지/비주얼)
+      gsap.utils.toArray("[data-reveal-scale]").forEach(function (el) {
+        gsap.to(el, {
+          opacity: 1, scale: 1, duration: 1.0, ease: "power3.out",
+          scrollTrigger: { trigger: el, start: "top 88%", toggleActions: "play none none none" }
+        });
+      });
+
+      // 3) 히어로 요소는 로드 직후 순차 등장
+      gsap.to(".hero [data-reveal], .hero [data-reveal-scale]", {
+        opacity: 1, y: 0, scale: 1, duration: 1, ease: "power3.out", stagger: 0.12
+      });
+
+      // 안전장치: 혹시 보이지 않는 요소가 남으면 강제 표시
+      window.addEventListener("load", function () { ScrollTrigger.refresh(); });
+    })();
+  </script>
+</body>
+</html>

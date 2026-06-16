@@ -487,86 +487,101 @@
         </div>
       </div>
     </section>
-        <!-- =====================================================
-         SECTION 8 : DESIGN PROJECT 04 (시스템치과의원)
-         - 토글 이미지 교체: data-after-image / data-before-image 수정
-         - 텍스트/아이콘/색상은 아래 HTML에서 바로 수정할 수 있습니다.
+    <!-- =====================================================
+         SECTION 8 : WEB RENEWAL (시스템치과) — TRACKSY형 레이아웃
+         - 토글(Before/After) + hover 자동 스크롤 기능 그대로 사용
+         - 토글이 동작하려면 섹션에 class="project" 가 있어야 합니다(JS가 탐색).
          ===================================================== -->
-    <section class="project project--modoo" id="design4" aria-label="디자인 프로젝트 04 - 시스템치과의원">
-      <div class="project-modoo__body">
-        <!-- 왼쪽: 프로젝트 화면 이미지 -->
-        <div class="project-modoo__visual" data-reveal>
+    <section class="project dental" id="design4" aria-label="디자인 프로젝트 04 - 시스템치과">
+      <div class="container dental__inner">
+        <!-- 왼쪽: 스크롤 디바이스 + 토글 -->
+        <div class="dental__visual" data-reveal>
+          <!-- 안내 멘트: 마우스 올리면 자동 스크롤 (이미지 위) -->
+          <p class="dental__hint">
+            <span class="dental__hint-icon" aria-hidden="true">↕</span>
+            위 화면에 마우스를 올리면 페이지가 자동으로 스크롤됩니다.
+          </p>
+
           <div class="project-modoo__device">
             <img
               class="project-modoo__image"
               src="./images/system_After_scroll.png"
-              alt="시스템치과의원 리뉴얼 후 화면"
+              alt="시스템치과 리뉴얼 후 화면"
               data-after-image="./images/system_After_scroll.png"
               data-before-image="./images/system_Before_scroll.png"
-              data-after-alt="시스템치과의원 리뉴얼 후 화면"
-              data-before-alt="시스템치과의원 리뉴얼 전 화면"
+              data-after-alt="시스템치과 리뉴얼 후 화면"
+              data-before-alt="시스템치과 리뉴얼 전 화면"
             />
           </div>
         </div>
 
         <!-- 오른쪽: 프로젝트 소개 -->
-        <div class="project-modoo__info" data-reveal>
-          <button
-            type="button"
-            class="project-toggle"
-            aria-label="시스템치과의원 Before 이미지 보기"
-            aria-pressed="true"
-          >
-            <span class="sr-only">Before/After 이미지 전환</span>
-          </button>
+        <div class="dental__info" data-reveal>
+          <!-- Before / After 토글 (h3 라벨 위, 정보 영역 맨 위) -->
+          <div class="dental__toggle">
+            <span>BEFORE</span>
+            <button
+              type="button"
+              class="project-toggle"
+              aria-label="시스템치과 Before 이미지 보기"
+              aria-pressed="true"
+            >
+              <span class="sr-only">Before/After 이미지 전환</span>
+            </button>
+            <span>AFTER</span>
+          </div>
 
-          <h2 class="project-modoo__title">
-            <span>리뉴얼 프로젝트</span>
-            <span>시스템치과의원 UIUX 개선</span>
-          </h2>
-
-          <p class="project-modoo__desc">
-            기존 사이트는 진료 안내, 예약, 의료진 소개 등 정보가 흩어져 있어
+          <h3 class="section-label">WEB RENEWAL &middot; PUBLISHING</h3>
+          <h2 class="dental__title">시스템치과 웹사이트 리뉴얼</h2>
+          <p class="dental__tagline">복잡한 진료 정보를 명확하게, 신뢰를 더한 치과 홈페이지</p>
+          <p class="dental__desc">
+            진료 안내, 의료진 소개, 임플란트·디지털 진료 등 정보가 흩어져 있어
             환자가 원하는 내용을 빠르게 찾기 어려웠습니다. 정보 구조를 재정비하고
-            예약 동선을 단순화해 신뢰감 있는 첫인상과 편리한 탐색 경험을 제공하도록
-            개선했습니다.
+            핵심 동선을 단순화해, 신뢰감 있는 첫인상과 편리한 탐색 경험을 갖춘
+            반응형 웹사이트로 개선했습니다.
           </p>
 
-          <div class="project-modoo__actions">
-            <a class="btn-outline" href="#"><span aria-hidden="true">→</span> PROCESS</a>
-            <a class="btn-outline" href="#"><span aria-hidden="true">→</span> VIEW MORE</a>
+          <div class="dental__actions">
+            <a class="btn-outline" href="./system_dental_case.html">
+              <span aria-hidden="true">→</span> VISIT SITE
+            </a>
+            <a
+              class="btn-outline"
+              href="https://kkm15921598.github.io/system_dental/index.html"
+              target="_blank"
+              rel="noopener"
+            >
+              <span aria-hidden="true">→</span> VIEW MORE
+            </a>
           </div>
         </div>
       </div>
 
-      <!-- 하단 프로젝트 정보 바 -->
-      <div class="project-modoo__meta" data-reveal>
+      <!-- 하단 프로젝트 정보 바 (모두매쓰 메타 구조 재사용) -->
+      <div class="project-modoo__meta dental__meta" data-reveal>
         <div class="project-modoo__meta-inner">
           <dl class="project-modoo__details">
             <div class="project-modoo__detail-row">
-              <dt>Contribution</dt>
-              <dd>기획30%, 디자인 20%, 퍼블리싱 100%</dd>
+              <dt>Type</dt><dd>반응형 웹사이트 (리뉴얼)</dd>
+            </div>
+            <div class="project-modoo__detail-row">
+              <dt>Role</dt><dd>UIUX 디자인 · 웹 퍼블리싱</dd>
             </div>
             <div class="project-modoo__detail-row">
               <dt>Design Color</dt>
               <dd>
                 <ul class="swatches project-modoo__swatches">
-                  <li style="background:#062B16"></li>
-                  <li style="background:#144B24"></li>
-                  <li style="background:#B9A160"></li>
+                  <li style="background:#A12D2E"></li>
+                  <li style="background:#D33B3B"></li>
+                  <li style="background:#E9E6E2"></li>
                 </ul>
               </dd>
-            </div>
-            <div class="project-modoo__detail-row">
-              <dt>Font Style</dt>
-              <dd>Pretendard Variable</dd>
             </div>
           </dl>
 
           <dl class="project-modoo__details">
             <div class="project-modoo__detail-row">
-              <dt>Generative AI</dt>
-              <dd>Chat GPT 이미지 생성</dd>
+              <dt>Built with</dt><dd>HTML · CSS · JavaScript</dd>
             </div>
             <div class="project-modoo__detail-row">
               <dt>Tools Used</dt>
@@ -574,16 +589,86 @@
                 <ul class="tools tools--sm project-modoo__tools">
                   <li class="tool"><img src="./images/ico_fig.png" alt="Figma" /></li>
                   <li class="tool"><img src="./images/ico_vs.png" alt="VS Code" /></li>
-                  <li class="tool"><img src="./images/ico_clau.png" alt="Claude" /></li>
-                  <li class="tool"><img src="./images/ico_fire.png" alt="Firebase" /></li>
                 </ul>
               </dd>
             </div>
             <div class="project-modoo__detail-row">
-              <dt>Duration</dt>
-              <dd>5일(집중작업)</dd>
+              <dt>Font Style</dt><dd>Pretendard Variable</dd>
             </div>
           </dl>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================
+         SECTION 9 : APP PROJECT (TRACKSY)
+         - 러닝 기록 앱 / APP 디자인 & 개발
+         - 이미지: trasksy01(입력 화면) / trasksy02(홈) / trasksy03(마스코트)
+         ===================================================== -->
+    <section class="tracksy" id="app" aria-label="앱 프로젝트 - TRACKSY">
+      <div class="container tracksy__inner">
+        <!-- 왼쪽: 앱 화면 + 마스코트 레이어 -->
+        <div class="tracksy__visual" data-reveal>
+          <img
+            class="tracksy__mascot"
+            src="./images/trasksy03.png"
+            alt="TRACKSY 러닝 마스코트 캐릭터"
+          />
+          <div class="tracksy__phone">
+            <img
+              src="./images/trasksy02.png"
+              alt="TRACKSY 홈 화면 - 러닝 기록 대시보드"
+            />
+          </div>
+          <img
+            class="tracksy__angled"
+            src="./images/trasksy01.png"
+            alt="TRACKSY 러닝 기록 직접 입력 화면"
+          />
+        </div>
+
+        <!-- 오른쪽: 앱 소개 -->
+        <div class="tracksy__info" data-reveal>
+          <h3 class="section-label">APP DESIGN &amp; DEVELOPMENT</h3>
+          <h2 class="tracksy__title">TRACKSY</h2>
+          <p class="tracksy__tagline">오늘의 러닝을, 나만의 이야기로</p>
+          <p class="tracksy__desc">
+            러닝 기록을 한곳에 모으고, 감각적인 러닝카드로 꾸며 저장·공유하는
+            러닝 기록 앱입니다. 기록 입력부터 주간 통계, 커뮤니티까지 이어지는
+            사용 흐름을 직접 기획하고 UIUX 디자인과 프론트엔드 개발까지 진행했습니다.
+          </p>
+
+          <dl class="tracksy__list project__list">
+            <div class="project__row"><dt>Type</dt><dd>모바일 웹앱 (PWA)</dd></div>
+            <div class="project__row">
+              <dt>Role</dt><dd>기획 · UIUX 디자인 · 프론트엔드 개발</dd>
+            </div>
+            <div class="project__row">
+              <dt>Built with</dt><dd>Next.js · React · Figma</dd>
+            </div>
+            <div class="project__row">
+              <dt>Design Color</dt>
+              <dd>
+                <ul class="swatches">
+                  <li style="background:#7C5CFF"></li>
+                  <li style="background:#B7A6FF"></li>
+                  <li style="background:#F1ECFF"></li>
+                </ul>
+              </dd>
+            </div>
+          </dl>
+
+          <div class="tracksy__actions">
+            <a
+              class="btn-outline"
+              href="https://tracksy-rouge.vercel.app/"
+              target="_blank"
+              rel="noopener"
+            >
+              <span aria-hidden="true">→</span> VISIT SITE
+            </a>
+            <a class="btn-outline" href="#"><span aria-hidden="true">→</span> VIEW MORE</a>
+          </div>
         </div>
       </div>
     </section>

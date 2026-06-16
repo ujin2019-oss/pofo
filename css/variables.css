@@ -38,6 +38,19 @@
   --color-dark-visual: #1B2530;   /* 프로젝트 좌측 비주얼 기본 배경 */
   --color-meta-bar: var(--color-main1); /* MODOO 하단 정보 바 배경(딥 네이비) */
 
+  /* TRACKSY 앱 프로젝트 */
+  --color-tracksy: #7C5CFF;       /* 앱 브랜드 퍼플 (사이트 퍼플과 조화) */
+  --gradient-tracksy: linear-gradient(160deg, #F5F2FF 0%, #E9E3FF 100%); /* 앱 섹션 배경 */
+  --shadow-app: 0 30px 70px rgba(60, 30, 160, 0.22); /* 앱 폰 목업 그림자 */
+
+  /* 시스템치과 웹 리뉴얼 프로젝트 (TRACKSY형 레이아웃)
+     브랜드 컬러: Burgundy #A12D2E / Soft Red #D33B3B / Light Gray #E9E6E2 */
+  --color-dental: #A12D2E;        /* 메인 액센트: 버건디 레드 */
+  --color-dental-soft: #D33B3B;   /* 보조: 소프트 레드 (hover 등) */
+  --color-dental-bar: #5A1C1D;    /* 하단 정보 바: 딥 버건디 (흰 글자/스와치 대비용) */
+  --gradient-dental: linear-gradient(160deg, #F7F5F3 0%, #E9E6E2 100%); /* 라이트 그레이 배경 */
+  --shadow-dental: 0 30px 70px rgba(120, 30, 30, 0.18); /* 치과 디바이스 그림자(레드 톤) */
+
   /* 흰색 기반 반투명(다크 배경 위 텍스트/라인용) */
   --color-on-dark: rgba(255, 255, 255, 0.7);   /* 다크 배경 위 보조 텍스트 */
   --color-on-dark-faint: rgba(255, 255, 255, 0.55); /* 더 옅은 라벨 */
