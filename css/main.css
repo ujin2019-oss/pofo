@@ -48,17 +48,25 @@
   background-position: center;
   background-repeat: no-repeat;
 }
-/* 커지는 원형 이미지 : 화면 중앙에 절대배치하여 텍스트 뒤에 깔림 */
-.slogan__sphere {
+/* 커지는 원형 이미지 래퍼 : 화면 중앙에 절대배치하여 텍스트 뒤에 깔림
+   - 래퍼는 GSAP 스크롤 애니메이션(커짐/페이드)을 담당 */
+.slogan__sphere-wrap {
   position: absolute;
   top: 50%;
   left: 50%;
   width: clamp(320px, 46vw, 560px);
-  height: auto;
   transform: translate(-50%, -50%); /* JS가 scale 을 추가로 적용 */
   will-change: transform, opacity;
   pointer-events: none;
+}
+/* 안쪽 이미지 : 마우스가 닿으면 톡톡 튕기는 효과(JS)를 담당 (스크롤 scale 과 분리) */
+.slogan__sphere {
+  display: block;
+  width: 100%;
+  height: auto;
+  will-change: transform;
   user-select: none;
+  pointer-events: none;
 }
 /* 구체 위에 겹쳐지는 텍스트 */
 .slogan__text {
@@ -315,6 +323,31 @@
   align-items: stretch;
   min-height: 100vh; /* 섹션 높이를 브라우저 화면에 맞춤 */
 }
+
+/* -----------------------------------------------------------
+   디자인 프로젝트 3개(JEJU STAY / LOTTE FESTIVAL / MOODIFY) :
+   - 각 섹션을 정확히 한 화면(100vh)에 맞추고
+   - 스크롤하면 다음 섹션으로 "딱" 넘어가도록 스크롤 스냅 적용
+   - scroll-snap-stop: always → 한 번에 건너뛰지 않고 섹션마다 멈춤
+   ----------------------------------------------------------- */
+html {
+  scroll-snap-type: y proximity; /* 스냅 지점 근처에서만 작동(다른 섹션 영향 최소화) */
+}
+/* 디자인 3개(JEJU STAY / LOTTE FESTIVAL / MOODIFY) 에만 적용 */
+#design,        /* JEJU STAY */
+#design3-lotte, /* LOTTE FESTIVAL */
+#design2 {      /* MOODIFY */
+  height: 100vh;            /* 한 브라우저 높이에 딱 맞춤 */
+  scroll-snap-align: start; /* 섹션 상단이 화면 상단에 정렬 */
+  scroll-snap-stop: always; /* 빠르게 스크롤해도 각 섹션에서 멈춤 */
+  overflow: hidden;         /* 100vh 안으로 내용 고정 */
+}
+#design .project__inner,
+#design3-lotte .project__inner,
+#design2 .project__inner {
+  min-height: 100vh;
+  height: 100vh;
+}
 /* 왼쪽 비주얼 (배경 이미지는 각 섹션 HTML 의 인라인 style 에서 지정) */
 .project__visual {
   position: relative;
@@ -405,28 +438,32 @@
   color: var(--color-white);
 }
 
-/* PROJECT 03 : MODOO 리뉴얼 섹션 */
+/* PROJECT 03 : MODOO 리뉴얼 섹션 (시스템치과와 동일 레이아웃) */
 .project--modoo {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background-color: var(--color-bg);
+  padding: var(--header-height) 0 0; /* 고정 헤더 회피 */
+  background: var(--gradient-modoo); /* 시스템치과처럼 옅은 퍼플 그라데이션 */
+  overflow: hidden;
 }
 .project-modoo__body {
   flex: 1;
   display: grid;
-  grid-template-columns: 1.05fr 0.95fr;
-  align-items: end;
-  gap: clamp(40px, 7vw, 120px);
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(40px, 5vw, 96px);
+  align-items: stretch; /* 컬럼을 세로로 꽉 채워 디바이스를 아래 바까지 */
   width: 100%;
   max-width: var(--container-max);
   margin: 0 auto;
-  padding: clamp(120px, 13vh, 190px) var(--container-padding) 0;
+  padding: clamp(16px, 2.5vh, 40px) var(--container-padding) 0;
 }
 .project-modoo__visual {
   display: flex;
-  justify-content: center;
-  align-items: flex-end;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between; /* 안내문구 위 / 디바이스 아래(네이비 바와 맞닿게) */
+  gap: clamp(14px, 2vh, 22px);
   min-width: 0;
 }
 .project-modoo__device {
@@ -460,9 +497,46 @@
   }
 }
 .project-modoo__info {
-  align-self: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* 정보 세로 중앙 */
   max-width: 560px;
-  padding-bottom: clamp(54px, 8vh, 110px);
+}
+/* 안내 멘트 (시스템치과와 동일 레이아웃) */
+.project-modoo__hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #ADA9A3;
+  font-size: var(--fs-caption);
+  font-weight: var(--fw-medium);
+  letter-spacing: 0.01em;
+  word-break: keep-all;
+  text-align: center;
+}
+.project-modoo__hint-icon {
+  font-size: 1.1em;
+  line-height: 1;
+  animation: dental-hint-bounce 1.6s var(--ease-in-out) infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .project-modoo__hint-icon {
+    animation: none;
+  }
+}
+/* BEFORE / AFTER 라벨 토글 행 (시스템치과와 동일) */
+.project-modoo__toggle-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 18px;
+  font-size: var(--fs-caption);
+  font-weight: var(--fw-bold);
+  letter-spacing: 0.14em;
+  color: var(--color-text-sub);
+}
+.project-modoo__toggle-row .project-toggle {
+  margin-bottom: 0; /* 라벨과 한 줄 정렬 */
 }
 .project-toggle {
   position: relative;
@@ -500,11 +574,19 @@
   flex-direction: column;
   gap: 14px;
   margin-bottom: 24px;
-  color: var(--color-sub);
+  color: #4D65F9; /* 2번째 줄(모두매쓰 UIUX 개선): 통일 색상 */
   font-size: var(--fs-modoo-title);
   font-weight: var(--fw-bold);
   line-height: 1.2;
   letter-spacing: 0;
+}
+/* 1번째 줄(리뉴얼 프로젝트): 시스템치과와 동일한 다크 컬러 */
+.project-modoo__title span:first-child {
+  color: var(--color-text);
+}
+/* 토글 ON: 통일 색상 (제목·바·버튼과 동일) */
+.project--modoo .project-toggle[aria-pressed="true"] {
+  background-color: #4D65F9;
 }
 .project-modoo__desc {
   max-width: 560px;
@@ -523,19 +605,19 @@
   min-width: 140px;
   padding: 10px 18px;
   justify-content: center;
-  border-color: var(--color-sub);
+  border-color: #4D65F9; /* 버튼 테두리: 통일 색상 */
   border-radius: 0;
-  color: var(--color-sub);
+  color: #4D65F9; /* 버튼 글자: 통일 색상 */
   font-size: var(--fs-modoo-btn);
   line-height: 1;
 }
 .project-modoo__actions .btn-outline:hover {
-  background-color: var(--color-sub);
+  background-color: #4D65F9;
   color: var(--color-white);
 }
 .project-modoo__meta {
   width: 100%;
-  background-color: var(--color-meta-bar);
+  background-color: #4D65F9; /* 하단 바: 통일 색상 */
   color: var(--color-white);
 }
 .project-modoo__meta-inner {
@@ -544,13 +626,14 @@
   gap: clamp(56px, 9vw, 150px);
   max-width: var(--container-max); /* 위 상세페이지(.project-modoo__body) 폭에 맞춤 */
   margin: 0 auto;
-  padding: 34px var(--container-padding) 26px;
+  /* 하단 바 높이: 시스템치과와 동일 */
+  padding: clamp(18px, 2.2vh, 28px) var(--container-padding) clamp(16px, 2vh, 24px);
 }
 .project-modoo__details {
   display: grid;
   grid-template-columns: max-content 1fr;
   column-gap: clamp(36px, 5vw, 88px);
-  row-gap: 22px;
+  row-gap: clamp(10px, 1.6vh, 18px); /* 시스템치과와 동일 */
   align-items: center;
 }
 .project-modoo__detail-row {
@@ -573,6 +656,51 @@
 .project-modoo__tools .tool {
   width: 38px;
   height: 38px;
+}
+
+/* =====================================================
+   TRACKSY : 모두매쓰와 동일 레이아웃 + TRACKSY 퍼플(#7C5CFF) 테마
+   - 왼쪽은 추후 교체용 빈 이미지 슬롯 / 토글 없음
+   ===================================================== */
+.project--modoo-tracksy {
+  background: var(--gradient-tracksy); /* 옅은 퍼플 배경 */
+}
+.project--modoo-tracksy .project-modoo__title {
+  color: var(--color-tracksy); /* 2번째 줄: TRACKSY 퍼플 */
+}
+.project--modoo-tracksy .project-modoo__meta {
+  background-color: var(--color-tracksy); /* 하단 바 */
+}
+.project--modoo-tracksy .project-modoo__actions .btn-outline {
+  border-color: var(--color-tracksy);
+  color: var(--color-tracksy);
+}
+.project--modoo-tracksy .project-modoo__actions .btn-outline:hover {
+  background-color: var(--color-tracksy);
+  color: var(--color-white);
+}
+/* 퍼플 바 위에서 스와치가 묻히지 않도록 흰 테두리 */
+.project--modoo-tracksy .project-modoo__swatches li {
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.35);
+}
+/* 왼쪽 이미지 슬롯: 디바이스 자리(크기/모양)는 그대로, 비워서 점선 박스로 표시 */
+.project--modoo-tracksy .project-modoo__visual {
+  justify-content: flex-end; /* 슬롯을 하단 바와 맞닿게 */
+}
+.project-modoo__device--slot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(124, 92, 255, 0.08);
+  border: 2px dashed rgba(124, 92, 255, 0.45);
+  box-shadow: none;
+}
+.device-slot__label {
+  font-size: var(--fs-caption);
+  font-weight: var(--fw-medium);
+  letter-spacing: 0.12em;
+  color: var(--color-tracksy);
+  opacity: 0.75;
 }
 
 /* =====================================================
@@ -666,7 +794,7 @@
 .tracksy__actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 16px;
+  gap: 30px; /* 모두매쓰와 동일 간격 */
 }
 .tracksy .btn-outline {
   border-color: var(--color-tracksy);
@@ -698,9 +826,9 @@
   display: grid;
   grid-template-columns: 1fr 1fr; /* 비주얼 / 정보 */
   gap: clamp(40px, 5vw, 96px);
-  align-items: center;
+  align-items: stretch; /* 컬럼을 세로로 꽉 채워 디바이스를 아래(붉은 바)까지 늘림 */
   padding-top: clamp(16px, 2.5vh, 40px);
-  padding-bottom: clamp(16px, 2.5vh, 40px);
+  padding-bottom: 0; /* 디바이스 하단이 붉은 바와 맞닿도록 */
 }
 
 /* 하단 정보 바: 모두매쓰 메타 구조를 재사용하고 딥 버건디로 채색 (바닥 고정) */
@@ -727,19 +855,13 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: space-between; /* 안내문구 위 / 디바이스 아래(붉은 바와 맞닿게) */
   gap: clamp(14px, 2vh, 22px);
 }
-/* 디바이스: 가운데 떠 있는 형태로 사방 라운드 + 하단 베젤 + 그림자
-   높이를 뷰포트 기준으로 제한해 한 화면 안에 들어오게 함 */
+/* 디바이스 크기/모양(폭·비율·상단 라운드·하단 평평)은 모두매쓰와 동일하게 상속.
+   치과용 그림자만 추가 */
 .dental .project-modoo__device {
-  width: auto;
-  height: min(64vh, 660px);
-  border-radius: var(--radius-device);
-  padding-bottom: var(--device-bezel);
   box-shadow: var(--shadow-dental);
-}
-.dental .project-modoo__image {
-  border-radius: calc(var(--radius-device) - 2px);
 }
 /* 안내 멘트 배지 (마우스 올리면 자동 스크롤) */
 .dental__hint {
@@ -785,17 +907,31 @@
 }
 
 /* 오른쪽 정보 */
+.dental__info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* 텍스트 세로 중앙 */
+}
 .dental .section-label {
   color: var(--color-dental); /* 치과 섹션 라벨: 버건디 */
 }
+/* 제목: 2줄, 색상 차례대로 (1번째 다크 / 2번째 버건디) */
 .dental__title {
-  font-size: var(--fs-h2);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: var(--fs-modoo-title);
   font-weight: var(--fw-bold);
-  line-height: 1.15;
+  line-height: 1.2;
   letter-spacing: -0.01em;
-  color: var(--color-dental);
-  margin: 6px 0 12px;
+  margin: 6px 0 18px;
   word-break: keep-all;
+}
+.dental__title-line1 {
+  color: var(--color-text); /* 1번째 줄: 다크 */
+}
+.dental__title-line2 {
+  color: var(--color-dental); /* 2번째 줄: 버건디 */
 }
 .dental__tagline {
   font-size: var(--fs-h3);
@@ -817,7 +953,7 @@
 .dental__actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 16px;
+  gap: 30px; /* 모두매쓰와 동일 간격 */
 }
 .dental .btn-outline {
   border-color: var(--color-dental);
@@ -827,6 +963,18 @@
   background-color: var(--color-dental-soft);
   border-color: var(--color-dental-soft);
   color: var(--color-white);
+}
+
+/* 시스템치과 / TRACKSY 버튼 모양·크기·글자크기를 모두매쓰 버튼과 동일하게
+   (각진 모서리 + 가운데 정렬 + 동일 글자크기). 색상은 각 섹션 규칙 유지 */
+.dental__actions .btn-outline,
+.tracksy__actions .btn-outline {
+  min-width: 140px;
+  padding: 10px 18px;
+  justify-content: center;
+  border-radius: 0;
+  font-size: var(--fs-modoo-btn);
+  line-height: 1;
 }
 
 /* =============================================================
@@ -860,11 +1008,11 @@
    반응형 - 모바일 (767px 이하)
    ============================================================= */
 @media (max-width: 767px) {
-  /* 슬로건: 모바일은 가독성 우선 */
+  /* 슬로건: 모바일은 가독성 우선 (구체 안에서 또렷하게 보이도록 키움) */
   .slogan__text {
-    font-size: var(--fs-h2);
+    font-size: clamp(40px, 13vw, 72px);
   }
-  .slogan__sphere {
+  .slogan__sphere-wrap {
     width: 86vw;
   }
 
@@ -905,6 +1053,24 @@
     margin-bottom: 4px;
   }
 
+  /* 모바일: 세로 스택으로 내용이 길어지므로 100vh 고정/스냅 해제 */
+  html {
+    scroll-snap-type: none;
+  }
+  #design,
+  #design3-lotte,
+  #design2 {
+    height: auto;
+    overflow: visible;
+    scroll-snap-align: none;
+    scroll-snap-stop: normal;
+  }
+  #design .project__inner,
+  #design3-lotte .project__inner,
+  #design2 .project__inner {
+    height: auto;
+  }
+
   /* 프로젝트: 비주얼 위 / 정보 아래로 스택 (반전 섹션도 동일) */
   .project__inner {
     grid-template-columns: 1fr;
@@ -927,19 +1093,21 @@
 
   .project--modoo {
     min-height: auto;
+    display: block;
+    overflow: visible;
   }
   .project-modoo__body {
     grid-template-columns: 1fr;
     gap: 36px;
     padding: 96px var(--container-padding) 0;
   }
+  /* 시스템치과와 동일: 이미지(비주얼) 위 / 정보 아래 */
   .project-modoo__visual {
-    order: 2;
+    order: 0;
   }
   .project-modoo__info {
-    order: 1;
+    order: 0;
     max-width: none;
-    padding-bottom: 0;
   }
   /* 토글 크기는 variables.css 의 --toggle-* (모바일 값)로 자동 조절,
      손잡이 이동거리도 calc 로 자동 계산됩니다. */
@@ -957,11 +1125,17 @@
     gap: 12px;
     margin-top: 32px;
   }
-  .project-modoo__actions .btn-outline {
+  .project-modoo__actions .btn-outline,
+  .dental__actions .btn-outline,
+  .tracksy__actions .btn-outline {
     flex: 1 1 140px;
     min-width: 0;
     padding: 10px 12px;
     font-size: 14px;
+  }
+  .dental__actions,
+  .tracksy__actions {
+    gap: 12px;
   }
   .project-modoo__device {
     width: min(100%, 420px);
@@ -1019,10 +1193,7 @@
   .dental__inner {
     grid-template-columns: 1fr;
   }
-  .dental .project-modoo__device {
-    width: min(100%, 460px);
-    height: auto;
-  }
+  /* 디바이스 크기는 모두매쓰와 동일하게 상속(모바일 폭도 공통 규칙 적용) */
   .dental__meta {
     margin-top: clamp(40px, 8vw, 72px);
   }

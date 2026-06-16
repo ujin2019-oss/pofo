@@ -38,6 +38,9 @@
   --color-dark-visual: #1B2530;   /* 프로젝트 좌측 비주얼 기본 배경 */
   --color-meta-bar: var(--color-main1); /* MODOO 하단 정보 바 배경(딥 네이비) */
 
+  /* MODOO(모두매쓰) 섹션 배경: 옅은 블루그레이 그라데이션 (시스템치과처럼) */
+  --gradient-modoo: linear-gradient(160deg, #F4F8FB 0%, #E4EEF6 100%);
+
   /* TRACKSY 앱 프로젝트 */
   --color-tracksy: #7C5CFF;       /* 앱 브랜드 퍼플 (사이트 퍼플과 조화) */
   --gradient-tracksy: linear-gradient(160deg, #F5F2FF 0%, #E9E3FF 100%); /* 앱 섹션 배경 */
@@ -179,5 +182,16 @@
     --toggle-w: 56px;     /* 모바일: 토글 살짝 더 작게 */
     --toggle-h: 30px;
     --toggle-knob: 22px;
+
+    /* 모바일 가독성: 좁은 화면에서 vw 값이 작아 글자가 너무 작아지는 문제 보정
+       → 최소값을 키우고 vw 기준을 화면폭에 맞게 재설정 */
+    --fs-display: clamp(44px, 13vw, 72px);  /* 초대형 텍스트 */
+    --fs-h1: clamp(30px, 8.5vw, 46px);      /* 대제목 */
+    --fs-h2: clamp(26px, 7vw, 36px);        /* 섹션 제목 */
+    --fs-h3: clamp(19px, 5.5vw, 26px);      /* 소제목 */
+    --fs-body: clamp(16px, 4.4vw, 18px);    /* 본문 */
+    --fs-caption: clamp(13px, 3.6vw, 15px); /* 캡션/작은 글씨 */
+    --fs-modoo-title: clamp(24px, 6.5vw, 32px); /* MODOO 프로젝트 제목 */
+    --fs-modoo-btn: clamp(15px, 4vw, 17px);     /* MODOO 버튼 글자 */
   }
 }

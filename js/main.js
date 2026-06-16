@@ -78,15 +78,17 @@
      ----------------------------------------------------------- */
   function initSloganScene() {
     const section = document.querySelector(".slogan");
+    const stage = section ? section.querySelector(".slogan__stage") : null;
+    const sphereWrap = document.querySelector(".slogan__sphere-wrap");
     const sphere = document.querySelector(".slogan__sphere");
     const text = document.querySelector(".slogan__text");
     const lines = gsap.utils.toArray(".slogan__line");
     const scrollCue = document.querySelector(".scroll-cue");
-    if (!section || !sphere) return;
+    if (!section || !sphereWrap || !sphere) return;
 
     // 초기 상태
-    // - 구체: 화면 중앙 정렬 + 처음 접속 시 원본 크기(scale 1)로 그대로 보임
-    gsap.set(sphere, { xPercent: -50, yPercent: -50, scale: 1, opacity: 1 });
+    // - 구체(래퍼): 화면 중앙 정렬 + 처음 접속 시 원본 크기(scale 1)로 그대로 보임
+    gsap.set(sphereWrap, { xPercent: -50, yPercent: -50, scale: 1, opacity: 1 });
     // - 텍스트: 처음 접속 시 70px(scale 0.5)로 보였다가 140px(scale 1)로 커짐
     gsap.set(text, { scale: 0.5, transformOrigin: "center center" });
     gsap.set(lines, { opacity: 1, y: 0 });
@@ -109,19 +111,79 @@
        - 별도의 위치 이동(점프) 없이 자연스럽게 다음 섹션으로 이어집니다. */
 
     // (1) 구체: 원본 크기 -> 계속 커짐 (끝까지)
-    tl.to(sphere, { scale: 2.8, duration: 3 }, 0);
+    tl.to(sphereWrap, { scale: 2.8, duration: 3 }, 0);
 
     // (2) 텍스트: 70px(scale 0.5) -> 140px(scale 1)로 커짐 (조금 더 일찍 마무리)
     tl.to(text, { scale: 1, duration: 2 }, 0);
 
     // (3) 마지막 구간: 커지는 동안 그대로 페이드아웃 -> 끝(progress 1)에 완전히 사라짐
     //     위치 이동 없이 제자리에서 사라져 다음 섹션과 부드럽게 크로스됨
-    tl.to(sphere, { opacity: 0, ease: "power2.in", duration: 1.1 }, 1.9);
+    tl.to(sphereWrap, { opacity: 0, ease: "power2.in", duration: 1.1 }, 1.9);
     tl.to(text, { opacity: 0, ease: "power2.in", duration: 1.1 }, 1.9);
 
     // (4) 스크롤이 시작되면 스크롤 안내 아이콘이 먼저 사라짐
     if (scrollCue) {
       tl.to(scrollCue, { opacity: 0, y: 20, duration: 0.6 }, 0);
+    }
+
+    /* -----------------------------------------------------------
+       (보너스) 툭 효과 : 마우스가 구체에 닿으면 마우스가 온 방향으로
+                         살짝 툭 밀렸다가 탄성있게 제자리로 복귀
+       - 커서가 원형 영역(반지름 안)으로 "들어올 때마다" 한 번씩 반응.
+       - 이동(x/y)은 이미지(.slogan__sphere)에만 적용 → 스크롤 scale 과 충돌 없음.
+       ----------------------------------------------------------- */
+    if (stage) {
+      let inside = false;
+
+      function nudge(moveX, moveY) {
+        const len = Math.hypot(moveX, moveY) || 1;
+        const dist = 36; // 툭 밀리는 거리(px) — 키우면 더 크게 움직임
+        gsap.killTweensOf(sphere);
+        gsap.fromTo(
+          sphere,
+          { x: 0, y: 0 },
+          {
+            keyframes: [
+              {
+                x: (moveX / len) * dist,
+                y: (moveY / len) * dist,
+                duration: 0.16,
+                ease: "power2.out",
+              },
+              {
+                x: 0,
+                y: 0,
+                duration: 0.85,
+                ease: "elastic.out(1, 0.4)",
+              },
+            ],
+          }
+        );
+      }
+
+      stage.addEventListener("pointermove", (e) => {
+        const r = sphereWrap.getBoundingClientRect();
+        const cx = r.left + r.width / 2;
+        const cy = r.top + r.height / 2;
+        const dx = e.clientX - cx;
+        const dy = e.clientY - cy;
+
+        if (Math.hypot(dx, dy) <= r.width / 2) {
+          if (!inside) {
+            inside = true;
+            // 마우스가 들어온(이동) 방향으로 툭. 이동량이 없으면 중심→커서 방향 사용
+            const mx = e.movementX || dx;
+            const my = e.movementY || dy;
+            nudge(mx, my);
+          }
+        } else {
+          inside = false;
+        }
+      });
+
+      stage.addEventListener("pointerleave", () => {
+        inside = false;
+      });
     }
   }
 

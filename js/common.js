@@ -75,38 +75,45 @@ function initHeader() {
     document.querySelector("#main > section:nth-of-type(2)");
   const firstSection = document.querySelector("#main > section:nth-of-type(1)");
 
-  /* 스크롤 시 (1) 헤더 배경 진하게 (2) 첫 섹션 이후부터 헤더 노출
-     (성능을 위해 rAF 사용) */
+  /* 헤더 노출 규칙 (단순/안정)
+     - 히어로(첫 섹션) 구간/맨 위: 숨김
+     - 그 이후로는 항상 표시 (스크롤 방향과 무관 → 자꾸 사라지지 않음) */
+
+  // 현재 히어로 구간(또는 맨 위)에 있는지
+  function inHeroZone() {
+    if (window.scrollY <= 10) return true;
+    if (secondSection) {
+      return secondSection.getBoundingClientRect().top > window.innerHeight * 0.5;
+    }
+    if (firstSection) {
+      return firstSection.getBoundingClientRect().bottom > window.innerHeight * 0.5;
+    }
+    return false;
+  }
+
+  // 헤더 표시/숨김 갱신
+  function updateHeader() {
+    header.style.backgroundColor =
+      window.scrollY > 10 ? "rgba(255,255,255,0.92)" : "rgba(255,255,255,0.7)";
+    header.classList.toggle("is-hidden", inHeroZone());
+  }
+
   let ticking = false;
-  const onScroll = () => {
-    if (ticking) return;
-    ticking = true;
-    requestAnimationFrame(() => {
-      // (1) 배경 농도
-      if (window.scrollY > 10) {
-        header.style.backgroundColor = "rgba(255,255,255,0.92)";
-      } else {
-        header.style.backgroundColor = "rgba(255,255,255,0.7)";
-      }
-
-      // (2) 헤더 노출 판정
-      let show = false;
-      if (secondSection) {
-        // 두 번째 섹션이 화면 상단 근처에 들어오면 표시
-        show = secondSection.getBoundingClientRect().top <= window.innerHeight * 0.5;
-      } else if (firstSection) {
-        // 두 번째 섹션이 없으면 첫 섹션을 거의 다 지난 뒤 표시
-        show = firstSection.getBoundingClientRect().bottom <= window.innerHeight * 0.5;
-      }
-      header.classList.toggle("is-hidden", !show);
-
-      ticking = false;
-    });
-  };
-  window.addEventListener("scroll", onScroll, { passive: true });
+  window.addEventListener(
+    "scroll",
+    () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        updateHeader();
+        ticking = false;
+      });
+    },
+    { passive: true }
+  );
 
   /* 새로고침 등으로 이미 스크롤되어 있을 수 있으니 초기 1회 실행 */
-  onScroll();
+  updateHeader();
 }
 
 /* 페이지 로드 시 컴포넌트 불러오기 시작 */
