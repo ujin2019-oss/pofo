@@ -496,7 +496,8 @@ html {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-between; /* 안내문구 위 / 디바이스 아래(네이비 바와 맞닿게) */
+  /* 디바이스는 하단 바에 맞닿게(아래 정렬) 두고, 안내문구는 이미지 바로 위에 붙임 */
+  justify-content: flex-end;
   gap: clamp(14px, 2vh, 22px);
   min-width: 0;
 }
@@ -935,7 +936,8 @@ html {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-between; /* 안내문구 위 / 디바이스 아래(붉은 바와 맞닿게) */
+  /* 디바이스는 하단 바에 맞닿게(아래 정렬) 두고, 안내문구는 이미지 바로 위에 붙임 */
+  justify-content: flex-end;
   gap: clamp(14px, 2vh, 22px);
 }
 /* 디바이스 크기/모양(폭·비율·상단 라운드·하단 평평)은 모두매쓰와 동일하게 상속.
