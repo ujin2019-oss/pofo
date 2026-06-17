@@ -147,7 +147,7 @@
   /* 프로필 ↔ 경력(Experience) 사이 세로 간격
      - 두 섹션은 같은 사람 정보라 일반 섹션 간격보다 좁게 둡니다.
      - 값을 키우면 사이가 넓어지고, 줄이면 좁아집니다. */
-  --gap-profile-exp: clamp(40px, 5vw, 80px);
+  --gap-profile-exp: clamp(16px, 3vw, 44px);
 
   /* 토글 스위치(Before/After) 크기 — 손잡이 이동거리는 자동 계산됩니다. */
   --toggle-w: 64px;     /* 전체 너비 */

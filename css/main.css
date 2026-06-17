@@ -299,14 +299,15 @@
 .experience .container {
   display: grid;
   grid-template-columns: var(--profile-photo) 1fr; /* 빈 사진 열 / 내용 */
-  gap: var(--profile-gap);
+  column-gap: var(--profile-gap); /* 가로 간격만 (세로 row-gap 은 0 → 라벨 여백으로 제어) */
+  row-gap: 0;
 }
 .experience .section-label,
 .experience .exp-list {
   grid-column: 2; /* 둘 다 두 번째 열에 배치 → 프로필 본문과 좌측 정렬 일치 */
 }
 .experience .section-label {
-  margin-bottom: 28px;
+  margin-bottom: 18px; /* Skills 등 다른 항목과 동일한 라벨↔내용 간격 */
 }
 .exp-list {
   display: grid;
@@ -451,6 +452,23 @@ html {
 }
 .btn-outline:hover {
   background-color: var(--color-main);
+  color: var(--color-white);
+}
+
+/* JEJU STAY / LOTTE / MOODIFY 의 CTA 를 모두매쓰(modoo) CTA 스타일로 통일
+   (각진 사각형 + 서브 퍼플 + 동일 폰트/패딩, hover 시 채움) */
+.project__foot .btn-outline {
+  min-width: 140px;
+  padding: 10px 18px;
+  justify-content: center;
+  border-color: var(--color-sub);
+  border-radius: 0;
+  color: var(--color-sub);
+  font-size: var(--fs-modoo-btn);
+  line-height: 1;
+}
+.project__foot .btn-outline:hover {
+  background-color: var(--color-sub);
   color: var(--color-white);
 }
 
@@ -717,6 +735,51 @@ html {
   letter-spacing: 0.12em;
   color: var(--color-tracksy);
   opacity: 0.75;
+}
+
+/* TRACKSY 폰 목업: phone.png(배경 투명, 손+폰) + 뒤에 tracksy1 화면이 비쳐 보임
+   - 배경이 투명하므로 카드 없이 보라 섹션 위에 떠 있는 형태 */
+.tracksy-mock {
+  position: relative;
+  width: min(100%, 720px);     /* 더 크게 */
+  aspect-ratio: 1070 / 846;    /* phone.png 원본 비율 */
+  margin-bottom: 0;            /* 하단 정보 바와 간격 없이 맞닿게 */
+  transform: translateX(clamp(-72px, -5vw, -24px)); /* 살짝 왼쪽으로 이동 */
+}
+/* 폰 프레임(손+폰) : 위 레이어 + 손 모양을 따라가는 그림자로 입체감 */
+.tracksy-mock__frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  z-index: 2;
+  pointer-events: none;
+  filter: drop-shadow(0 22px 40px rgba(60, 30, 160, 0.28));
+}
+/* 앱 화면(tracksy1) : 폰 화면의 투명 영역 위치에 정확히 맞춰 뒤에 배치
+   (phone.png 측정값: left 37.9% / top 7.2% / width 26.7% / height 72.9%) */
+.tracksy-mock__screen {
+  position: absolute;
+  /* 화면 구멍(좌59.5 상4.6 폭28.1 높79.4)에 꽉 맞추고 사방으로 아주 살짝만 물림
+     (위 베젤이 얇아 과하게 키우면 삐져나오므로 상하는 0.2%만 확장) */
+  left: 59.1%;
+  top: 4.4%;
+  width: 28.9%;
+  height: 79.8%;
+  object-fit: cover;
+  object-position: center top;
+  z-index: 1;
+  background: #B89CFF; /* 혹시 남는 미세 틈도 앱 퍼플로 메움 */
+  /* 여러 장을 겹쳐 두고 .is-active 한 장만 보이게 → 부드러운 크로스페이드 */
+  opacity: 0;
+  transition: opacity 1s var(--ease-out);
+}
+.tracksy-mock__screen.is-active {
+  opacity: 1;
+}
+@media (prefers-reduced-motion: reduce) {
+  .tracksy-mock__screen { transition: none; }
 }
 
 /* =====================================================

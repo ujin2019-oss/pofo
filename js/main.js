@@ -41,6 +41,24 @@
     initWebappCarousel();
     initCompareSlider();
     initProjectImageToggle();
+    initTracksyScreens();
+  }
+
+  /* -----------------------------------------------------------
+     TRACKSY 폰 화면 : tracksy1~4 자동 크로스페이드
+     - .tracksy-mock__screen 들 중 .is-active 한 장만 보이고
+       일정 간격으로 다음 장으로 부드럽게 전환
+     ----------------------------------------------------------- */
+  function initTracksyScreens() {
+    const screens = Array.from(document.querySelectorAll(".tracksy-mock__screen"));
+    if (screens.length < 2 || prefersReduced) return; // 모션 줄이기면 첫 장 고정
+
+    let i = 0;
+    setInterval(function () {
+      screens[i].classList.remove("is-active");
+      i = (i + 1) % screens.length;
+      screens[i].classList.add("is-active");
+    }, 3200); // 한 장당 노출 시간 (ms)
   }
 
   /* -----------------------------------------------------------
@@ -55,11 +73,11 @@
       gsap.to(el, {
         opacity: 1,
         y: 0,
-        duration: 0.9,
-        ease: "power3.out",
+        duration: 1.3,            // 더 길게 → 더 부드럽게
+        ease: "power2.out",       // 완만한 감속(긴 꼬리)
         scrollTrigger: {
           trigger: el,
-          start: "top 85%",
+          start: "top 90%",       // 조금 더 일찍 시작해 여유 있게 진입
           toggleActions: "play none none none",
         },
         onComplete: () => {
@@ -116,10 +134,10 @@
     // (2) 텍스트: 70px(scale 0.5) -> 140px(scale 1)로 커짐 (조금 더 일찍 마무리)
     tl.to(text, { scale: 1, duration: 2 }, 0);
 
-    // (3) 마지막 구간: 커지는 동안 그대로 페이드아웃 -> 끝(progress 1)에 완전히 사라짐
-    //     위치 이동 없이 제자리에서 사라져 다음 섹션과 부드럽게 크로스됨
-    tl.to(sphereWrap, { opacity: 0, ease: "power2.in", duration: 1.1 }, 1.9);
-    tl.to(text, { opacity: 0, ease: "power2.in", duration: 1.1 }, 1.9);
+    // (3) 마지막 구간: 페이드아웃을 더 일찍·더 길게 빼서 끝(progress 1)까지 천천히 사라짐
+    //     → 슬로건이 서서히 녹아내리며 다음(프로필) 섹션 등장과 겹치는 크로스페이드 느낌
+    tl.to(sphereWrap, { opacity: 0, ease: "power1.in", duration: 1.6 }, 1.4);
+    tl.to(text, { opacity: 0, ease: "power1.in", duration: 1.6 }, 1.4);
 
     // (4) 스크롤이 시작되면 스크롤 안내 아이콘이 먼저 사라짐
     if (scrollCue) {
