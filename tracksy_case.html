@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<!--
+  =====================================================================
+  TRACKSY — AI 기반 러닝 다이어리 서비스 / UX·UI Case Study (서브페이지)
+  - 순수 HTML + Vanilla CSS + Vanilla JS (CSS 라이브러리 미사용)
+  - 스크롤 인터랙션: GSAP + ScrollTrigger (CDN)
+  - 모든 이미지는 플레이스홀더(.img-slot) — 각 슬롯 주석의 위치에 넣으세요.
+  - 수정: <style> 최상단 :root 변수 / 각 .img-slot 을 <img> 로 교체
+  =====================================================================
+-->
+<html lang="ko" class="js">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TRACKSY · 러닝 다이어리 UX Case Study</title>
+  <meta name="description" content="오늘의 러닝을 나만의 이야기로 — AI 기반 러닝 다이어리 'TRACKSY' UX/UI 케이스 스터디" />
+
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+
+  <style>
+    /* =================================================================
+       1) DESIGN TOKENS
+       ================================================================= */
+    :root {
+      --color-primary: #8B5CF6;     /* Primary */
+      --color-secondary: #C4B5FD;   /* Secondary */
+      --color-light: #F5F3FF;       /* Light bg */
+      --color-text: #111111;        /* Text */
+      --color-white: #FFFFFF;
+
+      --color-bg: #FFFFFF;
+      --color-text-muted: #6B7280;
+      --color-line: rgba(17, 17, 17, 0.08);
+      --color-ink: #15121F;         /* 다크 섹션 */
+      --gradient-brand: linear-gradient(135deg, #C4B5FD 0%, #8B5CF6 100%);
+
+      --font-base: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui,
+        "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+      --fs-display: clamp(40px, 8vw, 96px);
+      --fs-h1: clamp(28px, 4.6vw, 56px);
+      --fs-h2: clamp(23px, 3vw, 40px);
+      --fs-h3: clamp(18px, 1.9vw, 24px);
+      --fs-body: clamp(15px, 1.15vw, 18px);
+      --fs-small: clamp(13px, 0.95vw, 15px);
+      --fs-num: clamp(40px, 6vw, 80px);
+
+      --fw-regular: 400; --fw-medium: 500; --fw-semibold: 600; --fw-bold: 700; --fw-black: 800;
+      --lh-tight: 1.12; --lh-normal: 1.6; --lh-loose: 1.85;
+
+      --section-gap: clamp(80px, 12vw, 168px);
+      --block-gap: clamp(28px, 4vw, 56px);
+      --pad-x: clamp(20px, 5vw, 88px);
+      --container: 1200px;
+
+      --radius-sm: 12px; --radius-md: 20px; --radius-lg: 30px; --radius-pill: 999px;
+      --shadow-card: 0 20px 50px rgba(80, 50, 160, 0.10);
+      --shadow-soft: 0 10px 30px rgba(80, 50, 160, 0.07);
+      --ease: cubic-bezier(0.16, 1, 0.3, 1);
+      --header-h: 68px;
+    }
+
+    /* =================================================================
+       2) RESET
+       ================================================================= */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+    body { font-family: var(--font-base); font-size: var(--fs-body); line-height: var(--lh-normal); color: var(--color-text); background: var(--color-bg); -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; overflow-x: hidden; }
+    img { display: block; max-width: 100%; height: auto; }
+    ul { list-style: none; }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+    :focus-visible { outline: 2px solid var(--color-primary); outline-offset: 3px; border-radius: var(--radius-sm); }
+
+    /* =================================================================
+       3) 공통
+       ================================================================= */
+    .container { width: 100%; max-width: var(--container); margin: 0 auto; padding-left: var(--pad-x); padding-right: var(--pad-x); }
+    .section { padding-top: var(--section-gap); padding-bottom: var(--section-gap); }
+    .section--light { background: var(--color-light); }
+    .section--ink { background: var(--color-ink); color: #fff; }
+
+    .eyebrow { display: inline-flex; align-items: center; gap: 10px; font-size: var(--fs-small); font-weight: var(--fw-bold); letter-spacing: 0.16em; text-transform: uppercase; color: var(--color-primary); margin-bottom: 18px; }
+    .eyebrow::before { content: ""; width: 26px; height: 2px; background: var(--color-primary); border-radius: 2px; }
+    .section--ink .eyebrow { color: var(--color-secondary); }
+    .section--ink .eyebrow::before { background: var(--color-secondary); }
+    .section-title { font-size: var(--fs-h1); font-weight: var(--fw-black); line-height: var(--lh-tight); letter-spacing: -0.025em; word-break: keep-all; }
+    .lead { max-width: 62ch; margin-top: 18px; line-height: var(--lh-loose); color: var(--color-text-muted); word-break: keep-all; }
+    .section--ink .lead { color: rgba(255,255,255,0.7); }
+    .head { max-width: 820px; margin-bottom: var(--block-gap); }
+
+    .btn { display: inline-flex; align-items: center; gap: 10px; padding: 15px 28px; border-radius: var(--radius-pill); font-weight: var(--fw-bold); transition: transform var(--ease) .3s, background-color .25s, color .25s, box-shadow .25s; }
+    .btn--primary { background: var(--color-primary); color: #fff; }
+    .btn--primary:hover { transform: translateY(-2px); box-shadow: 0 14px 30px rgba(139,92,246,0.4); }
+    .btn--ghost { border: 1.5px solid var(--color-primary); color: var(--color-primary); }
+    .btn--ghost:hover { background: var(--color-primary); color: #fff; }
+
+    /* 이미지 슬롯 (전부 플레이스홀더) */
+    .img-slot { position: relative; width: 100%; display: flex; align-items: center; justify-content: center; background: #ECE9F6; border-radius: var(--radius-lg); overflow: hidden; color: #9A93B5; font-size: var(--fs-small); font-weight: var(--fw-bold); letter-spacing: 0.08em; text-align: center; background-image: repeating-linear-gradient(45deg, transparent, transparent 16px, rgba(139,92,246,0.05) 16px, rgba(139,92,246,0.05) 32px); }
+    .img-slot::after { content: "🖼  " attr(data-label); padding: 0 14px; opacity: .9; }
+    .img-slot--phone { aspect-ratio: 9 / 19; border-radius: 32px; }
+    .img-slot--wide { aspect-ratio: 16 / 10; }
+    .img-slot--card { aspect-ratio: 4 / 3; }
+    .img-slot--sq { aspect-ratio: 1 / 1; }
+    .img-slot--ink { background: #221C33; color: #6E648C; }
+
+    /* =================================================================
+       4) HEADER / FOOTER (공통)
+       ================================================================= */
+    .site-header { position: fixed; top: 0; left: 0; width: 100%; height: var(--header-h); display: flex; align-items: center; z-index: 1000; background: rgba(255,255,255,0.8); backdrop-filter: saturate(180%) blur(14px); -webkit-backdrop-filter: saturate(180%) blur(14px); border-bottom: 1px solid var(--color-line); }
+    .site-header__inner { display: flex; align-items: center; justify-content: space-between; width: 100%; }
+    .site-header__logo { font-size: var(--fs-h3); font-weight: var(--fw-black); letter-spacing: -0.02em; }
+    .site-header__logo b { color: var(--color-primary); }
+    .site-nav { display: none; align-items: center; gap: clamp(16px, 2.2vw, 30px); }
+    .site-nav a { font-size: var(--fs-small); font-weight: var(--fw-medium); transition: color .2s; }
+    .site-nav a:hover { color: var(--color-primary); }
+    .site-header__back { display: inline-flex; align-items: center; gap: 6px; padding: 9px 17px; border-radius: var(--radius-pill); background: var(--color-primary); color: #fff; font-size: var(--fs-small); font-weight: var(--fw-bold); transition: transform .25s; }
+    .site-header__back:hover { transform: translateY(-1px); }
+
+    .site-footer { background: var(--color-ink); color: rgba(255,255,255,0.7); padding: clamp(48px,7vw,80px) 0 40px; }
+    .site-footer__inner { display: flex; flex-wrap: wrap; gap: var(--block-gap); justify-content: space-between; align-items: flex-end; }
+    .site-footer__brand { font-size: var(--fs-h2); font-weight: var(--fw-black); color: #fff; letter-spacing: -0.02em; }
+    .site-footer__brand b { color: var(--color-secondary); }
+    .site-footer__contact { display: flex; flex-direction: column; gap: 8px; font-size: var(--fs-small); }
+    .site-footer__contact a:hover { color: #fff; }
+    .site-footer__copy { width: 100%; margin-top: 36px; padding-top: 22px; border-top: 1px solid rgba(255,255,255,0.14); font-size: var(--fs-small); color: rgba(255,255,255,0.45); }
+
+    /* =================================================================
+       01) HERO  (split, Apple 미니멀)
+       ================================================================= */
+    .hero { padding-top: calc(var(--header-h) + clamp(44px, 8vw, 110px)); padding-bottom: var(--section-gap); }
+    .hero__grid { display: grid; grid-template-columns: 1fr; gap: var(--block-gap); align-items: center; }
+    .hero__mock { order: -1; max-width: 320px; margin: 0 auto; width: 100%; }
+    .hero__title { font-size: var(--fs-display); font-weight: var(--fw-black); line-height: 0.95; letter-spacing: -0.04em; background: var(--gradient-brand); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .hero__tagline { margin-top: 20px; font-size: clamp(20px, 2.6vw, 34px); font-weight: var(--fw-bold); line-height: 1.3; letter-spacing: -0.01em; word-break: keep-all; }
+    .hero__desc { margin-top: 18px; max-width: 46ch; color: var(--color-text-muted); line-height: var(--lh-loose); word-break: keep-all; }
+    .hero__meta { display: grid; grid-template-columns: 1fr 1fr; gap: 22px 28px; margin-top: var(--block-gap); padding-top: 28px; border-top: 1px solid var(--color-line); }
+    .hero__meta dt { font-size: var(--fs-small); font-weight: var(--fw-bold); letter-spacing: 0.06em; color: var(--color-primary); margin-bottom: 7px; }
+    .hero__meta dd { font-size: var(--fs-body); font-weight: var(--fw-medium); line-height: 1.6; }
+
+    /* =================================================================
+       02) PROBLEM
+       ================================================================= */
+    .problem__top { display: grid; grid-template-columns: 1fr; gap: var(--block-gap); align-items: start; margin-bottom: var(--block-gap); }
+    .problem__shot .img-slot { aspect-ratio: 4/3; box-shadow: var(--shadow-card); }
+    .pcards { display: grid; grid-template-columns: 1fr; gap: clamp(14px,2vw,22px); }
+    .pcard { padding: clamp(22px,3vw,34px); border-radius: var(--radius-md); background: var(--color-white); border: 1px solid var(--color-line); box-shadow: var(--shadow-soft); }
+    .pcard__tag { font-size: var(--fs-small); font-weight: var(--fw-bold); letter-spacing: 0.1em; color: var(--color-primary); }
+    .pcard__title { margin-top: 10px; font-size: var(--fs-h3); font-weight: var(--fw-bold); word-break: keep-all; }
+
+    /* =================================================================
+       03) GOAL (아이콘 카드)
+       ================================================================= */
+    .goals { display: grid; grid-template-columns: 1fr; gap: clamp(16px,2vw,26px); }
+    .goal { padding: clamp(28px,3.4vw,44px); border-radius: var(--radius-lg); background: var(--color-white); border: 1px solid var(--color-line); box-shadow: var(--shadow-card); transition: transform var(--ease) .4s; }
+    .goal:hover { transform: translateY(-6px); }
+    .goal__ico { width: 56px; height: 56px; border-radius: var(--radius-md); background: var(--color-light); display: grid; place-items: center; color: var(--color-primary); margin-bottom: 20px; }
+    .goal__ico svg { width: 28px; height: 28px; }
+    .goal__no { font-size: var(--fs-small); font-weight: var(--fw-bold); letter-spacing: 0.14em; color: var(--color-secondary); }
+    .goal__title { margin-top: 8px; font-size: var(--fs-h3); font-weight: var(--fw-black); line-height: 1.3; word-break: keep-all; }
+
+    /* =================================================================
+       04) INSIGHTS (가로 카드, ink)
+       ================================================================= */
+    .insights { display: flex; flex-direction: column; gap: clamp(14px,2vw,20px); margin-top: var(--block-gap); }
+    .insight { display: grid; grid-template-columns: auto 1fr; gap: clamp(18px,3vw,44px); align-items: center; padding: clamp(24px,3.4vw,46px); border-radius: var(--radius-lg); background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); transition: background .3s; }
+    .insight:hover { background: rgba(196,181,253,0.08); }
+    .insight__no { font-size: clamp(34px,5.5vw,72px); font-weight: var(--fw-black); line-height: 1; color: var(--color-secondary); }
+    .insight__text { font-size: clamp(18px,2.3vw,30px); font-weight: var(--fw-bold); line-height: 1.4; word-break: keep-all; }
+
+    /* =================================================================
+       05) SOLUTION (Flow diagram)
+       ================================================================= */
+    .flow { display: grid; grid-template-columns: 1fr; gap: 0; margin-top: var(--block-gap); }
+    .flow__step { display: grid; grid-template-columns: 1fr; gap: 16px; align-items: center; }
+    .flow__media .img-slot { aspect-ratio: 16/10; }
+    .flow__body { display: flex; align-items: center; gap: 18px; }
+    .flow__num { flex: 0 0 auto; width: 52px; height: 52px; border-radius: var(--radius-pill); background: var(--gradient-brand); color: #fff; display: grid; place-items: center; font-weight: var(--fw-black); }
+    .flow__label { font-size: var(--fs-h3); font-weight: var(--fw-bold); }
+    .flow__arrow { display: grid; place-items: center; color: var(--color-secondary); padding: 14px 0; }
+    .flow__arrow svg { width: 22px; height: 30px; }
+
+    /* =================================================================
+       06) KEY FEATURES (3열, 상단 모바일 화면)
+       ================================================================= */
+    .features { display: grid; grid-template-columns: 1fr; gap: clamp(18px,2.4vw,30px); }
+    .feature { border-radius: var(--radius-lg); background: var(--color-white); border: 1px solid var(--color-line); box-shadow: var(--shadow-card); overflow: hidden; transition: transform var(--ease) .4s; }
+    .feature:hover { transform: translateY(-6px); }
+    .feature__media { padding: clamp(20px,2.4vw,28px) clamp(20px,2.4vw,28px) 0; }
+    .feature__media .img-slot { aspect-ratio: 9/14; border-radius: var(--radius-md); }
+    .feature__body { padding: clamp(20px,2.4vw,30px); }
+    .feature__no { font-size: var(--fs-small); font-weight: var(--fw-bold); letter-spacing: 0.12em; color: var(--color-primary); }
+    .feature__title { margin: 8px 0 10px; font-size: var(--fs-h3); font-weight: var(--fw-black); }
+    .feature__desc { font-size: var(--fs-small); color: var(--color-text-muted); word-break: keep-all; }
+
+    /* =================================================================
+       07) UX DESIGN (탭 UI)
+       ================================================================= */
+    .tabs { display: flex; flex-wrap: wrap; gap: 10px; margin-top: var(--block-gap); margin-bottom: clamp(28px,4vw,44px); }
+    .tab { padding: 11px 22px; border-radius: var(--radius-pill); border: 1.5px solid var(--color-line); background: var(--color-white); font-weight: var(--fw-bold); font-size: var(--fs-small); color: var(--color-text-muted); transition: all .25s; }
+    .tab[aria-selected="true"] { background: var(--color-primary); border-color: var(--color-primary); color: #fff; }
+    .tabpanel { display: none; grid-template-columns: 1fr; gap: var(--block-gap); align-items: center; }
+    .tabpanel.is-active { display: grid; }
+    .tabpanel__media .img-slot { aspect-ratio: 9/16; max-width: 300px; margin: 0 auto; border-radius: 28px; }
+    .tabpanel__title { font-size: var(--fs-h2); font-weight: var(--fw-black); }
+    .tabpanel__desc { margin-top: 14px; color: var(--color-text-muted); line-height: var(--lh-loose); word-break: keep-all; }
+    .tabpanel__point { margin-top: 18px; display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: var(--radius-pill); background: var(--color-light); color: var(--color-primary); font-size: var(--fs-small); font-weight: var(--fw-bold); }
+
+    /* =================================================================
+       08) DESIGN SYSTEM
+       ================================================================= */
+    .ds { display: grid; grid-template-columns: 1fr; gap: clamp(18px,2.4vw,28px); margin-top: var(--block-gap); }
+    .ds__panel { background: var(--color-white); border: 1px solid var(--color-line); border-radius: var(--radius-lg); padding: clamp(24px,3vw,36px); box-shadow: var(--shadow-card); }
+    .ds__label { font-size: var(--fs-small); font-weight: var(--fw-bold); letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-secondary); margin-bottom: 20px; }
+    .ds__colors { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .ds__color { display: flex; flex-direction: column; gap: 8px; }
+    .ds__chip { height: 60px; border-radius: var(--radius-sm); box-shadow: inset 0 0 0 1px rgba(0,0,0,0.06); }
+    .ds__color small { font-size: 12px; color: var(--color-text-muted); }
+    .ds__color b { font-size: var(--fs-small); }
+    .ds__type { font-size: clamp(30px,4vw,46px); font-weight: var(--fw-black); letter-spacing: -0.02em; }
+    .ds__type-w { display: flex; gap: 16px; margin-top: 14px; flex-wrap: wrap; color: var(--color-text-muted); }
+    .ds__comp { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+    .ds-btn { padding: 11px 22px; border-radius: var(--radius-pill); background: var(--color-primary); color: #fff; font-weight: var(--fw-bold); font-size: var(--fs-small); }
+    .ds-card { padding: 16px 22px; border-radius: var(--radius-md); background: var(--color-light); font-weight: var(--fw-bold); font-size: var(--fs-small); }
+    .ds-nav { display: flex; gap: 18px; padding: 12px 22px; border-radius: var(--radius-pill); background: var(--color-ink); color: #fff; font-size: 12px; }
+    .ds-fab { width: 52px; height: 52px; border-radius: var(--radius-pill); background: var(--gradient-brand); color: #fff; display: grid; place-items: center; font-size: 24px; box-shadow: 0 10px 24px rgba(139,92,246,0.4); }
+    .ds__mascot .img-slot { aspect-ratio: 1/1; max-width: 200px; }
+
+    /* =================================================================
+       09) DEVELOPMENT (4카드 + 타임라인)
+       ================================================================= */
+    .devcards { display: grid; grid-template-columns: 1fr; gap: clamp(14px,2vw,22px); margin-top: var(--block-gap); }
+    .devcard { padding: clamp(22px,3vw,32px); border-radius: var(--radius-md); background: var(--color-white); border: 1px solid var(--color-line); box-shadow: var(--shadow-soft); }
+    .devcard__no { font-size: var(--fs-small); font-weight: var(--fw-bold); color: var(--color-secondary); letter-spacing: 0.12em; }
+    .devcard__title { margin-top: 8px; font-size: var(--fs-h3); font-weight: var(--fw-bold); word-break: keep-all; }
+    .timeline { display: grid; grid-template-columns: 1fr; gap: 0; margin-top: clamp(40px,6vw,72px); position: relative; }
+    .tl-label { font-size: var(--fs-small); font-weight: var(--fw-bold); letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-primary); margin-bottom: 24px; }
+    .tl-step { display: grid; grid-template-columns: auto 1fr; gap: 18px; padding-bottom: 26px; position: relative; }
+    .tl-step:not(:last-child)::before { content: ""; position: absolute; left: 11px; top: 26px; bottom: 0; width: 2px; background: var(--color-line); }
+    .tl-dot { width: 24px; height: 24px; border-radius: var(--radius-pill); background: var(--color-white); border: 3px solid var(--color-primary); margin-top: 2px; z-index: 1; }
+    .tl-step h4 { font-size: var(--fs-body); font-weight: var(--fw-bold); }
+    .tl-step p { font-size: var(--fs-small); color: var(--color-text-muted); margin-top: 4px; }
+
+    /* =================================================================
+       10) PROBLEM SOLVING (Before/After 3열)
+       ================================================================= */
+    .cases { display: grid; grid-template-columns: 1fr; gap: clamp(18px,2.4vw,28px); }
+    .case { border-radius: var(--radius-lg); background: var(--color-white); border: 1px solid var(--color-line); box-shadow: var(--shadow-card); overflow: hidden; }
+    .case__head { padding: clamp(20px,2.6vw,28px); border-bottom: 1px solid var(--color-line); }
+    .case__no { font-size: var(--fs-small); font-weight: var(--fw-bold); color: var(--color-primary); letter-spacing: 0.1em; }
+    .case__title { margin-top: 8px; font-size: var(--fs-h3); font-weight: var(--fw-bold); word-break: keep-all; }
+    .ba-row { display: grid; grid-template-columns: 1fr; }
+    .ba-cell { padding: clamp(18px,2.4vw,26px); }
+    .ba-cell--before { background: #FBF1F1; }
+    .ba-cell--after { background: var(--color-light); }
+    .ba-cell .tag { font-size: 11px; font-weight: var(--fw-black); letter-spacing: 0.14em; text-transform: uppercase; }
+    .ba-cell--before .tag { color: #D6455B; }
+    .ba-cell--after .tag { color: var(--color-primary); }
+    .ba-cell p { margin-top: 8px; font-size: var(--fs-small); font-weight: var(--fw-medium); word-break: keep-all; }
+    .ba-arrow { display: grid; place-items: center; padding: 6px 0; color: var(--color-secondary); background: transparent; transform: rotate(90deg); }
+
+    /* =================================================================
+       11) OUTCOME (KPI + value flow)
+       ================================================================= */
+    .outcome { background: var(--gradient-brand); color: #fff; }
+    .outcome .eyebrow { color: rgba(255,255,255,0.85); }
+    .outcome .eyebrow::before { background: rgba(255,255,255,0.85); }
+    .outcome .section-title { color: #fff; }
+    .kpis { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(16px,2.4vw,28px); margin-top: var(--block-gap); }
+    .kpi { padding: clamp(24px,3vw,40px); border-radius: var(--radius-lg); background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2); backdrop-filter: blur(4px); }
+    .kpi__num { font-size: var(--fs-num); font-weight: var(--fw-black); line-height: 1; letter-spacing: -0.03em; }
+    .kpi__label { margin-top: 12px; font-size: var(--fs-small); font-weight: var(--fw-medium); color: rgba(255,255,255,0.9); word-break: keep-all; }
+    .valueflow { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 12px; margin-top: clamp(40px,6vw,72px); }
+    .valueflow span { padding: 12px 22px; border-radius: var(--radius-pill); background: rgba(255,255,255,0.16); border: 1px solid rgba(255,255,255,0.28); font-weight: var(--fw-bold); font-size: var(--fs-small); }
+    .valueflow .arr { background: none; border: none; padding: 0; font-size: 18px; opacity: 0.85; }
+
+    /* =================================================================
+       12) RETROSPECTIVE
+       ================================================================= */
+    .retro { text-align: center; }
+    .retro__quote { max-width: 22ch; margin: 0 auto; font-size: clamp(24px,4vw,46px); font-weight: var(--fw-black); line-height: 1.4; letter-spacing: -0.02em; word-break: keep-all; }
+    .retro__quote b { color: var(--color-primary); }
+    .retro__cta { margin-top: var(--block-gap); display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+
+    /* =================================================================
+       REVEAL
+       ================================================================= */
+    .js [data-reveal] { opacity: 0; transform: translateY(42px); will-change: transform, opacity; }
+    .js [data-reveal-scale] { opacity: 0; transform: scale(0.94); will-change: transform, opacity; }
+    .no-anim [data-reveal], .no-anim [data-reveal-scale] { opacity: 1 !important; transform: none !important; }
+    @media (prefers-reduced-motion: reduce) { .js [data-reveal], .js [data-reveal-scale] { opacity: 1 !important; transform: none !important; } }
+
+    /* =================================================================
+       반응형
+       ================================================================= */
+    @media (min-width: 768px) {
+      .site-nav { display: flex; }
+      .hero__grid { grid-template-columns: 0.9fr 1.1fr; }
+      .hero__mock { order: 0; margin: 0; }
+      .hero__meta { grid-template-columns: repeat(4, 1fr); }
+      .problem__top { grid-template-columns: 1.1fr 0.9fr; }
+      .pcards { grid-template-columns: repeat(3, 1fr); }
+      .goals { grid-template-columns: repeat(3, 1fr); }
+      .flow__step { grid-template-columns: 1fr 1.1fr; }
+      .flow__step--reverse .flow__media { order: 2; }
+      .features { grid-template-columns: repeat(3, 1fr); }
+      .tabpanel.is-active { grid-template-columns: 0.8fr 1.2fr; }
+      .ds { grid-template-columns: repeat(3, 1fr); }
+      .ds__panel--wide { grid-column: span 3; }
+      .devcards { grid-template-columns: repeat(4, 1fr); }
+      .cases { grid-template-columns: repeat(3, 1fr); }
+      .kpis { grid-template-columns: repeat(4, 1fr); }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- ============ HEADER (공통) ============ -->
+  <header class="site-header" id="top">
+    <div class="container site-header__inner">
+      <a class="site-header__logo" href="./index.html#profile">PORT<b>FOLIO</b></a>
+      <nav class="site-nav" aria-label="섹션 이동">
+        <a href="#problem">Problem</a>
+        <a href="#solution">Solution</a>
+        <a href="#features">Features</a>
+        <a href="#outcome">Outcome</a>
+      </nav>
+      <a class="site-header__back" href="./index.html"><span aria-hidden="true">←</span> PORTFOLIO</a>
+    </div>
+  </header>
+
+  <main>
+    <!-- ============ 01 HERO ============ -->
+    <section class="hero">
+      <div class="container">
+        <div class="hero__grid">
+          <!-- 이미지 슬롯: 모바일 목업 (좌측) -->
+          <div class="hero__mock" data-reveal-scale>
+            <div class="img-slot img-slot--phone" data-label="MOBILE MOCKUP"></div>
+          </div>
+          <div class="hero__intro">
+            <h1 class="hero__title" data-reveal>TRACKSY</h1>
+            <p class="hero__tagline" data-reveal>오늘의 러닝을,<br />나만의 이야기로</p>
+            <p class="hero__desc" data-reveal>기존 러닝앱이 제공하지 못했던 감성 기록 경험을 만들기 위해 기획한 AI 기반 러닝 다이어리 서비스입니다.</p>
+            <dl class="hero__meta" data-reveal>
+              <div><dt>Role</dt><dd>UX/UI Design</dd></div>
+              <div><dt>Contribution</dt><dd>기획 40% · 디자인 50% · 퍼블리싱 30%</dd></div>
+              <div><dt>Team</dt><dd>4명</dd></div>
+              <div><dt>Duration</dt><dd>2026.04 ~ 05</dd></div>
+            </dl>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 02 PROBLEM ============ -->
+    <section class="section section--light" id="problem">
+      <div class="container">
+        <div class="problem__top">
+          <div class="problem__text">
+            <span class="eyebrow" data-reveal>Problem Definition</span>
+            <h2 class="section-title" data-reveal>러닝 기록은 남지만,<br />경험은 남지 않았다.</h2>
+            <p class="lead" data-reveal>기존 러닝 앱은 거리, 시간, 페이스 등 수치 중심 정보 제공에 집중되어 있습니다. 하지만 사용자는 단순 기록보다 자신의 성취감과 경험을 공유하고 싶어합니다.</p>
+          </div>
+          <!-- 이미지 슬롯: 기존 러닝앱 예시 (우측) -->
+          <div class="problem__shot" data-reveal-scale>
+            <div class="img-slot" data-label="기존 러닝앱 예시"></div>
+          </div>
+        </div>
+        <div class="pcards">
+          <div class="pcard" data-reveal><p class="pcard__tag">Problem 01</p><h3 class="pcard__title">기록 중심 UI</h3></div>
+          <div class="pcard" data-reveal><p class="pcard__tag">Problem 02</p><h3 class="pcard__title">SNS 공유 최적화 부족</h3></div>
+          <div class="pcard" data-reveal><p class="pcard__tag">Problem 03</p><h3 class="pcard__title">감성 표현의 한계</h3></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 03 PROJECT GOAL ============ -->
+    <section class="section">
+      <div class="container">
+        <div class="head">
+          <span class="eyebrow" data-reveal>Project Goal</span>
+          <h2 class="section-title" data-reveal>기록을 넘어, 경험이 되는 러닝</h2>
+        </div>
+        <div class="goals">
+          <article class="goal" data-reveal>
+            <div class="goal__ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M3 9h18M9 21V9"/></svg></div>
+            <p class="goal__no">GOAL 01</p>
+            <h3 class="goal__title">러닝 기록을 콘텐츠로 만든다</h3>
+          </article>
+          <article class="goal" data-reveal>
+            <div class="goal__ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a4 4 0 0 0-4 4v2a4 4 0 0 0 8 0V6a4 4 0 0 0-4-4z"/><path d="M5 11a7 7 0 0 0 14 0M12 18v4"/></svg></div>
+            <p class="goal__no">GOAL 02</p>
+            <h3 class="goal__title">AI 기반 자동 기록 시스템 구축</h3>
+          </article>
+          <article class="goal" data-reveal>
+            <div class="goal__ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="7" r="3"/><circle cx="17" cy="11" r="2.5"/><path d="M3 21v-1a5 5 0 0 1 5-5h2a5 5 0 0 1 5 5v1M15 17h6"/></svg></div>
+            <p class="goal__no">GOAL 03</p>
+            <h3 class="goal__title">러너 간 경험 공유 플랫폼 구축</h3>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 04 INSIGHTS ============ -->
+    <section class="section section--ink">
+      <div class="container">
+        <div class="head">
+          <span class="eyebrow" data-reveal>Key Insights</span>
+          <h2 class="section-title" data-reveal>사용자에게서 발견한 3가지</h2>
+        </div>
+        <div class="insights">
+          <div class="insight" data-reveal><div class="insight__no">01</div><p class="insight__text">사용자는 운동 기록보다 성취 경험을 공유하고 싶어한다.</p></div>
+          <div class="insight" data-reveal><div class="insight__no">02</div><p class="insight__text">러닝앱은 많지만 콘텐츠 제작 도구는 부족하다.</p></div>
+          <div class="insight" data-reveal><div class="insight__no">03</div><p class="insight__text">기록 입력 과정이 길어질수록 서비스 이탈률이 증가한다.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 05 SOLUTION (Flow) ============ -->
+    <section class="section section--light" id="solution">
+      <div class="container">
+        <div class="head">
+          <span class="eyebrow" data-reveal>Solution Flow</span>
+          <h2 class="section-title" data-reveal>기록을 콘텐츠로 만드는<br />새로운 러닝 경험</h2>
+        </div>
+        <div class="flow">
+          <div class="flow__step" data-reveal>
+            <div class="flow__media"><div class="img-slot" data-label="OCR 자동 기록 화면"></div></div>
+            <div class="flow__body"><div class="flow__num">1</div><div class="flow__label">OCR 자동 기록</div></div>
+          </div>
+          <div class="flow__arrow" data-reveal><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v16M6 14l6 6 6-6"/></svg></div>
+          <div class="flow__step flow__step--reverse" data-reveal>
+            <div class="flow__media"><div class="img-slot" data-label="러닝 카드 제작 화면"></div></div>
+            <div class="flow__body"><div class="flow__num">2</div><div class="flow__label">러닝 카드 제작</div></div>
+          </div>
+          <div class="flow__arrow" data-reveal><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v16M6 14l6 6 6-6"/></svg></div>
+          <div class="flow__step" data-reveal>
+            <div class="flow__media"><div class="img-slot" data-label="AI 러닝일지 생성 화면"></div></div>
+            <div class="flow__body"><div class="flow__num">3</div><div class="flow__label">AI 러닝일지 생성</div></div>
+          </div>
+          <div class="flow__arrow" data-reveal><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v16M6 14l6 6 6-6"/></svg></div>
+          <div class="flow__step flow__step--reverse" data-reveal>
+            <div class="flow__media"><div class="img-slot" data-label="SNS 공유 화면"></div></div>
+            <div class="flow__body"><div class="flow__num">4</div><div class="flow__label">SNS 공유</div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 06 KEY FEATURES ============ -->
+    <section class="section" id="features">
+      <div class="container">
+        <div class="head">
+          <span class="eyebrow" data-reveal>Key Features</span>
+          <h2 class="section-title" data-reveal>핵심 기능</h2>
+        </div>
+        <div class="features">
+          <article class="feature" data-reveal>
+            <div class="feature__media"><div class="img-slot" data-label="OCR 화면"></div></div>
+            <div class="feature__body"><p class="feature__no">FEATURE 01</p><h3 class="feature__title">OCR 자동 기록</h3><p class="feature__desc">캡처 이미지에서 거리·시간·페이스를 자동 추출</p></div>
+          </article>
+          <article class="feature" data-reveal>
+            <div class="feature__media"><div class="img-slot" data-label="AI 러닝일지 화면"></div></div>
+            <div class="feature__body"><p class="feature__no">FEATURE 02</p><h3 class="feature__title">AI 러닝일지</h3><p class="feature__desc">대화를 통해 오늘의 러닝을 한 줄로 기록</p></div>
+          </article>
+          <article class="feature" data-reveal>
+            <div class="feature__media"><div class="img-slot" data-label="러닝 카드 스튜디오 화면"></div></div>
+            <div class="feature__body"><p class="feature__no">FEATURE 03</p><h3 class="feature__title">러닝 카드 스튜디오</h3><p class="feature__desc">SNS 공유를 위한 감성 카드 제작 기능</p></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 07 UX DESIGN (탭) ============ -->
+    <section class="section section--light">
+      <div class="container">
+        <div class="head">
+          <span class="eyebrow" data-reveal>UX Design</span>
+          <h2 class="section-title" data-reveal>탭으로 나눈 4개의 핵심 화면</h2>
+        </div>
+        <div class="tabs" role="tablist" aria-label="UX 화면 탭" data-reveal>
+          <button class="tab" role="tab" aria-selected="true" data-tab="home">Home</button>
+          <button class="tab" role="tab" aria-selected="false" data-tab="studio">Studio</button>
+          <button class="tab" role="tab" aria-selected="false" data-tab="community">Community</button>
+          <button class="tab" role="tab" aria-selected="false" data-tab="archive">Archive</button>
+        </div>
+
+        <div class="tabpanel is-active" data-panel="home" data-reveal>
+          <div class="tabpanel__media"><div class="img-slot" data-label="Home 화면"></div></div>
+          <div class="tabpanel__text">
+            <h3 class="tabpanel__title">Home</h3>
+            <p class="tabpanel__desc">오늘의 러닝과 추천 카드를 한눈에. 사용자가 가장 먼저 ‘무엇을 할지’ 알 수 있도록 핵심 액션을 상단에 배치했습니다.</p>
+            <span class="tabpanel__point">UX Point · 핵심 액션 우선 노출</span>
+          </div>
+        </div>
+        <div class="tabpanel" data-panel="studio" data-reveal>
+          <div class="tabpanel__media"><div class="img-slot" data-label="Studio 화면"></div></div>
+          <div class="tabpanel__text">
+            <h3 class="tabpanel__title">Studio</h3>
+            <p class="tabpanel__desc">러닝 카드를 만드는 공간. 템플릿과 감성 요소를 조합해 몇 번의 탭만으로 공유용 콘텐츠를 완성합니다.</p>
+            <span class="tabpanel__point">UX Point · 최소 단계의 제작 흐름</span>
+          </div>
+        </div>
+        <div class="tabpanel" data-panel="community" data-reveal>
+          <div class="tabpanel__media"><div class="img-slot" data-label="Community 화면"></div></div>
+          <div class="tabpanel__text">
+            <h3 class="tabpanel__title">Community</h3>
+            <p class="tabpanel__desc">러너들의 카드를 둘러보고 영감을 얻는 공간. 경험을 나누며 동기부여로 이어지도록 설계했습니다.</p>
+            <span class="tabpanel__point">UX Point · 경험 공유 중심 피드</span>
+          </div>
+        </div>
+        <div class="tabpanel" data-panel="archive" data-reveal>
+          <div class="tabpanel__media"><div class="img-slot" data-label="Archive 화면"></div></div>
+          <div class="tabpanel__text">
+            <h3 class="tabpanel__title">Archive</h3>
+            <p class="tabpanel__desc">나의 러닝 기록과 카드를 모아보는 공간. 성장의 흐름을 한눈에 확인할 수 있습니다.</p>
+            <span class="tabpanel__point">UX Point · 기록의 시각적 누적</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 08 DESIGN SYSTEM ============ -->
+    <section class="section">
+      <div class="container">
+        <div class="head">
+          <span class="eyebrow" data-reveal>Design System</span>
+          <h2 class="section-title" data-reveal>일관된 감성을 위한 시스템</h2>
+        </div>
+        <div class="ds">
+          <div class="ds__panel" data-reveal>
+            <p class="ds__label">Color</p>
+            <div class="ds__colors">
+              <div class="ds__color"><span class="ds__chip" style="background:#8B5CF6"></span><b>Primary</b><small>#8B5CF6</small></div>
+              <div class="ds__color"><span class="ds__chip" style="background:#C4B5FD"></span><b>Secondary</b><small>#C4B5FD</small></div>
+              <div class="ds__color"><span class="ds__chip" style="background:#F5F3FF"></span><b>Light</b><small>#F5F3FF</small></div>
+              <div class="ds__color"><span class="ds__chip" style="background:#111111"></span><b>Text</b><small>#111111</small></div>
+            </div>
+          </div>
+          <div class="ds__panel" data-reveal>
+            <p class="ds__label">Typography</p>
+            <div class="ds__type">Pretendard</div>
+            <div class="ds__type-w"><span style="font-weight:400">Regular</span><span style="font-weight:600">SemiBold</span><span style="font-weight:800">Black</span></div>
+          </div>
+          <div class="ds__panel" data-reveal>
+            <p class="ds__label">Component</p>
+            <div class="ds__comp">
+              <span class="ds-btn">Button</span>
+              <span class="ds-card">Card</span>
+              <span class="ds-nav"><b>Home</b><span>Studio</span><span>Community</span></span>
+              <span class="ds-fab">+</span>
+            </div>
+          </div>
+          <div class="ds__panel ds__panel--wide ds__mascot" data-reveal>
+            <p class="ds__label">Mascot · TRACKSY Character</p>
+            <div class="img-slot" data-label="TRACKSY 마스코트"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 09 DEVELOPMENT & COLLABORATION ============ -->
+    <section class="section section--light">
+      <div class="container">
+        <div class="head">
+          <span class="eyebrow" data-reveal>Development &amp; Collaboration</span>
+          <h2 class="section-title" data-reveal>디자인을 넘어 개발·협업까지</h2>
+        </div>
+        <div class="devcards">
+          <div class="devcard" data-reveal><p class="devcard__no">01</p><h3 class="devcard__title">GitHub Branch 협업</h3></div>
+          <div class="devcard" data-reveal><p class="devcard__no">02</p><h3 class="devcard__title">Claude Code 활용</h3></div>
+          <div class="devcard" data-reveal><p class="devcard__no">03</p><h3 class="devcard__title">Groq OCR 연동</h3></div>
+          <div class="devcard" data-reveal><p class="devcard__no">04</p><h3 class="devcard__title">Flutter → Next.js 전환</h3></div>
+        </div>
+
+        <div class="timeline" data-reveal>
+          <p class="tl-label">Collaboration Process</p>
+          <div class="tl-step"><div class="tl-dot"></div><div><h4>기획 · 리서치</h4><p>문제 정의와 서비스 방향 합의</p></div></div>
+          <div class="tl-step"><div class="tl-dot"></div><div><h4>디자인 시스템 구축</h4><p>컬러·컴포넌트·마스코트 정립</p></div></div>
+          <div class="tl-step"><div class="tl-dot"></div><div><h4>개발 · 연동</h4><p>Next.js 전환, Groq OCR 연동</p></div></div>
+          <div class="tl-step"><div class="tl-dot"></div><div><h4>통합 · 배포</h4><p>브랜치 규칙 정립 후 안정 배포</p></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 10 PROBLEM SOLVING (Before/After) ============ -->
+    <section class="section">
+      <div class="container">
+        <div class="head">
+          <span class="eyebrow" data-reveal>Problem Solving</span>
+          <h2 class="section-title" data-reveal>막힌 지점을 해결한 방식</h2>
+        </div>
+        <div class="cases">
+          <article class="case" data-reveal>
+            <div class="case__head"><p class="case__no">CASE 01</p><h3 class="case__title">Flutter → Next.js 전환</h3></div>
+            <div class="ba-row">
+              <div class="ba-cell ba-cell--before"><span class="tag">Before</span><p>웹 환경 불안정</p></div>
+              <div class="ba-arrow"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+              <div class="ba-cell ba-cell--after"><span class="tag">After</span><p>배포 안정성 향상</p></div>
+            </div>
+          </article>
+          <article class="case" data-reveal>
+            <div class="case__head"><p class="case__no">CASE 02</p><h3 class="case__title">Gemini → Groq 전환</h3></div>
+            <div class="ba-row">
+              <div class="ba-cell ba-cell--before"><span class="tag">Before</span><p>429 / 403 오류 발생</p></div>
+              <div class="ba-arrow"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+              <div class="ba-cell ba-cell--after"><span class="tag">After</span><p>안정적 OCR 구현</p></div>
+            </div>
+          </article>
+          <article class="case" data-reveal>
+            <div class="case__head"><p class="case__no">CASE 03</p><h3 class="case__title">Git Merge 충돌</h3></div>
+            <div class="ba-row">
+              <div class="ba-cell ba-cell--before"><span class="tag">Before</span><p>충돌 발생</p></div>
+              <div class="ba-arrow"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+              <div class="ba-cell ba-cell--after"><span class="tag">After</span><p>브랜치 규칙 정립</p></div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 11 OUTCOME ============ -->
+    <section class="section outcome" id="outcome">
+      <div class="container">
+        <div class="head">
+          <span class="eyebrow" data-reveal>Project Outcome</span>
+          <h2 class="section-title" data-reveal>프로젝트 성과</h2>
+        </div>
+        <div class="kpis">
+          <div class="kpi" data-reveal><div class="kpi__num">3</div><p class="kpi__label">핵심 기능 설계</p></div>
+          <div class="kpi" data-reveal><div class="kpi__num">4</div><p class="kpi__label">서비스 영역 구축</p></div>
+          <div class="kpi" data-reveal><div class="kpi__num">AI</div><p class="kpi__label">AI 기능 적용</p></div>
+          <div class="kpi" data-reveal><div class="kpi__num">4인</div><p class="kpi__label">팀 프로젝트 진행</p></div>
+        </div>
+        <div class="valueflow" data-reveal>
+          <span>기록 관리</span>
+          <span class="arr" aria-hidden="true">→</span>
+          <span>콘텐츠 제작</span>
+          <span class="arr" aria-hidden="true">→</span>
+          <span>커뮤니티 경험</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 12 RETROSPECTIVE ============ -->
+    <section class="section retro">
+      <div class="container">
+        <span class="eyebrow" data-reveal style="justify-content:center">Retrospective</span>
+        <p class="retro__quote" data-reveal>
+          기록을 관리하는 서비스가 아니라 <b>경험을 기록하는 서비스</b>라는 관점을 배웠고,
+          UX 설계만큼 <b>개발 환경과 협업 구조</b> 설계가 중요하다는 것을 경험했습니다.
+        </p>
+        <div class="retro__cta" data-reveal>
+          <a class="btn btn--primary" href="https://tracksy-rouge.vercel.app/" target="_blank" rel="noopener">웹사이트 바로가기 <span aria-hidden="true">→</span></a>
+          <a class="btn btn--ghost" href="./index.html">← 포트폴리오로 돌아가기</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ FOOTER (공통) ============ -->
+  <footer class="site-footer">
+    <div class="container site-footer__inner">
+      <p class="site-footer__brand">PORT<b>FOLIO</b></p>
+      <address class="site-footer__contact">
+        <a href="mailto:ujin2019@gmail.com">ujin2019@gmail.com</a>
+        <a href="tel:01020774869">010.2077.4869</a>
+        <span>Seoul, Korea</span>
+      </address>
+      <p class="site-footer__copy">© 2026 PORTFOLIO. TRACKSY UX Case Study.</p>
+    </div>
+  </footer>
+
+  <!-- ===== GSAP (CDN) ===== -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+  <script>
+    (function () {
+      /* ---- 탭 UI ---- */
+      function initTabs() {
+        var tabs = Array.prototype.slice.call(document.querySelectorAll(".tab"));
+        var panels = Array.prototype.slice.call(document.querySelectorAll(".tabpanel"));
+        if (!tabs.length) return;
+        tabs.forEach(function (tab) {
+          tab.addEventListener("click", function () {
+            tabs.forEach(function (t) { t.setAttribute("aria-selected", "false"); });
+            tab.setAttribute("aria-selected", "true");
+            var key = tab.getAttribute("data-tab");
+            panels.forEach(function (p) {
+              p.classList.toggle("is-active", p.getAttribute("data-panel") === key);
+            });
+          });
+        });
+      }
+
+      /* ---- 스크롤 리빌 ---- */
+      function initReveal() {
+        var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        if (typeof gsap === "undefined" || reduce) { document.documentElement.classList.add("no-anim"); return; }
+        gsap.registerPlugin(ScrollTrigger);
+        gsap.utils.toArray("[data-reveal]").forEach(function (el) {
+          gsap.to(el, { opacity: 1, y: 0, duration: 1.1, ease: "power3.out", scrollTrigger: { trigger: el, start: "top 88%", toggleActions: "play none none none" } });
+        });
+        gsap.utils.toArray("[data-reveal-scale]").forEach(function (el) {
+          gsap.to(el, { opacity: 1, scale: 1, duration: 1.1, ease: "power3.out", scrollTrigger: { trigger: el, start: "top 90%", toggleActions: "play none none none" } });
+        });
+        gsap.to(".hero [data-reveal], .hero [data-reveal-scale]", { opacity: 1, y: 0, scale: 1, duration: 1, ease: "power3.out", stagger: 0.1 });
+      }
+
+      initTabs();
+      initReveal();
+    })();
+  </script>
+</body>
+</html>
