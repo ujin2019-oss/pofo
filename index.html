@@ -65,11 +65,19 @@
     <section class="profile" id="profile" aria-label="프로필">
       <div class="container profile__inner">
         <!-- 프로필 사진 (교체: 아래 img 의 src 를 실제 사진 경로로 변경) -->
-        <div class="profile__photo" data-reveal>
-          <!-- 사진 추가 전에는 회색 원으로 표시됩니다 -->
+        <div class="profile__photo" data-reveal onclick="this.classList.toggle('is-flipped')">
+          <!-- 마우스 올리면(모바일은 탭) pro_01 → pro_02 로 부드럽게 교차 -->
           <img
+            class="profile__img profile__img--a"
             src="./images/pro_01.png"
             alt="유진 프로필 사진"
+            onerror="this.style.display='none'"
+          />
+          <img
+            class="profile__img profile__img--b"
+            src="./images/pro_02.png"
+            alt=""
+            aria-hidden="true"
             onerror="this.style.display='none'"
           />
         </div>

@@ -233,17 +233,33 @@
   gap: var(--profile-gap);
   align-items: start;
 }
-/* 프로필 사진 (원형) */
+/* 프로필 사진 (원형) — pro_01 ↔ pro_02 자동 교차 페이드 */
 .profile__photo {
+  position: relative;
   aspect-ratio: 1 / 1;
   border-radius: var(--radius-full);
   overflow: hidden;
   background-color: var(--color-bg-gray);
 }
 .profile__photo img {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+/* 위에 겹친 두 번째 사진(pro_02): 평소 숨김, hover/탭 시 pro_02 로 부드럽게 교차 */
+.profile__photo {
+  cursor: pointer;
+}
+.profile__photo .profile__img--b {
+  opacity: 0;
+  transition: opacity var(--profile-cross) var(--ease-out);
+}
+.profile__photo:hover .profile__img--b,
+.profile__photo:focus-within .profile__img--b,
+.profile__photo.is-flipped .profile__img--b {
+  opacity: 1; /* pro_02 노출 */
 }
 /* 정보 영역 : 2열 */
 .profile__body {

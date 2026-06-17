@@ -128,6 +128,7 @@
   --duration-normal: 0.4s;
   --duration-slow: 0.8s;
   --scroll-duration: 8s;          /* 긴 이미지 hover 자동 스크롤 시간(길수록 천천히) */
+  --profile-cross: 0.5s;          /* 프로필 사진 hover 교차(pro_01→pro_02) 페이드 시간 */
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);   /* 부드럽게 감속 */
   --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
 
