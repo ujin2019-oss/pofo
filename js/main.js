@@ -54,11 +54,27 @@
     if (screens.length < 2 || prefersReduced) return; // 모션 줄이기면 첫 장 고정
 
     let i = 0;
+
     setInterval(function () {
-      screens[i].classList.remove("is-active");
+      const prev = screens[i];
       i = (i + 1) % screens.length;
-      screens[i].classList.add("is-active");
-    }, 3200); // 한 장당 노출 시간 (ms)
+      const next = screens[i];
+
+      /* z-index 를 고정 단계로 유지 (폰 프레임은 z-index:10 으로 항상 위):
+         - 들어오는 장 next = 3 (가장 위, 단 프레임 아래)
+         - 직전 장 prev = 2 (next 바로 아래에서 불투명하게 깔림 → dip 방지)
+         - 나머지 = 1
+         단계를 고정해 z-index 가 무한정 커져 프레임을 덮는 문제를 막습니다. */
+      screens.forEach(function (s) { s.style.zIndex = "1"; });
+      prev.style.zIndex = "2";
+      next.style.zIndex = "3";
+
+      /* next 를 0 → 1 로 다시 페이드인 (remove → 리플로우 → add 로 재트리거).
+         next 가 투명한 동안엔 아래 prev(불투명)가 보여 배경 깜빡임이 없습니다. */
+      next.classList.remove("is-active");
+      void next.offsetWidth;
+      next.classList.add("is-active");
+    }, 1600); // 한 장당 노출 시간 (ms)
   }
 
   /* -----------------------------------------------------------

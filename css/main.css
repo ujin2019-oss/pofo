@@ -753,7 +753,7 @@ html {
   width: 100%;
   height: 100%;
   object-fit: contain;
-  z-index: 2;
+  z-index: 10; /* 앱 화면(최대 z-index:3)보다 항상 위 → 화면이 프레임 밖으로 안 삐짐 */
   pointer-events: none;
   filter: drop-shadow(0 22px 40px rgba(60, 30, 160, 0.28));
 }
@@ -773,7 +773,8 @@ html {
   background: #B89CFF; /* 혹시 남는 미세 틈도 앱 퍼플로 메움 */
   /* 여러 장을 겹쳐 두고 .is-active 한 장만 보이게 → 부드러운 크로스페이드 */
   opacity: 0;
-  transition: opacity 1s var(--ease-out);
+  /* 들어오는 화면이 맨 위에서 부드럽게 떠오르듯 나타남(자연스러운 크로스페이드) */
+  transition: opacity 0.9s var(--ease-in-out);
 }
 .tracksy-mock__screen.is-active {
   opacity: 1;
@@ -1059,34 +1060,12 @@ html {
 /* =============================================================
    7) 반응형 - 태블릿 (768 ~ 1199px)
    ============================================================= */
-@media (max-width: 1199px) {
-  /* 프로필/경력 열 너비·간격은 variables.css 의 --profile-photo / --profile-gap
-     (태블릿 값)으로 자동 조절됩니다. */
-  .project-modoo__body {
-    grid-template-columns: 0.95fr 1.05fr;
-    gap: var(--content-gap);
-  }
-  .project-modoo__device {
-    width: min(100%, 520px);
-  }
-  .project-modoo__meta-inner {
-    max-width: 100%;
-    gap: var(--content-gap);
-  }
-  .project-modoo__details {
-    column-gap: 28px;
-  }
-  /* 앱(TRACKSY)/치과: 간격만 축소 */
-  .tracksy__inner,
-  .dental__inner {
-    gap: var(--content-gap);
-  }
-}
-
 /* =============================================================
-   반응형 - 모바일 (767px 이하)
+   반응형 - 태블릿 + 모바일 (1199px 이하)
+   - 태블릿에서도 모바일과 동일한 세로 1단 스택 구조를 사용합니다.
+     (좌우 2단보다 세로 스택 레이아웃이 더 보기 좋아 통합)
    ============================================================= */
-@media (max-width: 767px) {
+@media (max-width: 1199px) {
   /* 슬로건: 모바일은 가독성 우선 (구체 안에서 또렷하게 보이도록 키움) */
   .slogan__text {
     font-size: clamp(40px, 13vw, 72px);
@@ -1222,6 +1201,10 @@ html {
   }
   .project-modoo__image {
     border-radius: 12px 12px 0 0;
+  }
+  /* 스택 레이아웃: CTA 버튼과 하단 바가 붙지 않도록 위 여백 (치과와 동일) */
+  .project-modoo__meta {
+    margin-top: clamp(40px, 8vw, 72px);
   }
   .project-modoo__meta-inner {
     grid-template-columns: 1fr;
