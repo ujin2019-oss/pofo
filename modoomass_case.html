@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<!--
+  =====================================================================
+  MODOMASS(모두매쓰) — AI 기반 맞춤 수학 학습 서비스 / UI·UX Redesign
+  케이스 스터디(서브페이지)
+  - 순수 HTML + Vanilla CSS + Vanilla JS (CSS 라이브러리 미사용)
+  - 스크롤 인터랙션: GSAP + ScrollTrigger (CDN)
+  - 수정: ① <style> 최상단 :root 변수  ② 각 이미지 슬롯의 src
+  =====================================================================
+-->
+<html lang="ko" class="js">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MODOMASS · 모두매쓰 UIUX Redesign | Case Study</title>
+  <meta name="description" content="AI 기반 맞춤 수학 학습 서비스 '모두매쓰' UI/UX 리디자인 케이스 스터디 — 기획부터 디자인, 퍼블리싱까지의 과정" />
+
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+
+  <style>
+    /* =================================================================
+       1) DESIGN TOKENS — 여기 값만 바꾸면 전체에 반영됩니다.
+       ================================================================= */
+    :root {
+      /* 브랜드 컬러 (모두매쓰) */
+      --color-primary: #4D65F9;     /* 메인 블루 */
+      --color-secondary: #61C1CC;   /* 서브 틸 */
+      --color-accent: #CCEAF0;      /* 라이트 블루 */
+      --color-dark-text: #20242E;   /* 본문 텍스트 */
+      --color-white: #FFFFFF;
+
+      /* 역할 토큰 */
+      --color-bg: #F5F7FF;          /* 페이지 배경(아주 옅은 블루) */
+      --color-bg-soft: #ECF1FF;     /* 톤 들어간 배경 */
+      --color-deep: #161A2B;        /* 다크 섹션(반전) */
+      --color-text-muted: #6A7186;  /* 보조 텍스트 */
+      --color-line: rgba(32, 36, 46, 0.10);
+      --color-danger: #E5484D;      /* 문제 주석(빨강) */
+
+      /* 타이포 */
+      --font-base: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui,
+        "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+      --fs-display: clamp(40px, 8vw, 92px);
+      --fs-h1: clamp(28px, 4.4vw, 54px);
+      --fs-h2: clamp(22px, 3vw, 38px);
+      --fs-h3: clamp(18px, 1.9vw, 24px);
+      --fs-body: clamp(15px, 1.15vw, 18px);
+      --fs-small: clamp(13px, 0.95vw, 15px);
+      --fs-num: clamp(44px, 7vw, 96px);   /* Outcome 큰 숫자 */
+
+      --fw-regular: 400;
+      --fw-medium: 500;
+      --fw-bold: 700;
+      --fw-black: 800;
+
+      --lh-tight: 1.12;
+      --lh-normal: 1.6;
+      --lh-loose: 1.85;
+
+      /* 레이아웃 */
+      --section-gap: clamp(72px, 11vw, 160px);
+      --block-gap: clamp(28px, 4vw, 56px);
+      --pad-x: clamp(20px, 5vw, 80px);
+      --container: 1200px;
+
+      /* 라운드 */
+      --radius-sm: 10px;
+      --radius-md: 18px;
+      --radius-lg: 28px;
+      --radius-pill: 999px;
+
+      --shadow-card: 0 18px 50px rgba(40, 60, 160, 0.10);
+      --shadow-soft: 0 10px 30px rgba(40, 60, 160, 0.08);
+      --ease: cubic-bezier(0.16, 1, 0.3, 1);
+      --header-h: 68px;
+    }
+
+    /* =================================================================
+       2) RESET
+       ================================================================= */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+    body {
+      font-family: var(--font-base);
+      font-size: var(--fs-body);
+      line-height: var(--lh-normal);
+      color: var(--color-dark-text);
+      background: var(--color-bg);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+    img { display: block; max-width: 100%; height: auto; }
+    ul { list-style: none; }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+    :focus-visible { outline: 2px solid var(--color-primary); outline-offset: 3px; border-radius: var(--radius-sm); }
+
+    /* =================================================================
+       3) 공통 레이아웃 / 유틸
+       ================================================================= */
+    .container { width: 100%; max-width: var(--container); margin: 0 auto; padding-left: var(--pad-x); padding-right: var(--pad-x); }
+    .section { padding-top: var(--section-gap); padding-bottom: var(--section-gap); }
+    .section--soft { background: var(--color-bg-soft); }
+    .section--white { background: var(--color-white); }
+
+    .eyebrow {
+      display: inline-block; font-size: var(--fs-small); font-weight: var(--fw-bold);
+      letter-spacing: 0.18em; text-transform: uppercase; color: var(--color-primary); margin-bottom: 16px;
+    }
+    .eyebrow .no { color: var(--color-secondary); margin-right: 10px; }
+    .section-title { font-size: var(--fs-h1); font-weight: var(--fw-black); line-height: var(--lh-tight); letter-spacing: -0.02em; word-break: keep-all; }
+    .lead { max-width: 60ch; margin-top: 16px; line-height: var(--lh-loose); color: var(--color-text-muted); word-break: keep-all; }
+    .head { max-width: 760px; margin-bottom: var(--block-gap); }
+
+    .btn { display: inline-flex; align-items: center; gap: 10px; padding: 14px 26px; border-radius: var(--radius-pill); font-weight: var(--fw-bold); transition: transform var(--ease) .3s, background-color .25s, color .25s, box-shadow .25s; }
+    .btn--primary { background: var(--color-primary); color: #fff; }
+    .btn--primary:hover { background: var(--color-secondary); transform: translateY(-2px); box-shadow: var(--shadow-soft); }
+    .btn--ghost { border: 1.5px solid var(--color-primary); color: var(--color-primary); }
+    .btn--ghost:hover { background: var(--color-primary); color: #fff; }
+
+    /* IMAGE SLOT (이미지 자리) */
+    .img-slot {
+      position: relative; width: 100%; display: flex; align-items: center; justify-content: center;
+      background: #E3E8F7; border-radius: var(--radius-lg); overflow: hidden;
+      color: #8890Ae; font-size: var(--fs-small); font-weight: var(--fw-bold); letter-spacing: 0.1em; text-align: center;
+      background-image: repeating-linear-gradient(45deg, transparent, transparent 14px, rgba(40,60,160,0.04) 14px, rgba(40,60,160,0.04) 28px);
+    }
+    .img-slot::after { content: "🖼  " attr(data-label); padding: 0 16px; opacity: .85; }
+    .img-slot > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: top center; }
+
+    /* =================================================================
+       4) HEADER (공통)
+       ================================================================= */
+    .site-header {
+      position: fixed; top: 0; left: 0; width: 100%; height: var(--header-h); display: flex; align-items: center; z-index: 1000;
+      background: rgba(245, 247, 255, 0.82); backdrop-filter: saturate(180%) blur(12px); -webkit-backdrop-filter: saturate(180%) blur(12px);
+      border-bottom: 1px solid var(--color-line);
+    }
+    .site-header__inner { display: flex; align-items: center; justify-content: space-between; width: 100%; }
+    .site-header__logo { font-size: var(--fs-h3); font-weight: var(--fw-black); letter-spacing: -0.02em; }
+    .site-header__logo b { color: var(--color-primary); }
+    .site-nav { display: none; align-items: center; gap: clamp(16px, 2.2vw, 32px); }
+    .site-nav a { font-size: var(--fs-small); font-weight: var(--fw-medium); transition: color .2s; }
+    .site-nav a:hover { color: var(--color-primary); }
+    .site-header__back { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border-radius: var(--radius-pill); background: var(--color-primary); color: #fff; font-size: var(--fs-small); font-weight: var(--fw-bold); transition: background-color .25s; }
+    .site-header__back:hover { background: var(--color-secondary); }
+
+    /* =================================================================
+       01) HERO
+       ================================================================= */
+    .hero { padding-top: calc(var(--header-h) + clamp(44px, 8vw, 110px)); padding-bottom: var(--section-gap); }
+    .hero__grid { display: grid; grid-template-columns: 1fr; gap: var(--block-gap); align-items: center; }
+    .hero__eyebrow { color: var(--color-secondary); }
+    .hero__title { font-size: var(--fs-display); font-weight: var(--fw-black); line-height: 1; letter-spacing: -0.03em; color: var(--color-primary); }
+    .hero__sub { margin-top: 18px; font-size: clamp(17px, 1.8vw, 24px); font-weight: var(--fw-medium); color: var(--color-dark-text); }
+    .hero__mock { width: 100%; }
+    .hero__mock .img-slot { aspect-ratio: 4 / 3; box-shadow: var(--shadow-card); }
+    .hero__meta { display: grid; grid-template-columns: 1fr; gap: 22px; margin-top: var(--block-gap); padding-top: 28px; border-top: 1px solid var(--color-line); }
+    .hero__meta dt { font-size: var(--fs-small); font-weight: var(--fw-bold); letter-spacing: 0.08em; color: var(--color-primary); margin-bottom: 8px; }
+    .hero__meta dd { font-size: var(--fs-body); font-weight: var(--fw-medium); line-height: 1.7; }
+
+    /* =================================================================
+       02) PROBLEM
+       ================================================================= */
+    .problem__grid { display: grid; grid-template-columns: 1fr; gap: var(--block-gap); align-items: start; }
+    .problem-list { display: flex; flex-direction: column; gap: 14px; }
+    .problem-item { display: flex; align-items: flex-start; gap: 14px; padding: 20px 22px; border-radius: var(--radius-md); background: var(--color-white); border: 1px solid var(--color-line); box-shadow: var(--shadow-soft); }
+    .problem-item .num { flex: 0 0 auto; width: 30px; height: 30px; border-radius: var(--radius-pill); display: grid; place-items: center; background: var(--color-danger); color: #fff; font-size: var(--fs-small); font-weight: var(--fw-bold); }
+    .problem-item h4 { font-size: var(--fs-h3); font-weight: var(--fw-bold); }
+    .problem-item p { margin-top: 4px; font-size: var(--fs-small); color: var(--color-text-muted); word-break: keep-all; }
+    /* 기존 화면 + 빨간 주석 */
+    .problem-shot { position: relative; border-radius: var(--radius-lg); overflow: hidden; background: var(--color-bg-soft); box-shadow: var(--shadow-card); }
+    .problem-shot > img { width: 100%; display: block; }
+    .annot { position: absolute; transform: translate(-50%, -50%); display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: var(--radius-pill); background: var(--color-danger); color: #fff; font-size: clamp(11px, 1vw, 13px); font-weight: var(--fw-bold); white-space: nowrap; box-shadow: 0 6px 16px rgba(229,72,77,0.4); }
+    .annot::before { content: ""; position: absolute; inset: -4px; border-radius: var(--radius-pill); border: 2px solid rgba(229,72,77,0.5); }
+
+    /* =================================================================
+       03) GOAL · 08) EXPANSION  (카드 3개)
+       ================================================================= */
+    .cards3 { display: grid; grid-template-columns: 1fr; gap: clamp(16px, 2vw, 28px); }
+    .card { background: var(--color-white); border: 1px solid var(--color-line); border-radius: var(--radius-lg); padding: clamp(26px, 3vw, 40px); box-shadow: var(--shadow-card); transition: transform var(--ease) .4s, box-shadow .3s; }
+    .card:hover { transform: translateY(-6px); box-shadow: 0 26px 60px rgba(40,60,160,.16); }
+    .card__no { font-size: var(--fs-small); font-weight: var(--fw-bold); letter-spacing: 0.14em; color: var(--color-secondary); }
+    .card__title { margin-top: 12px; font-size: var(--fs-h3); font-weight: var(--fw-black); letter-spacing: -0.01em; word-break: keep-all; }
+    .card__desc { margin-top: 10px; font-size: var(--fs-small); color: var(--color-text-muted); word-break: keep-all; }
+
+    /* =================================================================
+       04) INSIGHT (가로 카드)
+       ================================================================= */
+    .insight { background: var(--color-deep); color: #fff; }
+    .insight .eyebrow { color: var(--color-accent); }
+    .insight .section-title { color: #fff; }
+    .insight__list { display: flex; flex-direction: column; gap: clamp(14px, 2vw, 22px); margin-top: var(--block-gap); }
+    .insight-card { display: grid; grid-template-columns: auto 1fr; gap: clamp(18px, 3vw, 40px); align-items: center; padding: clamp(24px, 3.5vw, 44px); border-radius: var(--radius-lg); background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12); }
+    .insight-card__no { font-size: clamp(34px, 5vw, 64px); font-weight: var(--fw-black); line-height: 1; color: var(--color-secondary); }
+    .insight-card__text { font-size: clamp(19px, 2.4vw, 32px); font-weight: var(--fw-bold); line-height: 1.35; word-break: keep-all; }
+    .insight-card__text b { color: var(--color-accent); }
+
+    /* =================================================================
+       05) SOLUTION (Before / After 슬라이더)
+       ================================================================= */
+    .ba { position: relative; width: 100%; max-width: 820px; margin: var(--block-gap) auto 0; border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-card); user-select: none; touch-action: none; aspect-ratio: 542 / 586; background: #000; }
+    .ba__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: top center; pointer-events: none; }
+    .ba__after { position: absolute; inset: 0; width: 50%; overflow: hidden; }
+    /* after 이미지는 항상 컨테이너 전체 폭으로 유지(찌그러짐 방지) → 폭은 JS가 px로 지정 */
+    .ba__after-inner { position: absolute; left: 0; top: 0; height: 100%; }
+    .ba__tag { position: absolute; top: 14px; padding: 6px 14px; border-radius: var(--radius-pill); font-size: var(--fs-small); font-weight: var(--fw-bold); color: #fff; z-index: 3; }
+    .ba__tag--before { left: 14px; background: rgba(0,0,0,0.55); }
+    .ba__tag--after { right: 14px; background: var(--color-primary); }
+    .ba__handle { position: absolute; top: 0; bottom: 0; left: 50%; width: 3px; background: #fff; transform: translateX(-50%); z-index: 4; box-shadow: 0 0 0 1px rgba(0,0,0,0.1); }
+    .ba__knob { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 46px; height: 46px; border-radius: var(--radius-pill); background: #fff; box-shadow: 0 6px 18px rgba(0,0,0,0.25); display: grid; place-items: center; color: var(--color-primary); font-weight: var(--fw-bold); z-index: 5; cursor: ew-resize; }
+    .ba__range { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: ew-resize; z-index: 6; margin: 0; }
+
+    /* =================================================================
+       06) USER FLOW (아이콘 기반)
+       ================================================================= */
+    .flow { display: flex; flex-direction: column; align-items: center; gap: 0; margin-top: var(--block-gap); }
+    .flow__step { display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center; }
+    .flow__icon { width: clamp(64px, 8vw, 88px); height: clamp(64px, 8vw, 88px); border-radius: var(--radius-lg); display: grid; place-items: center; background: var(--color-white); border: 1px solid var(--color-line); box-shadow: var(--shadow-soft); color: var(--color-primary); }
+    .flow__icon svg { width: 44%; height: 44%; }
+    .flow__label { font-size: var(--fs-body); font-weight: var(--fw-bold); }
+    .flow__arrow { height: clamp(28px, 4vw, 44px); color: var(--color-secondary); display: grid; place-items: center; }
+    .flow__arrow svg { width: 22px; height: 100%; }
+
+    /* =================================================================
+       07) DESIGN SYSTEM (3단)
+       ================================================================= */
+    .ds { display: grid; grid-template-columns: 1fr; gap: clamp(18px, 2.5vw, 32px); margin-top: var(--block-gap); }
+    .ds__panel { background: var(--color-white); border: 1px solid var(--color-line); border-radius: var(--radius-lg); padding: clamp(24px, 3vw, 36px); box-shadow: var(--shadow-card); }
+    .ds__label { font-size: var(--fs-small); font-weight: var(--fw-bold); letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-secondary); margin-bottom: 18px; }
+    .ds__colors { display: flex; flex-direction: column; gap: 12px; }
+    .ds__color { display: flex; align-items: center; gap: 12px; font-size: var(--fs-small); font-weight: var(--fw-medium); }
+    .ds__swatch { width: 40px; height: 40px; border-radius: var(--radius-sm); box-shadow: inset 0 0 0 1px rgba(0,0,0,0.06); }
+    .ds__type-sample { font-size: clamp(30px, 4vw, 46px); font-weight: var(--fw-black); letter-spacing: -0.02em; line-height: 1.1; }
+    .ds__type-row { margin-top: 10px; font-size: var(--fs-small); color: var(--color-text-muted); }
+    .ds__type-weights { display: flex; gap: 16px; margin-top: 14px; flex-wrap: wrap; }
+    .ds__type-weights span { font-size: var(--fs-body); }
+    .ds__components { display: flex; flex-direction: column; gap: 14px; }
+    .ds-btn { align-self: flex-start; padding: 11px 22px; border-radius: var(--radius-pill); background: var(--color-primary); color: #fff; font-weight: var(--fw-bold); font-size: var(--fs-small); }
+    .ds-card { padding: 16px; border-radius: var(--radius-md); background: var(--color-bg-soft); font-size: var(--fs-small); font-weight: var(--fw-medium); }
+    .ds-input { padding: 12px 16px; border-radius: var(--radius-sm); border: 1.5px solid var(--color-line); font-size: var(--fs-small); color: var(--color-text-muted); }
+
+    /* =================================================================
+       09) DEVELOPMENT
+       ================================================================= */
+    .dev__grid { display: grid; grid-template-columns: 1fr; gap: var(--block-gap); align-items: center; }
+    .dev__tools { display: flex; flex-wrap: wrap; gap: 16px; }
+    .dev__tool { display: flex; flex-direction: column; align-items: center; gap: 10px; width: clamp(78px, 12vw, 104px); }
+    .dev__tool-ico { width: 100%; aspect-ratio: 1; border-radius: var(--radius-md); background: var(--color-white); border: 1px solid var(--color-line); box-shadow: var(--shadow-soft); display: grid; place-items: center; padding: 18%; }
+    .dev__tool-ico img { width: 100%; height: 100%; object-fit: contain; }
+    .dev__tool span { font-size: var(--fs-small); font-weight: var(--fw-medium); }
+    .dev__points { display: flex; flex-direction: column; gap: 14px; }
+    .dev__point { display: flex; align-items: center; gap: 12px; font-size: var(--fs-body); font-weight: var(--fw-medium); }
+    .dev__point::before { content: ""; flex: 0 0 auto; width: 10px; height: 10px; border-radius: var(--radius-pill); background: var(--color-primary); }
+
+    /* =================================================================
+       10) OUTCOME (숫자 중심)
+       ================================================================= */
+    .outcome { background: var(--color-primary); color: #fff; }
+    .outcome .eyebrow { color: var(--color-accent); }
+    .outcome .section-title { color: #fff; }
+    .stats { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(20px, 3vw, 40px); margin-top: var(--block-gap); }
+    .stat__num { font-size: var(--fs-num); font-weight: var(--fw-black); line-height: 1; letter-spacing: -0.03em; }
+    .stat__label { margin-top: 12px; font-size: var(--fs-body); font-weight: var(--fw-medium); color: rgba(255,255,255,0.85); word-break: keep-all; }
+
+    /* =================================================================
+       11) RETROSPECTIVE
+       ================================================================= */
+    .retro { text-align: center; }
+    .retro__quote { max-width: 18ch; margin: 0 auto; font-size: clamp(24px, 4vw, 48px); font-weight: var(--fw-black); line-height: 1.35; letter-spacing: -0.02em; word-break: keep-all; }
+    .retro__quote b { color: var(--color-primary); }
+    .retro__cta { margin-top: var(--block-gap); display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+
+    /* =================================================================
+       FOOTER (공통)
+       ================================================================= */
+    .site-footer { background: var(--color-deep); color: rgba(255,255,255,0.7); padding: clamp(48px, 7vw, 80px) 0 40px; }
+    .site-footer__inner { display: flex; flex-wrap: wrap; gap: var(--block-gap); justify-content: space-between; align-items: flex-end; }
+    .site-footer__brand { font-size: var(--fs-h2); font-weight: var(--fw-black); color: #fff; letter-spacing: -0.02em; }
+    .site-footer__brand b { color: var(--color-secondary); }
+    .site-footer__contact { display: flex; flex-direction: column; gap: 8px; font-size: var(--fs-small); }
+    .site-footer__contact a:hover { color: #fff; }
+    .site-footer__copy { width: 100%; margin-top: 36px; padding-top: 22px; border-top: 1px solid rgba(255,255,255,0.14); font-size: var(--fs-small); color: rgba(255,255,255,0.45); }
+
+    /* =================================================================
+       SCROLL REVEAL 초기 상태
+       ================================================================= */
+    .js [data-reveal] { opacity: 0; transform: translateY(42px); will-change: transform, opacity; }
+    .js [data-reveal-scale] { opacity: 0; transform: scale(0.94); will-change: transform, opacity; }
+    .no-anim [data-reveal], .no-anim [data-reveal-scale] { opacity: 1 !important; transform: none !important; }
+    @media (prefers-reduced-motion: reduce) {
+      .js [data-reveal], .js [data-reveal-scale] { opacity: 1 !important; transform: none !important; }
+    }
+
+    /* =================================================================
+       반응형 (모바일 우선 → 확장)
+       ================================================================= */
+    @media (min-width: 768px) {
+      .site-nav { display: flex; }
+      .hero__grid { grid-template-columns: 1.05fr 0.95fr; }
+      .hero__meta { grid-template-columns: repeat(3, 1fr); }
+      .problem__grid { grid-template-columns: 1fr 1fr; }
+      .cards3 { grid-template-columns: repeat(3, 1fr); }
+      .ds { grid-template-columns: repeat(3, 1fr); }
+      .dev__grid { grid-template-columns: 0.9fr 1.1fr; }
+      .stats { grid-template-columns: repeat(4, 1fr); }
+    }
+    @media (min-width: 1100px) {
+      .hero__title { font-size: clamp(64px, 7vw, 100px); }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- =============================== HEADER (공통) =============================== -->
+  <header class="site-header" id="top">
+    <div class="container site-header__inner">
+      <a class="site-header__logo" href="./index.html#profile">PORT<b>FOLIO</b></a>
+      <nav class="site-nav" aria-label="섹션 이동">
+        <a href="#problem">Problem</a>
+        <a href="#insight">Insight</a>
+        <a href="#solution">Solution</a>
+        <a href="#outcome">Outcome</a>
+      </nav>
+      <a class="site-header__back" href="./index.html"><span aria-hidden="true">←</span> PORTFOLIO</a>
+    </div>
+  </header>
+
+  <main>
+    <!-- =============================== 01 HERO =============================== -->
+    <section class="hero">
+      <div class="container">
+        <div class="hero__grid">
+          <div class="hero__intro">
+            <span class="eyebrow hero__eyebrow" data-reveal>UI / UX Redesign</span>
+            <h1 class="hero__title" data-reveal>MODOMASS</h1>
+            <p class="hero__sub" data-reveal>AI 기반 맞춤 수학 학습 서비스</p>
+          </div>
+          <!-- 이미지 슬롯: 최종 결과물 대형 목업 (추천: modoo_After_scroll.png) -->
+          <div class="hero__mock" data-reveal-scale>
+            <div class="img-slot" data-label="FINAL MOCKUP (modoo_After_scroll.png)">
+              <img src="./images/modoo_After_scroll.png" alt="모두매쓰 최종 결과물 화면" />
+            </div>
+          </div>
+        </div>
+
+        <dl class="hero__meta" data-reveal>
+          <div><dt>Role</dt><dd>UIUX Design</dd></div>
+          <div><dt>Contribution</dt><dd>기획 30% · 디자인 20% · 퍼블리싱 100%</dd></div>
+          <div><dt>Duration</dt><dd>5 Days</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <!-- =============================== 02 PROBLEM =============================== -->
+    <section class="section section--white" id="problem">
+      <div class="container">
+        <div class="head">
+          <span class="eyebrow" data-reveal><span class="no">02</span>Problem</span>
+          <h2 class="section-title" data-reveal>한 화면에 모든 기능이 쏟아져,<br />무엇부터 해야 할지 알 수 없었습니다.</h2>
+        </div>
+
+        <div class="problem__grid">
+          <!-- 문제점 4개 (나누지 않고 한 묶음) -->
+          <div class="problem-list">
+            <div class="problem-item" data-reveal>
+              <span class="num">1</span>
+              <div><h4>기능 과다 노출</h4><p>난이도·문제·모드·저장 등 모든 기능이 메인에 한 번에 노출</p></div>
+            </div>
+            <div class="problem-item" data-reveal>
+              <span class="num">2</span>
+              <div><h4>핵심 CTA 부재</h4><p>가장 먼저 눌러야 할 행동이 명확하지 않음</p></div>
+            </div>
+            <div class="problem-item" data-reveal>
+              <span class="num">3</span>
+              <div><h4>정답 입력 위치 불명확</h4><p>사용자가 입력해야 할 곳을 직관적으로 찾기 어려움</p></div>
+            </div>
+            <div class="problem-item" data-reveal>
+              <span class="num">4</span>
+              <div><h4>중복 버튼</h4><p>유사한 기능의 버튼이 반복되어 탐색 피로 증가</p></div>
+            </div>
+          </div>
+
+          <!-- 기존 메인 화면 + 빨간 주석 (추천: modoo_Before.png) -->
+          <div class="problem-shot" data-reveal-scale>
+            <img src="./images/modoo_Before.png" alt="기존 모두매쓰 메인 화면" />
+            <span class="annot" style="left:30%; top:18%">기능 과다 노출</span>
+            <span class="annot" style="left:68%; top:40%">핵심 CTA 부재</span>
+            <span class="annot" style="left:38%; top:66%">정답 입력 위치 불명확</span>
+            <span class="annot" style="left:64%; top:86%">중복 버튼</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =============================== 03 PROJECT GOAL =============================== -->
+    <section class="section">
+      <div class="container">
+        <div class="head">
+          <span class="eyebrow" data-reveal><span class="no">03</span>Project Goal</span>
+          <h2 class="section-title" data-reveal>세 가지 방향으로 다시 설계했습니다.</h2>
+        </div>
+        <div class="cards3">
+          <article class="card" data-reveal><p class="card__no">01</p><h3 class="card__title">명확한 서비스 정체성</h3></article>
+          <article class="card" data-reveal><p class="card__no">02</p><h3 class="card__title">핵심 기능 중심 구조</h3></article>
+          <article class="card" data-reveal><p class="card__no">03</p><h3 class="card__title">사용 흐름 단순화</h3></article>
+        </div>
+      </div>
+    </section>
+
+    <!-- =============================== 04 INSIGHT =============================== -->
+    <section class="section insight" id="insight">
+      <div class="container">
+        <div class="head">
+          <span class="eyebrow" data-reveal><span class="no">04</span>Insight</span>
+          <h2 class="section-title" data-reveal>문제를 풀며 발견한 3가지 인사이트</h2>
+        </div>
+        <div class="insight__list">
+          <div class="insight-card" data-reveal>
+            <div class="insight-card__no">01</div>
+            <p class="insight-card__text">사용자는 <b>“무엇을 해야 하는가”</b>를 먼저 찾는다</p>
+          </div>
+          <div class="insight-card" data-reveal>
+            <div class="insight-card__no">02</div>
+            <p class="insight-card__text">기능보다 <b>사용 흐름</b>이 중요하다</p>
+          </div>
+          <div class="insight-card" data-reveal>
+            <div class="insight-card__no">03</div>
+            <p class="insight-card__text">AI 서비스는 <b>신뢰</b>가 먼저다</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =============================== 05 SOLUTION =============================== -->
+    <section class="section section--soft" id="solution">
+      <div class="container">
+        <div class="head">
+          <span class="eyebrow" data-reveal><span class="no">05</span>Solution</span>
+          <h2 class="section-title" data-reveal>핸들을 움직여 Before / After 를 비교해 보세요.</h2>
+        </div>
+
+        <!-- Before/After 슬라이더 (추천: before=modoo_Before.png, after=modoo_After.png) -->
+        <div class="ba" id="ba" data-reveal-scale>
+          <img class="ba__img" src="./images/modoo_Before.png" alt="개선 전 화면" />
+          <span class="ba__tag ba__tag--before">BEFORE</span>
+          <div class="ba__after" id="baAfter">
+            <div class="ba__after-inner" id="baAfterInner">
+              <img class="ba__img" src="./images/modoo_After.png" alt="개선 후 화면" />
+            </div>
+          </div>
+          <span class="ba__tag ba__tag--after">AFTER</span>
+          <div class="ba__handle" id="baHandle"></div>
+          <div class="ba__knob" id="baKnob" aria-hidden="true">⟺</div>
+          <input class="ba__range" id="baRange" type="range" min="0" max="100" value="50" aria-label="Before/After 비교 슬라이더" />
+        </div>
+      </div>
+    </section>
+
+    <!-- =============================== 06 USER FLOW =============================== -->
+    <section class="section section--white">
+      <div class="container">
+        <div class="head">
+          <span class="eyebrow" data-reveal><span class="no">06</span>User Flow</span>
+          <h2 class="section-title" data-reveal>한눈에 보는 사용 흐름</h2>
+        </div>
+        <div class="flow">
+          <div class="flow__step" data-reveal>
+            <div class="flow__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg></div>
+            <span class="flow__label">Landing</span>
+          </div>
+          <div class="flow__arrow" data-reveal><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v16"/><path d="M6 14l6 6 6-6"/></svg></div>
+          <div class="flow__step" data-reveal>
+            <div class="flow__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg></div>
+            <span class="flow__label">문제 생성</span>
+          </div>
+          <div class="flow__arrow" data-reveal><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v16"/><path d="M6 14l6 6 6-6"/></svg></div>
+          <div class="flow__step" data-reveal>
+            <div class="flow__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3 8-8"/><path d="M20 12v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h9"/></svg></div>
+            <span class="flow__label">문제 풀이</span>
+          </div>
+          <div class="flow__arrow" data-reveal><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v16"/><path d="M6 14l6 6 6-6"/></svg></div>
+          <div class="flow__step" data-reveal>
+            <div class="flow__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
+            <span class="flow__label">해설</span>
+          </div>
+          <div class="flow__arrow" data-reveal><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v16"/><path d="M6 14l6 6 6-6"/></svg></div>
+          <div class="flow__step" data-reveal>
+            <div class="flow__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4v16h16v-7"/><path d="M18.5 2.5a2.12 2.12 0 0 1 3 3L12 15l-4 1 1-4z"/></svg></div>
+            <span class="flow__label">오답노트</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =============================== 07 DESIGN SYSTEM =============================== -->
+    <section class="section">
+      <div class="container">
+        <div class="head">
+          <span class="eyebrow" data-reveal><span class="no">07</span>Design System</span>
+          <h2 class="section-title" data-reveal>일관된 경험을 위한 디자인 시스템</h2>
+        </div>
+        <div class="ds">
+          <div class="ds__panel" data-reveal>
+            <p class="ds__label">Color</p>
+            <div class="ds__colors">
+              <div class="ds__color"><span class="ds__swatch" style="background:#4D65F9"></span>#4D65F9</div>
+              <div class="ds__color"><span class="ds__swatch" style="background:#61C1CC"></span>#61C1CC</div>
+              <div class="ds__color"><span class="ds__swatch" style="background:#CCEAF0"></span>#CCEAF0</div>
+            </div>
+          </div>
+          <div class="ds__panel" data-reveal>
+            <p class="ds__label">Typography</p>
+            <div class="ds__type-sample">Pretendard</div>
+            <p class="ds__type-row">국문/영문 · 가독성 중심</p>
+            <div class="ds__type-weights">
+              <span style="font-weight:400">Regular</span>
+              <span style="font-weight:500">Medium</span>
+              <span style="font-weight:700">Bold</span>
+            </div>
+          </div>
+          <div class="ds__panel" data-reveal>
+            <p class="ds__label">Component</p>
+            <div class="ds__components">
+              <span class="ds-btn">Button</span>
+              <div class="ds-card">Card</div>
+              <div class="ds-input">Input</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =============================== 08 EXPANSION =============================== -->
+    <section class="section section--white">
+      <div class="container">
+        <div class="head">
+          <span class="eyebrow" data-reveal><span class="no">08</span>Feature Expansion</span>
+          <h2 class="section-title" data-reveal>핵심 구조 위에 확장 기능을 더했습니다.</h2>
+        </div>
+        <div class="cards3">
+          <article class="card" data-reveal><p class="card__no">01</p><h3 class="card__title">오답노트</h3><p class="card__desc">틀린 문제를 모아 복습 흐름으로 연결</p></article>
+          <article class="card" data-reveal><p class="card__no">02</p><h3 class="card__title">마이페이지</h3><p class="card__desc">학습 기록과 진척도를 한곳에서 관리</p></article>
+          <article class="card" data-reveal><p class="card__no">03</p><h3 class="card__title">프로필</h3><p class="card__desc">개인화된 학습 환경 설정</p></article>
+        </div>
+      </div>
+    </section>
+
+    <!-- =============================== 09 DEVELOPMENT =============================== -->
+    <section class="section">
+      <div class="container">
+        <div class="head">
+          <span class="eyebrow" data-reveal><span class="no">09</span>Development</span>
+          <h2 class="section-title" data-reveal>디자인을 실제 동작하는 화면으로</h2>
+        </div>
+        <div class="dev__grid">
+          <div class="dev__tools" data-reveal>
+            <div class="dev__tool"><div class="dev__tool-ico"><img src="./images/ico_vs.png" alt="VS Code" /></div><span>VS Code</span></div>
+            <div class="dev__tool"><div class="dev__tool-ico"><img src="./images/ico_clau.png" alt="Claude" /></div><span>Claude</span></div>
+            <div class="dev__tool"><div class="dev__tool-ico"><img src="./images/ico_fig.png" alt="Figma" /></div><span>Figma</span></div>
+            <div class="dev__tool"><div class="dev__tool-ico"><img src="./images/pro_ico05.png" alt="GitHub" /></div><span>GitHub</span></div>
+          </div>
+          <div class="dev__points" data-reveal>
+            <p class="dev__point">디자인 시스템 기반 퍼블리싱</p>
+            <p class="dev__point">반응형 구현</p>
+            <p class="dev__point">AI 활용</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =============================== 10 OUTCOME =============================== -->
+    <section class="section outcome" id="outcome">
+      <div class="container">
+        <div class="head">
+          <span class="eyebrow" data-reveal><span class="no">10</span>Outcome</span>
+          <h2 class="section-title" data-reveal>숫자로 보는 결과</h2>
+        </div>
+        <div class="stats">
+          <div data-reveal><div class="stat__num">4</div><p class="stat__label">주요 UX 문제 발견</p></div>
+          <div data-reveal><div class="stat__num">3</div><p class="stat__label">신규 기능 제안</p></div>
+          <div data-reveal><div class="stat__num">100%</div><p class="stat__label">퍼블리싱 참여</p></div>
+          <div data-reveal><div class="stat__num">5 Days</div><p class="stat__label">집중 제작</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =============================== 11 RETROSPECTIVE =============================== -->
+    <section class="section retro">
+      <div class="container">
+        <span class="eyebrow" data-reveal><span class="no">11</span>Retrospective</span>
+        <p class="retro__quote" data-reveal>
+          기능을 추가하는 것보다 <b>무엇을 제거할지</b> 결정하는 것이 더 중요하다는 것,
+          그리고 AI 서비스는 기능보다 <b>신뢰 구조</b>가 먼저라는 것을 배웠습니다.
+        </p>
+        <div class="retro__cta" data-reveal>
+          <a class="btn btn--primary" href="https://ujin2019-oss.github.io/modoomath/" target="_blank" rel="noopener">웹사이트 바로가기 <span aria-hidden="true">→</span></a>
+          <a class="btn btn--ghost" href="./index.html">← 포트폴리오로 돌아가기</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- =============================== FOOTER (공통) =============================== -->
+  <footer class="site-footer">
+    <div class="container site-footer__inner">
+      <p class="site-footer__brand">PORT<b>FOLIO</b></p>
+      <address class="site-footer__contact">
+        <a href="mailto:ujin2019@gmail.com">ujin2019@gmail.com</a>
+        <a href="tel:01020774869">010.2077.4869</a>
+        <span>Seoul, Korea</span>
+      </address>
+      <p class="site-footer__copy">© 2026 PORTFOLIO. MODOMASS Redesign Case Study.</p>
+    </div>
+  </footer>
+
+  <!-- ===== GSAP (CDN) ===== -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+  <script>
+    (function () {
+      /* ---------- Before/After 슬라이더 ---------- */
+      function initBA() {
+        var ba = document.getElementById("ba");
+        if (!ba) return;
+        var after = document.getElementById("baAfter");
+        var inner = document.getElementById("baAfterInner");
+        var handle = document.getElementById("baHandle");
+        var knob = document.getElementById("baKnob");
+        var range = document.getElementById("baRange");
+        function setPos(p) {
+          p = Math.max(0, Math.min(100, p));
+          after.style.width = p + "%";
+          // after 내부 이미지가 잘리지 않도록 컨테이너 폭으로 고정
+          inner.style.width = ba.clientWidth + "px";
+          handle.style.left = p + "%";
+          knob.style.left = p + "%";
+        }
+        range.addEventListener("input", function () { setPos(parseFloat(range.value)); });
+        window.addEventListener("resize", function () { setPos(parseFloat(range.value)); });
+        setPos(50);
+      }
+
+      /* ---------- 스크롤 리빌 ---------- */
+      function initReveal() {
+        var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        if (typeof gsap === "undefined" || reduce) {
+          document.documentElement.classList.add("no-anim");
+          return;
+        }
+        gsap.registerPlugin(ScrollTrigger);
+        gsap.utils.toArray("[data-reveal]").forEach(function (el) {
+          gsap.to(el, { opacity: 1, y: 0, duration: 1.1, ease: "power3.out",
+            scrollTrigger: { trigger: el, start: "top 88%", toggleActions: "play none none none" } });
+        });
+        gsap.utils.toArray("[data-reveal-scale]").forEach(function (el) {
+          gsap.to(el, { opacity: 1, scale: 1, duration: 1.1, ease: "power3.out",
+            scrollTrigger: { trigger: el, start: "top 90%", toggleActions: "play none none none" } });
+        });
+        gsap.to(".hero [data-reveal], .hero [data-reveal-scale]", { opacity: 1, y: 0, scale: 1, duration: 1, ease: "power3.out", stagger: 0.1 });
+      }
+
+      initBA();
+      initReveal();
+    })();
+  </script>
+</body>
+</html>
