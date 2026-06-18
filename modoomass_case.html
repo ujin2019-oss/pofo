@@ -2,8 +2,8 @@
 <!--
   =====================================================================
   모두매쓰(MODOOMASS) — AI 기반 맞춤 수학 학습 서비스 / UI·UX 리뉴얼
-  UX Case Study (단일 자급식 HTML5 파일)
-  - Vanilla CSS + Vanilla JS (외부: Pretendard CDN + GSAP/ScrollTrigger)
+  UX Case Study — 이미지 중심 전면 리디자인 (Apple × Linear)
+  단일 자급식 HTML5 · Vanilla CSS/JS · Pretendard + GSAP/ScrollTrigger
   =====================================================================
 -->
 <html lang="ko" class="js">
@@ -11,830 +11,587 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>모두매쓰 UI/UX 리뉴얼 · UX Case Study</title>
-  <meta name="description" content="AI 기반 맞춤 수학 학습 서비스 '모두매쓰' UI/UX 리뉴얼 케이스 스터디 — 문제 발견부터 분석, 솔루션, 결과까지의 UX 개선 과정." />
+  <meta name="description" content="AI 기반 맞춤 수학 학습 서비스 '모두매쓰' UI/UX 리뉴얼 케이스 스터디 — 문제 발견부터 분석, 솔루션, 결과까지." />
 
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
 
   <style>
-    /* =================================================================
-       A. FINAL DESIGN TOKENS
-       ================================================================= */
-    :root{
-      /* ── Brand ── */
-      --brand:   #4D65F9;
-      --teal:    #61C1CC;
-      --sky:     #CCEAF0;
-      --mist:    #F4F8FB;
+  /* =====================================================================
+     A. TOKENS
+     ===================================================================== */
+  :root{
+    /* Brand */
+    --brand:#4D65F9; --brand-600:#3B51E8; --teal:#61C1CC; --sky:#CCEAF0; --mist:#F4F7FB;
 
-      /* ── Ink scale ── */
-      --ink-900: #0E1118;
-      --ink-800: #161A2B;
-      --ink-700: #20242E;
-      --ink-500: #5B6273;
-      --ink-400: #8A91A3;
-      --line:        #E7EAF2;
-      --line-strong: #D4D9E6;
-      --line-dark:   rgba(255,255,255,.12);
-      --white:   #FFFFFF;
-      --danger:  #E5484D;
+    /* Ink */
+    --ink-900:#0B0D14; --ink-800:#12141D; --ink-700:#1C2030; --ink-600:#363B4D;
+    --ink-500:#5B6273; --ink-400:#8B92A4; --ink-300:#AEB5C6;
+    --line:#E9ECF4; --line-2:#DBE0EC; --line-dark:rgba(255,255,255,.10);
+    --white:#FFFFFF; --danger:#E5484D;
 
-      /* ── Gradients ── */
-      --grad-mesh: radial-gradient(60% 80% at 80% 8%, rgba(77,101,249,.08), transparent 60%),
-                   radial-gradient(50% 60% at 6% 92%, rgba(97,193,204,.08), transparent 55%);
+    /* Surfaces (dark) */
+    --d-bg:#0B0D14; --d-card:rgba(255,255,255,.045); --d-card-2:rgba(255,255,255,.07);
 
-      /* ── Typography ── */
-      --font: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
-      --font-mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, monospace;
-      --fs-hero:    clamp(40px, 6.4vw, 80px);
-      --fs-h1:      clamp(28px, 3.6vw, 48px);
-      --fs-h2:      clamp(20px, 2.2vw, 28px);
-      --fs-h3:      clamp(18px, 1.5vw, 21px);
-      --fs-lead:    clamp(17px, 1.4vw, 21px);
-      --fs-body:    clamp(15px, 1.05vw, 17px);
-      --fs-cap:     13px;
-      --fs-eyebrow: 12px;
-      --fs-mega:    clamp(48px, 7vw, 104px);
+    /* Gradients */
+    --mesh:radial-gradient(58% 70% at 82% 4%, rgba(77,101,249,.10), transparent 60%),
+           radial-gradient(50% 60% at 4% 96%, rgba(97,193,204,.10), transparent 55%);
+    --mesh-dark:radial-gradient(60% 70% at 80% 0%, rgba(77,101,249,.22), transparent 60%),
+                radial-gradient(46% 56% at 6% 100%, rgba(97,193,204,.16), transparent 55%);
 
-      --w-r:400; --w-m:500; --w-sb:600; --w-b:700; --w-x:800;
-      --lh-tight:1.08; --lh-snug:1.28; --lh-body:1.7;
-      --ls-tight:-0.025em; --ls-hero:-0.03em; --ls-eyebrow:0.16em;
-      --measure:66ch;
+    /* Type */
+    --font:"Pretendard",-apple-system,BlinkMacSystemFont,system-ui,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+    --mono:ui-monospace,"SF Mono","JetBrains Mono",Menlo,monospace;
+    --fs-hero:clamp(44px,7vw,94px);
+    --fs-display:clamp(34px,5vw,68px);
+    --fs-h1:clamp(28px,3.6vw,52px);
+    --fs-h2:clamp(22px,2.2vw,30px);
+    --fs-h3:clamp(18px,1.4vw,21px);
+    --fs-lead:clamp(17px,1.35vw,22px);
+    --fs-body:clamp(15px,1.02vw,17px);
+    --fs-cap:13px; --fs-eyebrow:12px;
+    --fs-mega:clamp(64px,11vw,180px);
 
-      /* ── Spacing (8pt) ── */
-      --s-1:4px; --s-2:8px; --s-3:12px; --s-4:16px; --s-5:24px; --s-6:32px; --s-7:48px; --s-8:64px; --s-9:96px;
-      --section-y: clamp(80px, 11vw, 152px);
-      --pad-x:     clamp(20px, 5vw, 64px);
-      --container: 1400px;
-      --gutter:    clamp(16px, 1.8vw, 28px);
+    --wr:400; --wm:500; --wsb:600; --wb:700; --wx:800;
+    --lh-tight:1.04; --lh-snug:1.18; --lh-body:1.72;
+    --ls-tight:-0.025em; --ls-hero:-0.035em; --ls-eyebrow:0.2em;
+    --measure:64ch;
 
-      /* ── Radius ── */
-      --r-xs:6px; --r-sm:10px; --r-md:14px; --r-lg:20px; --r-xl:28px; --r-pill:999px;
+    /* Spacing */
+    --s1:4px; --s2:8px; --s3:12px; --s4:16px; --s5:24px; --s6:32px; --s7:48px; --s8:72px; --s9:104px;
+    --section-y:clamp(96px,14vw,200px);
+    --pad-x:clamp(20px,5vw,64px);
+    --container:1280px; --container-wide:1440px;
 
-      /* ── Shadow ── */
-      --sh-1: 0 1px 2px rgba(16,18,30,.04), 0 1px 1px rgba(16,18,30,.03);
-      --sh-2: 0 4px 14px rgba(16,18,30,.06);
-      --sh-3: 0 18px 50px rgba(40,60,160,.10);
-      --sh-glow: 0 8px 30px rgba(77,101,249,.26);
-      --sh-focus: 0 0 0 4px rgba(77,101,249,.18);
+    /* Radius */
+    --r-sm:10px; --r-md:14px; --r-lg:20px; --r-xl:28px; --r-2xl:36px; --r-pill:999px;
 
-      /* ── Motion ── */
-      --ease: cubic-bezier(.16,1,.3,1);
-      --ease-soft: cubic-bezier(.4,0,.2,1);
-      --t-fast:.18s; --t-med:.32s; --t-slow:.6s;
-      --header-h:60px;
-    }
+    /* Shadow */
+    --sh1:0 1px 2px rgba(16,18,30,.05), 0 1px 1px rgba(16,18,30,.03);
+    --sh2:0 6px 22px rgba(16,18,30,.07);
+    --sh3:0 26px 60px -16px rgba(30,45,120,.22), 0 6px 18px rgba(16,18,30,.06);
+    --sh-float:0 40px 90px -28px rgba(24,38,110,.32), 0 12px 30px rgba(16,18,30,.08);
+    --sh-glow:0 12px 34px rgba(77,101,249,.32);
+    --sh-focus:0 0 0 4px rgba(77,101,249,.2);
 
-    /* =================================================================
-       RESET
-       ================================================================= */
-    *,*::before,*::after{ box-sizing:border-box; }
-    html{ -webkit-text-size-adjust:100%; scroll-behavior:smooth; }
-    body{
-      margin:0; font-family:var(--font); color:var(--ink-700);
-      background:var(--white); line-height:var(--lh-body);
-      overflow-x:hidden; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
-      font-size:var(--fs-body);
-    }
-    img{ max-width:100%; display:block; }
-    a{ color:inherit; text-decoration:none; }
-    button{ font-family:inherit; cursor:pointer; border:none; background:none; }
-    h1,h2,h3,h4,p,figure,blockquote,dl,dd{ margin:0; }
-    ul{ margin:0; padding:0; list-style:none; }
-    :focus-visible{ outline:none; box-shadow:var(--sh-focus); border-radius:var(--r-xs); }
+    /* Motion */
+    --ease:cubic-bezier(.16,1,.3,1); --ease-soft:cubic-bezier(.4,0,.2,1);
+    --t1:.18s; --t2:.34s; --t3:.6s;
+    --header-h:62px;
+  }
 
-    /* =================================================================
-       LAYOUT HELPERS
-       ================================================================= */
-    .container{ width:100%; max-width:var(--container); margin-inline:auto; padding-inline:var(--pad-x); }
-    section{ scroll-margin-top:calc(var(--header-h) + 16px); }
-    .sec{ padding-block:var(--section-y); position:relative; }
-    .sec--mist{ background:var(--mist); }
-    .sec--dark{ background:var(--ink-900); color:var(--white); }
-    .sec--brand{ background:var(--brand); color:var(--white); }
-    .sec--mesh{ background-image:var(--grad-mesh); }
+  /* =====================================================================
+     RESET
+     ===================================================================== */
+  *,*::before,*::after{ box-sizing:border-box; }
+  html{ -webkit-text-size-adjust:100%; scroll-behavior:smooth; }
+  body{
+    margin:0; font-family:var(--font); color:var(--ink-700); background:var(--white);
+    line-height:var(--lh-body); font-size:var(--fs-body);
+    overflow-x:hidden; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+  }
+  img{ max-width:100%; display:block; }
+  a{ color:inherit; text-decoration:none; }
+  button{ font-family:inherit; cursor:pointer; border:none; background:none; }
+  h1,h2,h3,h4,p,figure,blockquote,dl,dd{ margin:0; }
+  ul{ margin:0; padding:0; list-style:none; }
+  :focus-visible{ outline:none; box-shadow:var(--sh-focus); border-radius:var(--r-sm); }
+  ::selection{ background:rgba(77,101,249,.22); }
 
-    p{ max-width:var(--measure); line-height:var(--lh-body); word-break:keep-all; }
+  /* =====================================================================
+     LAYOUT
+     ===================================================================== */
+  .container{ width:100%; max-width:var(--container); margin-inline:auto; padding-inline:var(--pad-x); }
+  .container--wide{ max-width:var(--container-wide); }
+  section{ scroll-margin-top:calc(var(--header-h) + 16px); }
+  .sec{ padding-block:var(--section-y); position:relative; }
+  .sec--mist{ background:var(--mist); }
+  .sec--dark{ background:var(--d-bg); color:var(--white); background-image:var(--mesh-dark); }
+  .sec--brand{ background:linear-gradient(160deg,#4D65F9,#3B51E8 60%,#2E40C8); color:var(--white); }
+  .sec--mesh{ background-image:var(--mesh); }
+  .divider{ height:1px; background:var(--line); border:0; margin:0; }
 
-    /* eyebrow */
-    .eyebrow{
-      display:inline-flex; align-items:center; gap:var(--s-2);
-      font-size:var(--fs-eyebrow); font-weight:var(--w-b); text-transform:uppercase;
-      letter-spacing:var(--ls-eyebrow); color:var(--ink-400); margin-bottom:var(--s-4);
-    }
-    .eyebrow .no{ font-family:var(--font-mono); color:var(--brand); font-weight:var(--w-b); }
-    .sec--dark .eyebrow{ color:rgba(255,255,255,.72); }
-    .sec--brand .eyebrow{ color:#fff; }
-    .sec--dark .eyebrow .no{ color:var(--sky); }
-    .sec--brand .eyebrow .no{ color:var(--sky); }
+  p{ line-height:var(--lh-body); word-break:keep-all; }
 
-    .sec-title{
-      font-size:var(--fs-h1); font-weight:var(--w-x); letter-spacing:var(--ls-tight);
-      line-height:var(--lh-snug); word-break:keep-all; color:var(--ink-700);
-    }
-    .sec--dark .sec-title, .sec--brand .sec-title{ color:var(--white); }
-    .sec-lead{
-      font-size:var(--fs-lead); color:var(--ink-500); font-weight:var(--w-m);
-      margin-top:var(--s-4); max-width:62ch;
-    }
-    .sec--brand .sec-lead{ color:#fff; }
-    .sec-head{ margin-bottom:var(--s-8); }
-    .sec-head--center{ text-align:center; }
-    .sec-head--center .eyebrow{ justify-content:center; }
-    .sec-head--center .sec-lead{ margin-inline:auto; }
+  /* Eyebrow */
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:var(--s3);
+    font-family:var(--mono); font-size:var(--fs-eyebrow); font-weight:var(--wb);
+    text-transform:uppercase; letter-spacing:var(--ls-eyebrow); color:var(--ink-400);
+    margin-bottom:var(--s5);
+  }
+  .eyebrow .no{ color:var(--brand); }
+  .eyebrow::before{ content:""; width:22px; height:1.5px; background:var(--line-2); display:inline-block; }
+  .sec--dark .eyebrow{ color:rgba(255,255,255,.6); }
+  .sec--dark .eyebrow .no{ color:var(--sky); }
+  .sec--dark .eyebrow::before{ background:rgba(255,255,255,.24); }
+  .sec--brand .eyebrow{ color:rgba(255,255,255,.85); }
+  .sec--brand .eyebrow .no{ color:#fff; }
+  .sec--brand .eyebrow::before{ background:rgba(255,255,255,.45); }
 
-    /* CTAs */
-    .btn{
-      display:inline-flex; align-items:center; justify-content:center; gap:var(--s-2);
-      font-weight:var(--w-b); font-size:var(--fs-body); border-radius:var(--r-pill);
-      padding:14px 26px; transition:transform var(--t-med) var(--ease),
-        background var(--t-med) var(--ease), box-shadow var(--t-med) var(--ease),
-        border-color var(--t-med) var(--ease), color var(--t-med) var(--ease);
-      white-space:nowrap; line-height:1;
-    }
-    .btn--primary{ background:var(--brand); color:#fff; box-shadow:var(--sh-2); }
-    .btn--primary:hover{ background:var(--teal); transform:translateY(-2px); box-shadow:var(--sh-glow); }
-    .btn--ghost{ background:transparent; color:var(--ink-700); border:1px solid var(--line-strong); }
-    .btn--ghost:hover{ border-color:var(--brand); color:var(--brand); transform:translateY(-2px); }
-    .sec--dark .btn--ghost, .sec--brand .btn--ghost{ color:#fff; border-color:rgba(255,255,255,.32); }
-    .sec--dark .btn--ghost:hover, .sec--brand .btn--ghost:hover{ border-color:#fff; color:#fff; }
-    .sec--brand .btn--primary{ background:#fff; color:var(--brand); }
-    .sec--brand .btn--primary:hover{ background:var(--sky); color:var(--brand); }
-    .cta-row{ display:flex; flex-wrap:wrap; gap:var(--s-3); }
+  .sec-title{
+    font-size:var(--fs-h1); font-weight:var(--wx); letter-spacing:var(--ls-tight);
+    line-height:var(--lh-snug); word-break:keep-all; color:var(--ink-900);
+  }
+  .sec--dark .sec-title,.sec--brand .sec-title{ color:#fff; }
+  .sec-lead{
+    font-size:var(--fs-lead); color:var(--ink-500); font-weight:var(--wm);
+    margin-top:var(--s5); max-width:60ch; line-height:1.6;
+  }
+  .sec--dark .sec-lead{ color:rgba(255,255,255,.66); }
+  .sec--brand .sec-lead{ color:rgba(255,255,255,.9); }
+  .sec-head{ margin-bottom:var(--s8); max-width:var(--container); }
+  .sec-head--center{ text-align:center; margin-inline:auto; }
+  .sec-head--center .eyebrow{ justify-content:center; }
+  .sec-head--center .sec-lead{ margin-inline:auto; }
 
-    /* =================================================================
-       HEADER
-       ================================================================= */
-    .site-header{
-      position:fixed; inset:0 0 auto 0; height:var(--header-h); z-index:1000;
-      background:rgba(255,255,255,.72); backdrop-filter:saturate(180%) blur(14px);
-      -webkit-backdrop-filter:saturate(180%) blur(14px);
-      border-bottom:1px solid var(--line);
-    }
-    .site-header__inner{
-      max-width:var(--container); margin-inline:auto; padding-inline:var(--pad-x);
-      height:var(--header-h); display:flex; align-items:center; justify-content:space-between; gap:var(--s-4);
-    }
-    .logo{ font-size:18px; font-weight:var(--w-x); letter-spacing:-0.02em; color:var(--ink-700); }
-    .logo b{ color:var(--brand); }
-    .navc{ display:flex; gap:var(--s-5); }
-    .navc a{
-      font-size:14px; font-weight:var(--w-sb); color:var(--ink-500); position:relative;
-      padding:6px 2px; transition:color var(--t-fast) var(--ease);
-    }
-    .navc a::after{
-      content:""; position:absolute; left:0; right:0; bottom:0; height:2px; background:var(--brand);
-      transform:scaleX(0); transform-origin:left; transition:transform var(--t-med) var(--ease);
-    }
-    .navc a:hover{ color:var(--ink-700); }
-    .navc a.is-active{ color:var(--ink-700); }
-    .navc a.is-active::after{ transform:scaleX(1); }
-    .header-right{ display:flex; align-items:center; gap:var(--s-3); }
-    .pill-back{
-      display:inline-flex; align-items:center; gap:6px; font-size:13px; font-weight:var(--w-sb);
-      color:var(--ink-700); border:1px solid var(--line-strong); border-radius:var(--r-pill);
-      padding:8px 14px; transition:all var(--t-fast) var(--ease);
-    }
-    .pill-back:hover{ border-color:var(--brand); color:var(--brand); }
-    .chip-live{
-      display:inline-flex; align-items:center; gap:5px; font-size:12px; font-weight:var(--w-b);
-      color:var(--brand); background:var(--sky); border-radius:var(--r-pill); padding:7px 12px;
-      transition:all var(--t-fast) var(--ease);
-    }
-    .chip-live:hover{ background:var(--brand); color:#fff; }
-    .progress-bar{
-      position:absolute; left:0; bottom:-3px; height:3px; width:100%; background:var(--brand);
-      transform:scaleX(0); transform-origin:left; will-change:transform;
-    }
+  /* Buttons */
+  .btn{
+    display:inline-flex; align-items:center; justify-content:center; gap:var(--s2);
+    font-weight:var(--wb); font-size:var(--fs-body); border-radius:var(--r-pill);
+    padding:15px 28px; line-height:1; white-space:nowrap;
+    transition:transform var(--t2) var(--ease), background var(--t2) var(--ease),
+      box-shadow var(--t2) var(--ease), border-color var(--t2) var(--ease), color var(--t2) var(--ease);
+  }
+  .btn--primary{ background:var(--brand); color:#fff; box-shadow:var(--sh2); }
+  .btn--primary:hover{ background:var(--brand-600); transform:translateY(-2px); box-shadow:var(--sh-glow); }
+  .btn--ghost{ background:transparent; color:var(--ink-700); border:1px solid var(--line-2); }
+  .btn--ghost:hover{ border-color:var(--brand); color:var(--brand); transform:translateY(-2px); }
+  .sec--dark .btn--ghost,.sec--brand .btn--ghost{ color:#fff; border-color:rgba(255,255,255,.32); }
+  .sec--dark .btn--ghost:hover,.sec--brand .btn--ghost:hover{ border-color:#fff; }
+  .sec--brand .btn--primary{ background:#fff; color:var(--brand); }
+  .sec--brand .btn--primary:hover{ background:var(--sky); }
+  .cta-row{ display:flex; flex-wrap:wrap; gap:var(--s3); }
 
-    /* =================================================================
-       01 — HERO
-       ================================================================= */
-    #hero{ padding-top:calc(var(--header-h) + clamp(40px,7vw,90px)); padding-bottom:0; }
-    .hero-grid{
-      display:grid; grid-template-columns:1.05fr 0.95fr; gap:var(--s-8);
-      align-items:center; min-height:min(80vh,720px);
-    }
-    .hero-h1{
-      font-size:var(--fs-hero); font-weight:var(--w-x); letter-spacing:var(--ls-hero);
-      line-height:1.04; color:var(--ink-700); word-break:keep-all; margin-bottom:var(--s-5);
-    }
-    .hero-h1 .u{ position:relative; }
-    .hero-h1 .u::after{
-      content:""; position:absolute; left:0; right:0; bottom:.04em; height:5px;
-      background:var(--brand); border-radius:3px; opacity:.9;
-    }
-    .hero-sub{ font-size:var(--fs-lead); font-weight:var(--w-m); color:var(--ink-500); max-width:26ch; margin-bottom:var(--s-6); }
-    .hero-cta{ display:flex; flex-wrap:wrap; gap:var(--s-3); }
+  /* =====================================================================
+     BROWSER / DEVICE FRAME (image-centric chrome)
+     ===================================================================== */
+  .browser{
+    border-radius:var(--r-lg); overflow:hidden; background:#fff; border:1px solid var(--line);
+    box-shadow:var(--sh-float); transition:transform var(--t3) var(--ease), box-shadow var(--t3) var(--ease);
+  }
+  .browser__bar{
+    display:flex; align-items:center; gap:var(--s3); height:42px; padding:0 16px;
+    background:#F2F4F9; border-bottom:1px solid var(--line);
+  }
+  .browser__dots{ display:flex; gap:7px; flex:none; }
+  .browser__dots i{ width:11px; height:11px; border-radius:50%; background:#D6DBE6; }
+  .browser__dots i:nth-child(1){ background:#FF5F57; }
+  .browser__dots i:nth-child(2){ background:#FEBC2E; }
+  .browser__dots i:nth-child(3){ background:#28C840; }
+  .browser__url{
+    flex:1; height:24px; display:flex; align-items:center; gap:7px; padding:0 12px;
+    background:#fff; border:1px solid var(--line); border-radius:var(--r-pill);
+    font-family:var(--mono); font-size:11px; color:var(--ink-400); overflow:hidden; white-space:nowrap;
+  }
+  .browser__url svg{ width:11px; height:11px; flex:none; color:var(--teal); }
+  .browser__body{ background:#fff; display:block; }
+  .browser__body img{ width:100%; display:block; }
+  .browser__body--scroll{ height:clamp(360px,52vh,560px); overflow:hidden; position:relative; }
+  .browser__body--scroll img{ will-change:transform; }
+  /* fixed "above the fold" crop window — keeps tall full-page shots balanced */
+  .browser__body--crop{ height:clamp(300px,42vh,440px); overflow:hidden; }
+  .browser__body--crop img{ height:100%; object-fit:cover; object-position:top center; }
 
-    .hero-device{ position:relative; display:flex; align-items:center; justify-content:center; min-height:420px; }
-    .hero-blob{
-      position:absolute; width:62%; aspect-ratio:1; border-radius:50%;
-      background:radial-gradient(circle, var(--sky), transparent 70%);
-      filter:blur(60px); opacity:.6; z-index:0;
-    }
-    .phone-wrap{ position:relative; width:min(100%,460px); aspect-ratio:1070/846; z-index:2; }
-    .phone-wrap .phone-shot{
-      position:absolute; top:8.5%; left:35.5%; width:29%; height:80%;
-      object-fit:cover; object-position:top center; border-radius:18px; z-index:1;
-    }
-    .phone-wrap .phone-frame{ position:absolute; inset:0; width:100%; height:100%; z-index:3; pointer-events:none; }
+  .browser--dark{ border-color:rgba(255,255,255,.12); }
+  .browser--dark .browser__bar{ background:#1A1E2B; border-bottom-color:rgba(255,255,255,.08); }
+  .browser--dark .browser__url{ background:#12141D; border-color:rgba(255,255,255,.1); color:rgba(255,255,255,.5); }
 
-    .hero-meta{ margin-top:var(--s-8); }
-    .hero-meta dl{
-      display:grid; grid-template-columns:repeat(3,1fr); gap:var(--s-5);
-      background:var(--mist); border:1px solid var(--line); border-radius:var(--r-lg);
-      padding:var(--s-6) var(--s-6); margin:0 0 var(--s-8);
-    }
-    .hero-meta dt{
-      font-family:var(--font-mono); font-size:13px; font-weight:var(--w-b); letter-spacing:.08em; text-transform:uppercase;
-      color:var(--brand); margin-bottom:6px;
-    }
-    .hero-meta dd{ margin:0; font-weight:var(--w-sb); color:var(--ink-700); font-size:var(--fs-body); }
-    .hero-meta dl > div{ position:relative; padding-left:var(--s-5); }
-    .hero-meta dl > div::before{ content:""; position:absolute; left:0; top:2px; bottom:2px; width:2px; background:var(--line-strong); border-radius:2px; }
-    .hero-meta dl > div:first-child{ padding-left:0; }
-    .hero-meta dl > div:first-child::before{ display:none; }
+  .frame-cap{ font-family:var(--mono); font-size:var(--fs-cap); color:var(--ink-400); margin-top:var(--s4); text-align:center; }
+  .sec--dark .frame-cap{ color:rgba(255,255,255,.5); }
 
-    /* =================================================================
-       02 — PROBLEM DISCOVERY
-       ================================================================= */
-    .problem-grid{ display:grid; grid-template-columns:0.92fr 1.08fr; gap:var(--s-7); align-items:start; }
-    .prob-cards{ display:flex; flex-direction:column; gap:var(--s-5); }
-    .prob-card{
-      background:#fff; border:1px solid var(--line); border-left:3px solid var(--danger); border-radius:18px; padding:24px;
-      box-shadow:var(--sh-1); display:grid; grid-template-columns:auto 1fr; gap:var(--s-4);
-      transition:transform var(--t-med) var(--ease), box-shadow var(--t-med) var(--ease), border-color var(--t-med) var(--ease);
-    }
-    .prob-card .chip{
-      width:42px; height:42px; flex:none; border-radius:12px; display:grid; place-items:center;
-      font-family:var(--font-mono); font-weight:var(--w-b); font-size:15px;
-      color:var(--danger); background:rgba(229,72,77,.10); border:1px solid rgba(229,72,77,.4);
-      transition:all var(--t-med) var(--ease);
-    }
-    .prob-card h3{ font-size:var(--fs-h3); font-weight:var(--w-b); color:var(--ink-700); margin-bottom:6px; word-break:keep-all; }
-    .prob-card p{ font-size:15px; color:var(--ink-500); max-width:none; }
-    .prob-card:hover, .prob-card.is-active{ transform:translateY(-3px); box-shadow:var(--sh-2); border-color:var(--line-strong); border-left-color:var(--danger); }
-    .prob-card:hover .chip, .prob-card.is-active .chip{ background:var(--danger); color:#fff; }
+  .tag{
+    display:inline-flex; align-items:center; gap:6px; font-family:var(--mono); font-size:11px;
+    font-weight:var(--wb); letter-spacing:.12em; padding:6px 12px; border-radius:var(--r-pill);
+  }
+  .tag--before{ color:var(--danger); border:1px solid rgba(229,72,77,.4); background:rgba(229,72,77,.06); }
+  .tag--after{ color:#fff; background:var(--brand); }
 
-    .prob-figure{ position:sticky; top:calc(var(--header-h) + 24px); }
-    .shot-frame{
-      position:relative; border:1px solid var(--line); border-radius:var(--r-lg); overflow:hidden;
-      box-shadow:var(--sh-3); background:#fff;
-    }
-    .shot-frame img{ width:100%; display:block; }
-    .shot-tag{
-      position:absolute; top:14px; left:14px; z-index:4; font-family:var(--font-mono); font-size:11px;
-      font-weight:var(--w-b); letter-spacing:.1em; padding:5px 10px; border-radius:var(--r-pill);
-    }
-    .shot-tag--before{ color:var(--danger); border:1px solid var(--danger); background:rgba(255,255,255,.92); }
-    .shot-cap{ font-size:var(--fs-cap); color:var(--ink-400); margin-top:var(--s-3); text-align:center; font-family:var(--font-mono); }
-    .pin{
-      position:absolute; z-index:5; width:26px; height:26px; transform:translate(-50%,-50%);
-      cursor:pointer; border:none; background:none;
-    }
-    .pin .dot{
-      position:absolute; inset:0; margin:auto; width:18px; height:18px; border-radius:50%;
-      background:var(--danger); color:#fff; display:grid; place-items:center;
-      font-family:var(--font-mono); font-size:11px; font-weight:var(--w-b); box-shadow:0 2px 8px rgba(229,72,77,.5);
-      transition:transform var(--t-med) var(--ease);
-    }
-    .pin::before{
-      content:""; position:absolute; inset:0; margin:auto; width:18px; height:18px; border-radius:50%;
-      border:2px solid var(--danger); animation:pinPulse 2s var(--ease-soft) infinite;
-    }
-    @keyframes pinPulse{ 0%{ transform:scale(1); opacity:.7; } 70%,100%{ transform:scale(2.6); opacity:0; } }
-    .pin:hover .dot, .pin.is-active .dot{ transform:scale(1.25); }
-    .pin-list{ display:none; }
+  /* =====================================================================
+     HEADER
+     ===================================================================== */
+  .site-header{
+    position:fixed; inset:0 0 auto 0; height:var(--header-h); z-index:1000;
+    background:rgba(255,255,255,.7); backdrop-filter:saturate(180%) blur(16px);
+    -webkit-backdrop-filter:saturate(180%) blur(16px); border-bottom:1px solid var(--line);
+  }
+  .site-header__inner{
+    max-width:var(--container-wide); margin-inline:auto; padding-inline:var(--pad-x);
+    height:var(--header-h); display:flex; align-items:center; justify-content:space-between; gap:var(--s4);
+  }
+  .logo{ font-size:18px; font-weight:var(--wx); letter-spacing:-0.02em; color:var(--ink-900); }
+  .logo b{ color:var(--brand); }
+  .navc{ display:flex; gap:var(--s6); }
+  .navc a{ font-size:14px; font-weight:var(--wsb); color:var(--ink-500); position:relative; padding:6px 2px; transition:color var(--t1) var(--ease); }
+  .navc a::after{ content:""; position:absolute; left:0; right:0; bottom:0; height:2px; background:var(--brand); transform:scaleX(0); transform-origin:left; transition:transform var(--t2) var(--ease); }
+  .navc a:hover,.navc a.is-active{ color:var(--ink-900); }
+  .navc a.is-active::after{ transform:scaleX(1); }
+  .header-right{ display:flex; align-items:center; gap:var(--s3); }
+  .pill-back{ display:inline-flex; align-items:center; gap:6px; font-size:13px; font-weight:var(--wsb); color:var(--ink-700); border:1px solid var(--line-2); border-radius:var(--r-pill); padding:9px 15px; transition:all var(--t1) var(--ease); }
+  .pill-back:hover{ border-color:var(--brand); color:var(--brand); }
+  .chip-live{ display:inline-flex; align-items:center; gap:5px; font-size:12px; font-weight:var(--wb); color:var(--brand); background:var(--sky); border-radius:var(--r-pill); padding:8px 13px; transition:all var(--t1) var(--ease); }
+  .chip-live:hover{ background:var(--brand); color:#fff; }
+  .progress-bar{ position:absolute; left:0; bottom:-2px; height:2px; width:100%; background:linear-gradient(90deg,var(--brand),var(--teal)); transform:scaleX(0); transform-origin:left; will-change:transform; }
 
-    /* =================================================================
-       03 — PROJECT GOAL
-       ================================================================= */
-    /* Quote now sits as the lead band atop the goal grid for cohesion */
-    .goal-wrap{ border:1px solid var(--line); border-radius:var(--r-lg); overflow:hidden; background:#fff; max-width:1000px; margin-inline:auto; }
-    .goal-quote{
-      background:linear-gradient(120deg, rgba(77,101,249,.06), var(--mist));
-      border-left:4px solid var(--brand);
-      padding:var(--s-6) var(--s-7); margin:0; border-bottom:1px solid var(--line);
-    }
-    .goal-quote p{ font-size:var(--fs-lead); font-weight:var(--w-sb); color:var(--ink-700); max-width:none; }
-    .goal-quote span{ display:block; margin-top:var(--s-2); font-size:var(--fs-cap); color:var(--ink-400); font-family:var(--font-mono); }
-    .goal-grid{ display:grid; grid-template-columns:repeat(3,1fr); background:#fff; }
-    .goal-cell{ padding:var(--s-7) var(--s-6); position:relative; border-left:1px solid var(--line); transition:transform var(--t-med) var(--ease), background var(--t-med) var(--ease); }
-    .goal-cell:first-child{ border-left:none; }
-    /* Accent the middle cell (최단 경로) as the pivotal goal */
-    .goal-cell--accent{ background:rgba(77,101,249,.04); }
-    .goal-cell::before{
-      content:""; position:absolute; top:0; left:0; height:3px; width:0; background:var(--brand);
-      transition:width var(--t-slow) var(--ease);
-    }
-    .goal-cell:hover{ transform:translateY(-4px); background:var(--mist); z-index:2; }
-    .goal-cell:hover::before{ width:100%; }
-    .goal-idx{ font-family:var(--font-mono); font-size:34px; font-weight:var(--w-x); color:#fff;
-      -webkit-text-stroke:1.5px var(--sky); margin-bottom:var(--s-4); display:block; }
-    .goal-cell h3{ font-size:var(--fs-h3); font-weight:var(--w-b); color:var(--ink-700); margin-bottom:var(--s-3); word-break:keep-all; }
-    .goal-cell p{ font-size:15px; color:var(--ink-500); }
-    .goal-cell .solve{ display:block; margin-top:var(--s-4); font-size:var(--fs-cap); color:var(--brand); font-weight:var(--w-sb); }
+  /* =====================================================================
+     01 — HERO
+     ===================================================================== */
+  #hero{ padding-top:calc(var(--header-h) + clamp(48px,8vw,110px)); padding-bottom:var(--section-y); overflow:hidden;
+    background-color:#F7FAFF;
+    background-image:url(./images/hero_sub.png);
+    background-size:cover; background-position:center; background-repeat:no-repeat;
+  }
+  .hero-grid{ display:grid; grid-template-columns:1.02fr 1.1fr; gap:clamp(32px,5vw,80px); align-items:center; }
+  .hero-h1{ font-size:var(--fs-hero); font-weight:var(--wx); letter-spacing:var(--ls-hero); line-height:var(--lh-tight); color:var(--ink-900); word-break:keep-all; margin-bottom:var(--s5); }
+  .hero-h1 .grad{ background:linear-gradient(120deg,var(--brand),var(--teal)); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .hero-sub{ font-size:var(--fs-lead); font-weight:var(--wm); color:var(--ink-500); max-width:32ch; margin-bottom:var(--s6); line-height:1.6; }
+  .hero-media{ position:relative; display:flex; flex-direction:column; align-items:center; gap:clamp(10px,1.4vw,16px); }
+  /* macOS/Safari 스타일 브라우저 프레임 (hover 시 긴 화면 자동 스크롤) */
+  .hero-device-hint{ display:inline-flex; align-items:center; gap:6px; color:var(--ink-400); font-size:var(--fs-cap); font-weight:var(--wm); letter-spacing:.01em; word-break:keep-all; text-align:center; }
+  .hero-device-hint__icon{ font-size:1.1em; line-height:1; animation:hintBounce 1.6s var(--ease-soft) infinite; }
+  @keyframes hintBounce{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(5px); } }
+  .hero-browser{ width:min(100%,580px); transition:transform var(--t3) var(--ease), box-shadow var(--t3) var(--ease); }
+  .hero-browser:hover{ transform:translateY(-4px); box-shadow:0 50px 100px -28px rgba(24,38,110,.4), 0 14px 34px rgba(16,18,30,.1); }
+  .browser__body--autoscroll{ height:clamp(340px,48vh,470px); overflow:hidden; background:#EDEDED; }
+  .browser__body--autoscroll img{ width:100%; height:100%; object-fit:cover; object-position:center top; transition:object-position 8s linear; }
+  .hero-browser:hover .browser__body--autoscroll img,.hero-browser:focus-within .browser__body--autoscroll img{ object-position:center bottom; }
+  .hero-glow{ position:absolute; inset:-12% -8% -8% -8%; z-index:-1; background:radial-gradient(60% 60% at 70% 30%,rgba(77,101,249,.18),transparent 70%),radial-gradient(50% 50% at 20% 80%,rgba(97,193,204,.16),transparent 70%); filter:blur(20px); }
 
-    /* =================================================================
-       04 — KEY INSIGHTS (dark)
-       ================================================================= */
-    #insight{ background-image:var(--grad-mesh); }
-    .insight-rows{ margin-top:var(--s-6); border-top:1px solid var(--line-dark); }
-    .insight-row{
-      display:grid; grid-template-columns:auto 1fr; gap:var(--s-7); align-items:center;
-      padding:var(--s-8) var(--s-5); border-bottom:1px solid var(--line-dark);
-      background:rgba(255,255,255,.04); transition:background var(--t-med) var(--ease), border-color var(--t-med) var(--ease);
-    }
-    .insight-row:hover{ background:rgba(255,255,255,.07); border-bottom-color:var(--teal); }
-    .insight-num{ font-family:var(--font-mono); font-weight:var(--w-x); color:var(--brand); line-height:1; }
-    .insight-row p{ font-weight:var(--w-b); color:#fff; line-height:1.32; max-width:none; }
-    .insight-row p b{ color:var(--sky); font-weight:var(--w-x); }
+  .hero-meta{ margin-top:clamp(40px,6vw,84px); }
+  /* 프로스트 글래스 카드 — 웨이브 배경 위에서도 메타 정보가 또렷하게 */
+  .hero-meta dl{
+    display:grid; grid-template-columns:repeat(4,1fr); gap:0;
+    background:rgba(255,255,255,.55);
+    -webkit-backdrop-filter:blur(16px) saturate(160%);
+    backdrop-filter:blur(16px) saturate(160%);
+    border:1px solid rgba(255,255,255,.7);
+    border-radius:var(--r-lg);
+    box-shadow:0 10px 34px -8px rgba(30,45,120,.14), inset 0 1px 0 rgba(255,255,255,.6);
+    padding:clamp(22px,2.6vw,30px) clamp(22px,2.2vw,32px);
+  }
+  .hero-meta dl > div{ padding-right:var(--s5); padding-left:var(--s5); border-left:1px solid var(--line); }
+  .hero-meta dl > div:first-child{ border-left:none; padding-left:0; }
+  .hero-meta dl > div:last-child{ padding-right:0; }
+  .hero-meta dt{ font-family:var(--mono); font-size:11px; font-weight:var(--wb); letter-spacing:.14em; text-transform:uppercase; color:var(--ink-400); margin-bottom:10px; }
+  .hero-meta dd{ font-weight:var(--wsb); color:var(--ink-800); font-size:var(--fs-body); line-height:1.5; }
 
-    /* Row 01 — left-aligned, largest number, big lead statement */
-    .insight-row--lead .insight-num{ font-size:var(--fs-mega); }
-    .insight-row--lead p{ font-size:clamp(20px,2.6vw,34px); }
+  /* =====================================================================
+     02 — PROBLEM (dark, annotated)
+     ===================================================================== */
+  .prob-figure{ margin-top:var(--s8); position:relative; max-width:var(--container); margin-inline:auto; }
+  .prob-figure .browser{ box-shadow:0 40px 90px -30px rgba(0,0,0,.7); }
+  .prob-shot{ position:relative; }
+  .prob-shot img{ width:100%; display:block; }
+  .prob-cards{ display:grid; grid-template-columns:repeat(4,1fr); gap:var(--s4); margin-top:var(--s8); }
+  .prob-card{
+    background:var(--d-card); border:1px solid var(--line-dark); border-top:2px solid var(--danger);
+    border-radius:var(--r-md); padding:var(--s5);
+    transition:transform var(--t2) var(--ease), background var(--t2) var(--ease);
+  }
+  .prob-card:hover{ transform:translateY(-4px); background:var(--d-card-2); }
+  .prob-card .pn{ font-family:var(--mono); font-size:12px; font-weight:var(--wb); color:var(--danger); letter-spacing:.1em; display:block; margin-bottom:var(--s3); }
+  .prob-card h3{ font-size:var(--fs-h3); font-weight:var(--wb); color:#fff; margin-bottom:var(--s3); line-height:1.3; word-break:keep-all; }
+  .prob-card p{ font-size:14px; color:rgba(255,255,255,.6); line-height:1.6; }
 
-    /* Row 02 — centered, smaller number but bolder/tighter copy */
-    .insight-row--mid{ grid-template-columns:1fr; justify-items:center; text-align:center; gap:var(--s-4); }
-    .insight-row--mid .insight-num{ font-size:64px; color:var(--teal); }
-    .insight-row--mid p{ font-size:clamp(20px,2.4vw,30px); font-weight:var(--w-x); max-width:24ch; }
+  /* =====================================================================
+     03 — BENCHMARK
+     ===================================================================== */
+  .bench-grid{ display:grid; grid-template-columns:1fr 1fr; gap:var(--s7); }
+  .bench-card{ display:flex; flex-direction:column; }
+  .bench-card .browser{ transition:transform var(--t2) var(--ease); }
+  .bench-card:hover .browser{ transform:translateY(-5px); box-shadow:var(--sh-float); }
+  .bench-meta{ margin-top:var(--s5); }
+  .bench-name{ display:inline-flex; align-items:center; gap:8px; font-weight:var(--wb); color:var(--ink-900); font-size:var(--fs-h3); margin-bottom:var(--s2); }
+  .bench-name .k{ font-family:var(--mono); font-size:11px; font-weight:var(--wb); color:var(--brand); background:var(--sky); border-radius:var(--r-pill); padding:4px 9px; letter-spacing:.06em; }
+  .bench-card p{ color:var(--ink-500); font-size:var(--fs-body); max-width:46ch; }
+  .bench-card p b{ color:var(--ink-800); font-weight:var(--wsb); }
+  .bench-takeaway{
+    margin-top:var(--s8); border:1px solid var(--line); border-left:3px solid var(--brand);
+    border-radius:var(--r-md); background:#fff; padding:var(--s6) var(--s7); box-shadow:var(--sh1);
+    display:flex; gap:var(--s5); align-items:center; flex-wrap:wrap;
+  }
+  .bench-takeaway .lab{ font-family:var(--mono); font-size:11px; font-weight:var(--wb); letter-spacing:.14em; color:var(--brand); text-transform:uppercase; flex:none; }
+  .bench-takeaway p{ font-size:var(--fs-lead); font-weight:var(--wsb); color:var(--ink-800); max-width:none; }
 
-    /* Row 03 — accent (teal) card, right-aligned conclusion */
-    .insight-row--accent{
-      grid-template-columns:1fr auto; justify-items:end; text-align:right;
-      background:linear-gradient(120deg, rgba(97,193,204,.20), rgba(77,101,249,.16));
-      border-bottom-color:var(--teal);
-    }
-    .insight-row--accent:hover{ background:linear-gradient(120deg, rgba(97,193,204,.28), rgba(77,101,249,.22)); }
-    .insight-row--accent .insight-num{ font-size:clamp(64px,8vw,116px); color:#fff; -webkit-text-stroke:1.5px var(--teal); order:2; }
-    .insight-row--accent p{ font-size:clamp(20px,2.6vw,32px); order:1; }
-    .insight-row--accent p b{ color:#fff; }
+  /* =====================================================================
+     04 — GOAL
+     ===================================================================== */
+  .goal-quote{ max-width:30ch; margin:0 auto var(--s8); text-align:center; }
+  .goal-quote blockquote{ font-size:var(--fs-h2); font-weight:var(--wb); color:var(--ink-900); letter-spacing:-0.02em; line-height:1.4; word-break:keep-all; }
+  .goal-quote blockquote b{ color:var(--brand); }
+  .goal-quote cite{ display:block; margin-top:var(--s4); font-family:var(--mono); font-size:var(--fs-cap); color:var(--ink-400); font-style:normal; }
+  .goal-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:var(--s5); }
+  .goal-cell{
+    background:#fff; border:1px solid var(--line); border-radius:var(--r-lg); padding:var(--s7) var(--s6); position:relative;
+    transition:transform var(--t2) var(--ease), box-shadow var(--t2) var(--ease), border-color var(--t2) var(--ease);
+  }
+  .goal-cell:hover{ transform:translateY(-5px); box-shadow:var(--sh3); border-color:var(--line-2); }
+  .goal-cell--accent{ background:linear-gradient(165deg,rgba(77,101,249,.05),#fff); border-color:rgba(77,101,249,.25); }
+  .goal-idx{ font-family:var(--mono); font-size:14px; font-weight:var(--wb); color:var(--brand); letter-spacing:.1em; display:block; margin-bottom:var(--s5); }
+  .goal-cell h3{ font-size:var(--fs-h3); font-weight:var(--wb); color:var(--ink-900); margin-bottom:var(--s3); word-break:keep-all; }
+  .goal-cell p{ font-size:var(--fs-body); color:var(--ink-500); line-height:1.6; }
+  .goal-cell .solve{ display:inline-block; margin-top:var(--s5); font-family:var(--mono); font-size:11px; font-weight:var(--wb); color:var(--brand); background:rgba(77,101,249,.07); border-radius:var(--r-pill); padding:6px 12px; letter-spacing:.04em; }
 
-    /* =================================================================
-       05 — USER FLOW
-       ================================================================= */
-    .flow-rail{ display:flex; align-items:stretch; justify-content:center; flex-wrap:wrap; gap:0; }
-    .flow-node{
-      background:#fff; border:1px solid var(--line); border-radius:var(--r-md); padding:16px 22px;
-      box-shadow:var(--sh-1); text-align:center; min-width:120px; flex:none;
-    }
-    .flow-node{ position:relative; }
-    .flow-node .step{ font-family:var(--font-mono); font-size:12px; font-weight:var(--w-b); color:var(--ink-500); display:block; margin-bottom:8px; letter-spacing:.06em; }
-    .flow-node .gly{ color:var(--brand); display:grid; place-items:center; margin:0 auto 8px; width:30px; height:30px; }
-    .flow-node .gly svg{ width:26px; height:26px; }
-    .flow-node .lbl{ font-weight:var(--w-b); color:var(--ink-700); font-size:15px; }
-    /* Tinted "active zone" — core 문제 생성·풀이 steps */
-    .flow-node--login{ background:rgba(204,234,240,.4); }
-    .flow-node--core{ background:rgba(77,101,249,.06); border-color:rgba(77,101,249,.28); }
-    .flow-node--core .step{ color:var(--brand); }
-    .flow-conn{
-      display:flex; align-items:center; justify-content:center; flex:none; padding:0 4px; min-width:36px;
-      color:var(--teal); font-size:20px; font-weight:var(--w-b); align-self:center;
-      opacity:.5; transition:opacity var(--t-med) var(--ease);
-    }
-    .flow-conn.drawn{ opacity:1; }
-    .flow-conn .line{ width:18px; height:2px; background:var(--sky); margin-right:4px; transform:scaleX(0); transform-origin:left; transition:transform var(--t-slow) var(--ease); }
-    .flow-conn.drawn .line{ transform:scaleX(1); }
-    .flow-sub{
-      margin-top:var(--s-7); text-align:center; font-size:var(--fs-cap); color:var(--ink-400);
-      font-family:var(--font-mono);
-    }
-    .flow-sub b{ color:var(--ink-500); font-weight:var(--w-sb); }
+  /* =====================================================================
+     05 — INSIGHTS (dark)
+     ===================================================================== */
+  .insight-list{ margin-top:var(--s7); display:flex; flex-direction:column; }
+  .insight-row{
+    display:grid; grid-template-columns:minmax(120px,0.4fr) 1fr; gap:clamp(24px,5vw,72px);
+    align-items:center; padding-block:clamp(40px,6vw,72px); border-top:1px solid var(--line-dark);
+  }
+  .insight-row:last-child{ border-bottom:1px solid var(--line-dark); }
+  .insight-num{ font-family:var(--mono); font-weight:var(--wx); font-size:var(--fs-mega); line-height:.9; color:transparent; -webkit-text-stroke:1.5px rgba(204,234,240,.5); }
+  .insight-row:hover .insight-num{ color:var(--brand); -webkit-text-stroke:1.5px var(--brand); transition:color var(--t3) var(--ease); }
+  .insight-row p{ font-size:clamp(20px,2.4vw,32px); font-weight:var(--wb); color:#fff; line-height:1.4; max-width:24ch; }
+  .insight-row p b{ color:var(--sky); }
 
-    /* =================================================================
-       06 — SOLUTION
-       ================================================================= */
-    .case{ margin-top:var(--s-9); border-radius:var(--r-xl); padding:var(--s-7); }
-    .case:first-of-type{ margin-top:var(--s-6); }
-    /* Per-case background treatments for altitude/distinctiveness */
-    .case--01{ background:var(--mist); }
-    .case--02{
-      background:#fff; border:1px solid var(--line);
-      background-image:linear-gradient(var(--line) 1px, transparent 1px), linear-gradient(90deg, var(--line) 1px, transparent 1px);
-      background-size:28px 28px; background-position:-1px -1px;
-    }
-    .case--03{ background:var(--ink-900); color:#fff; }
-    .case--03 .case-head h3{ color:#fff; }
-    .case--03 .case-no{ color:var(--sky); }
-    .case--03 .case-cap{ color:rgba(255,255,255,.8); }
-    .case--03 .case-cap b{ color:#fff; }
-    .case-head{ display:flex; align-items:baseline; gap:var(--s-4); margin-bottom:var(--s-5); flex-wrap:wrap; }
-    .case-no{ font-family:var(--font-mono); font-size:13px; font-weight:var(--w-b); color:var(--brand); letter-spacing:.08em; }
-    .case-head h3{ font-size:var(--fs-h2); font-weight:var(--w-b); color:var(--ink-700); word-break:keep-all; }
-    .case-cap{ font-size:var(--fs-body); color:var(--ink-500); margin-top:var(--s-5); max-width:74ch; }
-    .case-cap b{ color:var(--ink-700); font-weight:var(--w-sb); }
-    .case-cap .solve{ color:var(--brand); font-weight:var(--w-b); }
-    .case--03 .case-cap .solve{ color:var(--sky); }
-    /* Case 02 transition divider between BEFORE and AFTER frames */
-    .case-frames{ position:relative; }
-    .case-wave{
-      position:absolute; top:0; bottom:0; left:50%; transform:translateX(-50%); width:46px; z-index:3;
-      display:flex; align-items:center; justify-content:center; pointer-events:none;
-    }
-    .case-wave svg{ width:46px; height:100%; }
-    .case-wave .arrow{
-      position:absolute; width:36px; height:36px; border-radius:50%; background:var(--brand); color:#fff;
-      display:grid; place-items:center; box-shadow:var(--sh-glow); font-size:16px; font-weight:var(--w-b);
-    }
+  /* =====================================================================
+     06 — SOLUTION (cases)
+     ===================================================================== */
+  .case{ margin-top:var(--s9); }
+  .case:first-of-type{ margin-top:0; }
+  .case-head{ display:flex; align-items:baseline; gap:var(--s4); margin-bottom:var(--s6); flex-wrap:wrap; }
+  .case-no{ font-family:var(--mono); font-size:13px; font-weight:var(--wb); color:var(--brand); letter-spacing:.1em; }
+  .case-head h3{ font-size:var(--fs-h2); font-weight:var(--wb); color:var(--ink-900); word-break:keep-all; }
+  .case-cap{ font-size:var(--fs-body); color:var(--ink-500); margin-top:var(--s5); max-width:74ch; line-height:1.7; }
+  .case-cap b{ color:var(--ink-800); font-weight:var(--wsb); }
+  .case-cap .solve{ font-family:var(--mono); font-size:12px; font-weight:var(--wb); color:var(--brand); background:rgba(77,101,249,.08); border-radius:var(--r-pill); padding:4px 10px; margin-left:6px; white-space:nowrap; }
 
-    /* Case 01 slider */
-    .ba{
-      position:relative; width:100%; max-width:780px; margin-inline:auto; aspect-ratio:542/586;
-      border-radius:var(--r-xl); overflow:hidden; box-shadow:var(--sh-3); border:1px solid var(--line);
-      background:var(--mist); user-select:none; touch-action:pan-y;
-    }
-    .ba__img, .ba__after-inner{ position:absolute; inset:0; width:100%; height:100%; }
-    .ba__img img, .ba__after-inner img{ width:100%; height:100%; object-fit:cover; display:block; }
-    .ba__after{ position:absolute; inset:0; width:50%; height:100%; overflow:hidden; }
-    .ba__after-inner{ width:100%; }
-    .ba__tag{
-      position:absolute; top:14px; z-index:6; font-family:var(--font-mono); font-size:11px; font-weight:var(--w-b);
-      letter-spacing:.1em; padding:5px 11px; border-radius:var(--r-pill);
-    }
-    .ba__tag--before{ left:14px; background:rgba(14,17,24,.82); color:#fff; }
-    .ba__tag--after{ right:14px; background:var(--brand); color:#fff; }
-    .ba__handle{
-      position:absolute; top:0; bottom:0; left:50%; width:2px; background:#fff; z-index:7;
-      box-shadow:0 0 0 1px rgba(0,0,0,.06); transform:translateX(-1px); pointer-events:none;
-    }
-    .ba__knob{
-      position:absolute; top:50%; left:50%; z-index:8; width:48px; height:48px; border-radius:50%;
-      background:var(--brand); color:#fff; display:grid; place-items:center; transform:translate(-50%,-50%);
-      box-shadow:var(--sh-2); font-size:18px; pointer-events:none;
-    }
-    .ba__range{
-      position:absolute; inset:0; width:100%; height:100%; opacity:0; cursor:ew-resize; z-index:9; margin:0;
-    }
-    .ba__hint{
-      position:absolute; left:50%; bottom:16px; transform:translateX(-50%); z-index:6;
-      background:rgba(14,17,24,.78); color:#fff; font-size:12px; font-weight:var(--w-sb);
-      padding:7px 14px; border-radius:var(--r-pill); transition:opacity var(--t-slow) var(--ease); pointer-events:none;
-    }
-    .ba.touched .ba__hint{ opacity:0; }
+  /* side-by-side compare */
+  .compare{ display:grid; grid-template-columns:1fr auto 1fr; gap:var(--s5); align-items:center; }
+  .compare__col{ display:flex; flex-direction:column; }
+  .compare__top{ display:flex; justify-content:center; margin-bottom:var(--s4); }
+  .compare__arrow{ width:48px; height:48px; border-radius:50%; background:var(--brand); color:#fff; display:grid; place-items:center; font-size:20px; box-shadow:var(--sh-glow); flex:none; }
+  .compare--center{ align-items:start; }
+  .compare--center .browser{ align-self:start; }
 
-    /* Case 02 frames */
-    .case-frames{ display:grid; grid-template-columns:1fr 1fr; gap:var(--s-6); }
-    .case-frame{ position:relative; }
-    .case-frame .ftag{
-      position:absolute; top:14px; left:14px; z-index:4; font-family:var(--font-mono); font-size:11px;
-      font-weight:var(--w-b); letter-spacing:.1em; padding:5px 11px; border-radius:var(--r-pill);
-    }
-    .ftag--before{ background:rgba(14,17,24,.82); color:#fff; }
-    .ftag--after{ background:var(--brand); color:#fff; }
-    .frame-window{
-      height:560px; overflow:hidden; border-radius:18px; border:1px solid var(--line);
-      box-shadow:var(--sh-3); background:var(--mist); position:relative;
-    }
-    .frame-window img{ width:100%; display:block; will-change:transform; }
-    .frame-cap{ font-size:var(--fs-cap); color:var(--ink-400); margin-top:var(--s-3); text-align:center; font-family:var(--font-mono); }
+  /* core feature gallery (Case 03) */
+  .feat-tabs{ display:flex; gap:var(--s2); justify-content:center; flex-wrap:wrap; margin-bottom:var(--s7); }
+  .feat-tab{ font-size:14px; font-weight:var(--wsb); color:var(--ink-500); padding:10px 20px; border-radius:var(--r-pill); border:1px solid var(--line-2); background:#fff; transition:all var(--t1) var(--ease); }
+  .feat-tab.is-active{ background:var(--ink-900); color:#fff; border-color:var(--ink-900); }
+  .feat-tab:hover:not(.is-active){ border-color:var(--brand); color:var(--brand); }
+  .feat-panels{ position:relative; max-width:1000px; margin-inline:auto; }
+  .feat-panel{ display:none; }
+  .feat-panel.is-active{ display:block; animation:fadeUp .5s var(--ease); }
+  @keyframes fadeUp{ from{ opacity:0; transform:translateY(16px); } to{ opacity:1; transform:none; } }
+  .feat-panel .feat-desc{ text-align:center; margin-top:var(--s6); }
+  .feat-panel .feat-desc h4{ font-size:var(--fs-h3); font-weight:var(--wb); color:var(--ink-900); margin-bottom:var(--s2); }
+  .feat-panel .feat-desc p{ font-size:var(--fs-body); color:var(--ink-500); max-width:52ch; margin-inline:auto; }
 
-    /* Case 03 recreated UI */
-    .case03{ display:grid; grid-template-columns:1fr auto 1fr; gap:var(--s-5); align-items:center; }
-    .c03-arrow{ font-size:28px; color:var(--teal); font-weight:var(--w-b); text-align:center; }
-    .c03-panel{ border-radius:var(--r-md); border:1px solid var(--line); padding:var(--s-5); position:relative; }
-    .c03-panel--before{ background:var(--mist); border-color:rgba(229,72,77,.35); }
-    .c03-panel--after{ background:#fff; box-shadow:var(--sh-2); }
-    .c03-tag{
-      position:absolute; top:14px; right:14px; font-family:var(--font-mono); font-size:10px; font-weight:var(--w-b);
-      letter-spacing:.1em; padding:4px 9px; border-radius:var(--r-pill);
-    }
-    .c03-tag--before{ color:var(--danger); border:1px solid var(--danger); }
-    .c03-tag--after{ color:#fff; background:var(--brand); }
-    .c03-screen-title{ font-size:13px; font-weight:var(--w-b); color:var(--ink-400); margin-bottom:var(--s-4); font-family:var(--font-mono); }
-    .c03-toolbar{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:var(--s-4); }
-    .c03-btn{
-      font-size:12px; font-weight:var(--w-sb); padding:8px 12px; border-radius:8px;
-      border:1px solid var(--line-strong); background:#fff; color:var(--ink-500);
-    }
-    .c03-btn--dup{ border-style:dashed; }
-    .c03-ico{ font-size:12px; padding:8px 10px; border-radius:8px; background:#fff; border:1px solid var(--line-strong); color:var(--ink-400); }
-    .c03-hidden-row{
-      display:flex; align-items:center; gap:8px; margin-top:var(--s-3); padding:10px;
-      border:1px dashed var(--line-strong); border-radius:8px; background:rgba(255,255,255,.5);
-    }
-    .c03-hidden-input{ flex:1; font-size:11px; color:var(--ink-400); background:#eef0f4; border-radius:6px; padding:7px 9px; opacity:.6; }
-    .c03-burger{ font-size:14px; color:var(--ink-400); }
-    .tag-hidden{ font-size:9px; font-weight:var(--w-b); color:#fff; background:var(--danger); border-radius:5px; padding:3px 6px; }
-    .c03-after-cta{
-      width:100%; background:var(--brand); color:#fff; font-weight:var(--w-b); font-size:15px;
-      border-radius:10px; padding:14px; margin-bottom:var(--s-3); text-align:center;
-    }
-    .ds-input{
-      width:100%; font-family:inherit; font-size:14px; color:var(--ink-700);
-      background:var(--mist); border:1px solid var(--line); border-radius:10px; padding:13px 14px;
-      transition:border-color var(--t-fast) var(--ease), box-shadow var(--t-fast) var(--ease);
-    }
-    .ds-input:focus{ outline:none; border-color:var(--brand); box-shadow:var(--sh-focus); background:#fff; }
-    .c03-ghost-link{ display:inline-block; margin-top:var(--s-3); color:var(--brand); font-weight:var(--w-sb); font-size:14px; }
-    .c03-notes{ margin-top:var(--s-4); display:flex; flex-direction:column; gap:6px; }
-    .c03-note{ font-size:12px; font-weight:var(--w-sb); display:flex; align-items:center; gap:6px; }
-    .c03-note--bad{ color:var(--danger); }
-    .c03-note--good{ color:var(--teal); }
+  /* =====================================================================
+     07 — FEATURE EXPANSION
+     ===================================================================== */
+  .exp-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:var(--s6); }
+  .exp-card{ display:flex; flex-direction:column; }
+  .exp-shot{ border-radius:var(--r-lg); overflow:hidden; border:1px solid var(--line); box-shadow:var(--sh2); background:#fff; transition:transform var(--t2) var(--ease), box-shadow var(--t2) var(--ease); aspect-ratio:16/11; }
+  .exp-shot img{ width:100%; height:100%; object-fit:cover; object-position:top center; display:block; }
+  .exp-card:hover .exp-shot{ transform:translateY(-5px); box-shadow:var(--sh-float); }
+  .exp-body{ padding-top:var(--s5); }
+  .exp-body .top{ display:flex; align-items:center; gap:var(--s3); margin-bottom:var(--s3); }
+  .badge-new{ font-family:var(--mono); font-size:10px; font-weight:var(--wb); letter-spacing:.1em; color:var(--brand); background:var(--sky); border-radius:var(--r-pill); padding:5px 10px; }
+  .exp-body h3{ font-size:var(--fs-h3); font-weight:var(--wb); color:var(--ink-900); }
+  .exp-body p{ font-size:var(--fs-body); color:var(--ink-500); line-height:1.6; }
+  .exp-body p b{ color:var(--ink-800); font-weight:var(--wsb); }
+  .exp-tag{ display:inline-block; margin-top:var(--s4); font-size:12px; font-weight:var(--wsb); color:var(--brand); }
 
-    /* =================================================================
-       07 — FEATURE EXPANSION
-       ================================================================= */
-    .exp-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:var(--s-5); align-items:stretch; }
-    .exp-card{
-      position:relative; background:#fff; border:1px solid var(--line); border-radius:var(--r-lg); padding:var(--s-6);
-      box-shadow:var(--sh-1); overflow:hidden;
-      transition:transform var(--t-med) var(--ease), box-shadow var(--t-med) var(--ease), border-color var(--t-med) var(--ease);
-    }
-    .exp-card:hover{ transform:translateY(-3px); box-shadow:var(--sh-2); border-color:var(--line-strong); }
-    .exp-top{ display:flex; align-items:center; justify-content:space-between; margin-bottom:var(--s-5); }
-    .exp-tile{
-      width:52px; height:52px; border-radius:14px; background:var(--sky); color:var(--brand);
-      display:grid; place-items:center; transition:all var(--t-med) var(--ease);
-    }
-    .exp-tile svg{ width:26px; height:26px; transition:transform var(--t-med) var(--ease); }
-    .exp-card:hover .exp-tile{ background:var(--brand); color:#fff; }
+  /* =====================================================================
+     08 — USER FLOW
+     ===================================================================== */
+  .flow-rail{ display:flex; align-items:stretch; justify-content:center; flex-wrap:wrap; gap:0; }
+  .flow-node{ background:#fff; border:1px solid var(--line); border-radius:var(--r-md); padding:18px 22px; box-shadow:var(--sh1); text-align:center; min-width:118px; flex:none; position:relative; }
+  .flow-node .step{ font-family:var(--mono); font-size:11px; font-weight:var(--wb); color:var(--ink-400); display:block; margin-bottom:10px; letter-spacing:.08em; }
+  .flow-node .gly{ color:var(--brand); display:grid; place-items:center; margin:0 auto 10px; width:28px; height:28px; }
+  .flow-node .gly svg{ width:24px; height:24px; }
+  .flow-node .lbl{ font-weight:var(--wb); color:var(--ink-900); font-size:15px; }
+  .flow-node--core{ background:rgba(77,101,249,.05); border-color:rgba(77,101,249,.28); }
+  .flow-node--core .step{ color:var(--brand); }
+  .flow-conn{ display:flex; align-items:center; justify-content:center; flex:none; padding:0 6px; min-width:34px; color:var(--teal); align-self:center; opacity:.4; transition:opacity var(--t2) var(--ease); }
+  .flow-conn svg{ width:20px; height:20px; }
+  .flow-conn.drawn{ opacity:1; }
+  .flow-sub{ margin-top:var(--s7); text-align:center; font-family:var(--mono); font-size:var(--fs-cap); color:var(--ink-400); }
+  .flow-sub b{ color:var(--ink-600); font-weight:var(--wsb); }
 
-    /* Card 01 — Correction: mist surface, icon nudges on hover */
-    .exp-card--correction{ background:var(--mist); }
-    .exp-card--correction:hover .exp-tile svg{ transform:rotate(-8deg) scale(1.08); }
-    .exp-card--correction h3{ font-size:15px; }
-    /* Card 02 — My Page: brand→sky gradient wash, teal tile, bolder copy */
-    .exp-card--mypage{ background:linear-gradient(165deg, rgba(77,101,249,.06), rgba(204,234,240,.5)); }
-    .exp-card--mypage .exp-tile{ background:rgba(97,193,204,.22); color:var(--teal); }
-    .exp-card--mypage:hover .exp-tile{ background:var(--teal); color:#fff; }
-    .exp-card--mypage h3{ font-size:calc(var(--fs-h3) + 1px); }
-    .exp-card--mypage p{ font-size:16px; }
-    /* Card 03 — Profile: standalone, teal bottom accent bar, gradient tile */
-    .exp-card--profile{ border-color:var(--line-strong); }
-    .exp-card--profile::after{
-      content:""; position:absolute; left:0; right:0; bottom:0; height:4px;
-      background:linear-gradient(90deg, var(--brand), var(--teal));
-    }
-    .exp-card--profile .exp-tile{ background:linear-gradient(135deg, var(--brand), var(--teal)); color:#fff; }
-    .exp-card--profile:hover .exp-tile{ background:linear-gradient(135deg, var(--teal), var(--brand)); }
-    .exp-card--profile h3{ font-size:14px; }
-    .exp-card--profile .exp-tag{ background:var(--brand); color:#fff; }
-    .badge-new{
-      font-family:var(--font-mono); font-size:10px; font-weight:var(--w-b); letter-spacing:.08em;
-      color:var(--brand); background:var(--sky); border-radius:var(--r-pill); padding:5px 10px;
-    }
-    .exp-card h3{ font-size:var(--fs-h3); font-weight:var(--w-b); color:var(--ink-700); margin-bottom:var(--s-3); }
-    .exp-card p{ font-size:15px; color:var(--ink-500); }
-    .exp-tag{
-      display:inline-block; margin-top:var(--s-5); font-size:12px; font-weight:var(--w-sb);
-      color:var(--brand); background:rgba(77,101,249,.08); border-radius:var(--r-pill); padding:5px 12px;
-    }
+  /* =====================================================================
+     09 — DESIGN SYSTEM
+     ===================================================================== */
+  .ds-row{ display:grid; grid-template-columns:1.25fr 1fr; gap:var(--s6); margin-bottom:var(--s6); }
+  .ds-block{ border:1px solid var(--line); border-radius:var(--r-lg); padding:var(--s7); background:#fff; }
+  .ds-block h3{ font-family:var(--mono); font-size:12px; font-weight:var(--wb); color:var(--ink-400); letter-spacing:.12em; text-transform:uppercase; margin-bottom:var(--s6); }
+  .color-stack{ display:flex; flex-direction:column; gap:var(--s5); }
+  .col-label{ font-family:var(--mono); font-size:10px; font-weight:var(--wb); letter-spacing:.14em; color:var(--ink-400); text-transform:uppercase; margin-bottom:10px; }
+  .swatch-primary{ display:flex; align-items:flex-end; gap:var(--s4); min-height:112px; border-radius:var(--r-md); padding:var(--s4) var(--s5); background:var(--brand); color:#fff; }
+  .swatch-primary .ph{ font-family:var(--mono); font-size:18px; font-weight:var(--wb); }
+  .swatch-primary .ps{ font-size:12px; color:rgba(255,255,255,.92); margin-left:auto; text-align:right; line-height:1.5; }
+  .swatch-primary .ps b{ display:block; font-weight:var(--wb); }
+  .swatches{ display:grid; grid-template-columns:repeat(3,1fr); gap:var(--s3); }
+  .swatch{ border-radius:var(--r-md); overflow:hidden; border:1px solid var(--line); }
+  .swatch .chip-c{ height:60px; }
+  .swatch .meta{ padding:10px 12px; }
+  .swatch .hex{ font-family:var(--mono); font-size:11px; font-weight:var(--wb); color:var(--ink-800); }
+  .swatch .role{ font-size:10px; color:var(--ink-400); margin-top:2px; }
+  .type-spec{ font-size:clamp(40px,5vw,68px); font-weight:var(--wx); letter-spacing:-0.03em; color:var(--ink-900); margin-bottom:var(--s4); line-height:1; }
+  .type-meta{ font-family:var(--mono); font-size:13px; color:var(--ink-500); line-height:2; border-top:1px solid var(--line); padding-top:var(--s4); margin-top:var(--s4); }
+  .type-weights{ margin-top:var(--s5); display:flex; flex-wrap:wrap; gap:18px; font-size:19px; color:var(--ink-700); }
+  .type-weights span:nth-child(1){ font-weight:400; } .type-weights span:nth-child(2){ font-weight:500; }
+  .type-weights span:nth-child(3){ font-weight:600; } .type-weights span:nth-child(4){ font-weight:700; }
+  .type-weights span:nth-child(5){ font-weight:800; }
+  .comp-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:var(--s5); }
+  .comp-card{ border:1px solid var(--line); border-radius:var(--r-md); padding:var(--s5); background:#fff; display:flex; flex-direction:column; gap:var(--s4); }
+  .comp-body{ flex:1; display:flex; flex-direction:column; gap:10px; align-items:flex-start; justify-content:center; min-height:88px; }
+  .comp-cap{ font-family:var(--mono); font-size:11px; color:var(--ink-400); border-top:1px solid var(--line); padding-top:10px; }
+  .ds-input{ width:100%; font-family:inherit; font-size:14px; color:var(--ink-700); background:var(--mist); border:1px solid var(--line); border-radius:10px; padding:13px 14px; transition:border-color var(--t1) var(--ease), box-shadow var(--t1) var(--ease); }
+  .ds-input:focus{ outline:none; border-color:var(--brand); box-shadow:var(--sh-focus); background:#fff; }
+  .mini-card{ border:1px solid var(--line); border-radius:var(--r-md); padding:14px; box-shadow:var(--sh2); width:100%; }
+  .mini-card strong{ display:block; font-size:14px; color:var(--ink-900); margin-bottom:4px; }
+  .mini-card span{ font-size:12px; color:var(--ink-400); }
+  .badge{ font-size:11px; font-weight:var(--wb); border-radius:var(--r-pill); padding:5px 11px; display:inline-block; }
+  .badge--new{ background:var(--sky); color:var(--brand); } .badge--ai{ color:var(--brand); border:1px solid var(--brand); }
+  .badge--before{ background:var(--danger); color:#fff; } .badge--after{ background:var(--teal); color:#fff; }
+  .badge-wrap{ display:flex; flex-wrap:wrap; gap:8px; }
 
-    /* =================================================================
-       08 — DESIGN SYSTEM
-       ================================================================= */
-    .ds-row{ display:grid; grid-template-columns:1.2fr 1fr; gap:var(--s-6); margin-bottom:var(--s-6); }
-    .ds-block{ border:1px solid var(--line); border-radius:var(--r-lg); padding:var(--s-6); background:#fff; }
-    .ds-block h3{ font-size:13px; font-weight:var(--w-b); color:var(--ink-400); font-family:var(--font-mono); letter-spacing:.06em; text-transform:uppercase; margin-bottom:var(--s-5); }
-    /* Semantic color hierarchy: Primary large, supporting paired, tertiary contextual */
-    .color-stack{ display:flex; flex-direction:column; gap:var(--s-5); }
-    .col-group-label{ font-family:var(--font-mono); font-size:10px; font-weight:var(--w-b); letter-spacing:.12em; color:var(--ink-400); text-transform:uppercase; margin-bottom:10px; }
-    .swatch-primary{
-      display:flex; align-items:flex-end; gap:var(--s-4); min-height:108px; border-radius:var(--r-md);
-      padding:var(--s-4) var(--s-5); background:#4D65F9; color:#fff; border:1px solid var(--line);
-    }
-    .swatch-primary .ph{ font-family:var(--font-mono); font-size:18px; font-weight:var(--w-b); }
-    .swatch-primary .ps{ font-size:12px; color:rgba(255,255,255,.92); margin-left:auto; text-align:right; line-height:1.5; }
-    .swatch-primary .ps b{ display:block; font-weight:var(--w-b); }
-    .swatches{ display:grid; grid-template-columns:repeat(2,1fr); gap:var(--s-4); }
-    .swatch{ border-radius:var(--r-md); overflow:hidden; border:1px solid var(--line); }
-    .swatch .chip-c{ height:64px; }
-    .swatch .meta{ padding:10px 12px; }
-    .swatch .hex{ font-family:var(--font-mono); font-size:12px; font-weight:var(--w-b); color:var(--ink-700); }
-    .swatch .role{ font-size:11px; color:var(--ink-400); }
-    .swatch .wcag{ font-family:var(--font-mono); font-size:10px; color:var(--ink-400); margin-top:2px; }
-    /* In-context usage chips */
-    .col-context{ display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-top:var(--s-3); }
-    .ctx-btn{ background:var(--brand); color:#fff; font-size:12px; font-weight:var(--w-b); border-radius:var(--r-pill); padding:7px 14px; }
-    .ctx-badge{ background:var(--teal); color:#fff; font-size:11px; font-weight:var(--w-b); border-radius:var(--r-pill); padding:5px 11px; }
-    .ctx-fill{ background:var(--mist); border:1px solid var(--line); color:var(--ink-500); font-size:11px; border-radius:8px; padding:7px 11px; }
-    .type-spec{ font-size:clamp(28px,3vw,40px); font-weight:var(--w-x); letter-spacing:-0.02em; color:var(--ink-700); margin-bottom:var(--s-4); }
-    .type-scale{ font-family:var(--font-mono); font-size:13px; color:var(--ink-500); line-height:2; }
-    .type-weights{ margin-top:var(--s-4); display:flex; flex-wrap:wrap; gap:14px; font-size:18px; color:var(--ink-700); }
-    .type-weights span:nth-child(1){ font-weight:400; }
-    .type-weights span:nth-child(2){ font-weight:500; }
-    .type-weights span:nth-child(3){ font-weight:600; }
-    .type-weights span:nth-child(4){ font-weight:700; }
-    .type-weights span:nth-child(5){ font-weight:800; }
-    .comp-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:var(--s-5); }
-    .comp-card{ border:1px solid var(--line); border-radius:var(--r-md); padding:var(--s-5); background:#fff; display:flex; flex-direction:column; gap:var(--s-4); }
-    .comp-body{ flex:1; display:flex; flex-direction:column; gap:10px; align-items:flex-start; justify-content:center; min-height:90px; }
-    .comp-cap{ font-family:var(--font-mono); font-size:11px; color:var(--ink-400); border-top:1px solid var(--line); padding-top:10px; }
-    .mini-card{ border:1px solid var(--line); border-radius:var(--r-md); padding:14px; box-shadow:var(--sh-2); width:100%; }
-    .mini-card strong{ display:block; font-size:14px; color:var(--ink-700); margin-bottom:4px; }
-    .mini-card span{ font-size:12px; color:var(--ink-400); }
-    .badge{ font-size:11px; font-weight:var(--w-b); border-radius:var(--r-pill); padding:5px 11px; display:inline-block; }
-    .badge--new{ background:var(--sky); color:var(--brand); }
-    .badge--ai{ color:var(--brand); border:1px solid var(--brand); }
-    .badge--before{ background:var(--danger); color:#fff; }
-    .badge--after{ background:var(--teal); color:#fff; }
-    .badge-wrap{ display:flex; flex-wrap:wrap; gap:8px; }
+  /* =====================================================================
+     10 — EXPLORATION (versions)
+     ===================================================================== */
+  .ver-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:var(--s6); }
+  .ver-card{ position:relative; border-radius:var(--r-lg); overflow:hidden; border:1px solid var(--line-dark); background:var(--d-card); transition:transform var(--t2) var(--ease); }
+  .ver-card:hover{ transform:translateY(-6px); }
+  .ver-card.is-pick{ border:1px solid var(--sky); box-shadow:0 0 0 1px var(--sky), 0 30px 60px -24px rgba(97,193,204,.5); }
+  .ver-thumb{ aspect-ratio:16/10; overflow:hidden; }
+  .ver-thumb img{ width:100%; height:100%; object-fit:cover; }
+  .ver-body{ padding:var(--s5); display:flex; align-items:center; justify-content:space-between; gap:var(--s3); }
+  .ver-body .vt{ font-weight:var(--wb); color:#fff; font-size:var(--fs-h3); }
+  .ver-body .vs{ font-size:13px; color:rgba(255,255,255,.55); margin-top:2px; }
+  .ver-pick{ font-family:var(--mono); font-size:10px; font-weight:var(--wb); letter-spacing:.1em; color:var(--d-bg); background:var(--sky); border-radius:var(--r-pill); padding:6px 12px; flex:none; }
+  .ver-note{ margin-top:var(--s7); text-align:center; font-size:var(--fs-body); color:rgba(255,255,255,.6); max-width:60ch; margin-inline:auto; }
+  .ver-note b{ color:var(--sky); font-weight:var(--wsb); }
 
-    /* =================================================================
-       09 — DEVELOPMENT
-       ================================================================= */
-    .dev-block-label{ font-family:var(--font-mono); font-size:12px; font-weight:var(--w-b); color:var(--ink-400); letter-spacing:.08em; text-transform:uppercase; margin-bottom:var(--s-5); }
-    .tool-groups{ display:grid; grid-template-columns:repeat(3,1fr); gap:var(--s-4); margin-bottom:var(--s-9); align-items:start; }
-    .tool-group{ padding:var(--s-5); border-radius:var(--r-md); height:100%; }
-    .tool-group--design{ background:rgba(204,234,240,.45); }
-    .tool-group--develop{ background:var(--mist); }
-    .tool-group--deploy{ background:rgba(77,101,249,.07); }
-    .tool-cat{
-      font-family:var(--font-mono); font-size:10px; font-weight:var(--w-b); letter-spacing:.12em;
-      color:var(--ink-400); text-transform:uppercase; margin-bottom:var(--s-4); display:block;
-    }
-    .tool-group .chips{ display:flex; flex-wrap:wrap; gap:var(--s-3); }
-    .tool-row{ display:flex; flex-wrap:wrap; gap:var(--s-3); margin-bottom:var(--s-9); }
-    .tool-chip{
-      display:inline-flex; align-items:center; gap:8px; background:#fff; border:1px solid var(--line);
-      border-radius:12px; padding:10px 16px; font-size:14px; font-weight:var(--w-sb); color:var(--ink-700);
-      box-shadow:var(--sh-1);
-    }
-    .tool-chip img{ width:20px; height:20px; object-fit:contain; }
-    .tool-chip svg{ width:20px; height:20px; }
-    .lettermark{ font-family:var(--font-mono); font-weight:var(--w-b); font-size:11px; padding:3px 6px; border-radius:5px; }
-    .lm-html{ background:#FFEDE3; color:#E44D26; }
-    .lm-css{ background:#E6EFFF; color:#2965F1; }
-    .lm-js{ background:#F7DF1E; color:#111; }
+  /* =====================================================================
+     11 — DEVELOPMENT
+     ===================================================================== */
+  .dev-label{ font-family:var(--mono); font-size:12px; font-weight:var(--wb); color:var(--ink-400); letter-spacing:.1em; text-transform:uppercase; margin-bottom:var(--s5); }
+  .tool-groups{ display:grid; grid-template-columns:repeat(3,1fr); gap:var(--s4); margin-bottom:var(--s9); align-items:start; }
+  .tool-group{ padding:var(--s5); border-radius:var(--r-md); height:100%; border:1px solid var(--line); background:#fff; }
+  .tool-cat{ font-family:var(--mono); font-size:10px; font-weight:var(--wb); letter-spacing:.14em; color:var(--ink-400); text-transform:uppercase; margin-bottom:var(--s4); display:block; }
+  .tool-group .chips{ display:flex; flex-wrap:wrap; gap:var(--s3); }
+  .tool-chip{ display:inline-flex; align-items:center; gap:8px; background:var(--mist); border:1px solid var(--line); border-radius:12px; padding:10px 16px; font-size:14px; font-weight:var(--wsb); color:var(--ink-800); }
+  .tool-chip img{ width:20px; height:20px; object-fit:contain; }
+  .tool-chip svg{ width:20px; height:20px; }
+  .lettermark{ font-family:var(--mono); font-weight:var(--wb); font-size:11px; padding:3px 6px; border-radius:5px; }
+  .lm-html{ background:#FFEDE3; color:#E44D26; } .lm-css{ background:#E6EFFF; color:#2965F1; } .lm-js{ background:#F7DF1E; color:#111; }
+  .timeline{ position:relative; display:grid; grid-template-columns:repeat(4,1fr); gap:var(--s5); padding-top:var(--s6); }
+  .timeline::before{ content:""; position:absolute; top:calc(var(--s6) + 7px); left:6%; right:6%; height:2px; background:var(--line); }
+  .timeline::after{ content:""; position:absolute; top:calc(var(--s6) + 7px); left:6%; width:0; height:2px; background:var(--brand); transition:width 1.2s var(--ease); }
+  .timeline.drawn::after{ width:88%; }
+  .tl-step{ position:relative; text-align:center; }
+  .tl-dot{ width:16px; height:16px; border-radius:50%; background:var(--brand); margin:0 auto var(--s4); position:relative; z-index:2; box-shadow:0 0 0 4px var(--mist); }
+  .tl-step h4{ font-size:var(--fs-body); font-weight:var(--wb); color:var(--ink-900); margin-bottom:6px; }
+  .tl-step p{ font-size:13px; color:var(--ink-500); }
 
-    .timeline{ position:relative; display:grid; grid-template-columns:repeat(4,1fr); gap:var(--s-5); padding-top:var(--s-6); }
-    .timeline::before{
-      content:""; position:absolute; top:calc(var(--s-6) + 7px); left:6%; right:6%; height:2px; background:var(--line);
-    }
-    .timeline::after{
-      content:""; position:absolute; top:calc(var(--s-6) + 7px); left:6%; width:0; height:2px; background:var(--brand);
-      transition:width 1.2s var(--ease);
-    }
-    .timeline.drawn::after{ width:88%; }
-    .tl-step{ position:relative; text-align:center; }
-    .tl-dot{ width:16px; height:16px; border-radius:50%; background:var(--brand); margin:0 auto var(--s-4); position:relative; z-index:2; box-shadow:0 0 0 4px var(--mist); }
-    .tl-step h4{ font-size:var(--fs-body); font-weight:var(--w-b); color:var(--ink-700); margin-bottom:6px; }
-    .tl-step p{ font-size:13px; color:var(--ink-500); max-width:none; }
+  /* =====================================================================
+     12 — OUTCOME (brand)
+     ===================================================================== */
+  .kpi-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:var(--s5); margin-bottom:var(--s5); }
+  .kpi-card{ position:relative; overflow:hidden; background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.2); border-radius:var(--r-lg); padding:var(--s6); transition:transform var(--t2) var(--ease), background var(--t2) var(--ease); }
+  .kpi-card:hover{ transform:translateY(-5px); background:rgba(255,255,255,.16); }
+  .kpi-card--high{ background:rgba(255,255,255,.17); }
+  .kpi-card--high::before{ content:""; position:absolute; top:0; left:0; right:0; height:3px; background:linear-gradient(90deg,#fff,var(--sky)); }
+  .kpi-up{ font-size:40px; font-weight:var(--wx); color:#fff; line-height:1; margin-bottom:var(--s4); }
+  .kpi-card--high .kpi-up{ font-size:46px; }
+  .kpi-card h3{ font-size:var(--fs-h3); font-weight:var(--wb); color:#fff; margin-bottom:var(--s3); word-break:keep-all; }
+  .kpi-card p{ font-size:14px; color:rgba(255,255,255,.8); line-height:1.6; }
+  .kpi-tag{ display:inline-block; margin-top:var(--s4); font-family:var(--mono); font-size:10px; font-weight:var(--wb); letter-spacing:.1em; color:var(--sky); }
+  .kpi-note{ font-size:var(--fs-cap); color:rgba(255,255,255,.7); margin-bottom:var(--s8); font-style:italic; }
+  .roadmap{ background:rgba(11,13,20,.18); border:1px solid rgba(255,255,255,.16); border-radius:var(--r-lg); padding:var(--s6); display:flex; align-items:stretch; gap:var(--s3); flex-wrap:wrap; }
+  .rm-step{ flex:1; min-width:140px; }
+  .rm-pill{ display:flex; align-items:center; gap:8px; background:rgba(255,255,255,.14); border-radius:var(--r-pill); padding:9px 14px; font-weight:var(--wb); font-size:14px; color:#fff; margin-bottom:8px; }
+  .rm-pill .n{ width:22px; height:22px; border-radius:50%; background:#fff; color:var(--brand); display:grid; place-items:center; font-size:12px; font-family:var(--mono); flex:none; }
+  .rm-sub{ font-size:12px; color:rgba(255,255,255,.7); padding-left:6px; }
+  .rm-arrow{ display:flex; align-items:center; color:rgba(255,255,255,.5); font-size:18px; flex:none; }
 
-    /* =================================================================
-       10 — OUTCOME (brand)
-       ================================================================= */
-    .kpi-grid{ display:grid; grid-template-columns:repeat(5,1fr); gap:var(--s-5); margin-bottom:var(--s-5); }
-    .kpi-card{
-      position:relative; overflow:hidden;
-      background:rgba(255,255,255,.10); border:1px solid rgba(255,255,255,.22); border-radius:var(--r-lg);
-      padding:28px; transition:transform var(--t-med) var(--ease), background var(--t-med) var(--ease);
-    }
-    .kpi-card:hover{ transform:translateY(-4px); background:rgba(255,255,255,.16); }
-    /* Tiered impact: high-impact KPIs get full-opacity surface + top accent bar */
-    .kpi-card--high{ background:rgba(255,255,255,.18); }
-    .kpi-card--high::before{
-      content:""; position:absolute; top:0; left:0; right:0; height:4px;
-      background:linear-gradient(90deg, #fff, var(--sky));
-    }
-    .kpi-card--high .kpi-up{ font-size:44px; }
-    .kpi-card--mid{ background:rgba(255,255,255,.14); }
-    .kpi-up{ font-size:38px; font-weight:var(--w-x); color:#fff; line-height:1; margin-bottom:var(--s-4); }
-    .kpi-card h3{ font-size:var(--fs-h3); font-weight:var(--w-b); color:#fff; margin-bottom:var(--s-3); word-break:keep-all; }
-    .kpi-card p{ font-size:14px; color:rgba(255,255,255,.78); max-width:none; }
-    .kpi-tag{ display:inline-block; margin-top:var(--s-4); font-family:var(--font-mono); font-size:10px; font-weight:var(--w-b); letter-spacing:.1em; color:var(--sky); }
-    .kpi-note{ font-style:italic; font-size:var(--fs-cap); color:rgba(255,255,255,.7); margin-bottom:var(--s-8); }
+  /* =====================================================================
+     13 — RETROSPECTIVE (dark)
+     ===================================================================== */
+  .retro-wrap{ max-width:var(--measure); margin-inline:auto; }
+  .retro-rule{ width:60px; height:3px; background:linear-gradient(90deg,var(--brand),var(--teal)); border-radius:3px; margin-bottom:var(--s6); }
+  .retro-quote{ font-size:var(--fs-h1); font-weight:var(--wx); letter-spacing:-0.02em; line-height:1.28; color:#fff; word-break:keep-all; margin-bottom:var(--s7); }
+  .retro-quote b{ color:var(--brand); }
+  .retro-wrap p{ color:rgba(255,255,255,.68); line-height:var(--lh-body); margin-bottom:var(--s5); font-size:var(--fs-lead); }
+  .retro-wrap p em{ color:#fff; font-style:italic; }
+  .retro-cta{ margin-top:var(--s7); }
 
-    .roadmap{
-      background:rgba(14,17,24,.18); border:1px solid rgba(255,255,255,.16); border-radius:var(--r-lg);
-      padding:var(--s-6); display:flex; align-items:stretch; gap:var(--s-3); flex-wrap:wrap;
-    }
-    .rm-step{ flex:1; min-width:140px; }
-    .rm-pill{
-      display:flex; align-items:center; gap:8px; background:rgba(255,255,255,.14); border-radius:var(--r-pill);
-      padding:9px 14px; font-weight:var(--w-b); font-size:14px; color:#fff; margin-bottom:8px;
-    }
-    .rm-pill .n{ width:22px; height:22px; border-radius:50%; background:#fff; color:var(--brand); display:grid; place-items:center; font-size:12px; font-family:var(--font-mono); flex:none; }
-    .rm-sub{ font-size:12px; color:rgba(255,255,255,.7); padding-left:6px; }
-    .rm-arrow{ display:flex; align-items:center; color:rgba(255,255,255,.5); font-size:18px; flex:none; }
+  /* =====================================================================
+     FOOTER
+     ===================================================================== */
+  .site-footer{ background:var(--ink-800); color:rgba(255,255,255,.7); padding-block:var(--s9) var(--s7); }
+  .footer-top{ display:flex; justify-content:space-between; gap:var(--s6); flex-wrap:wrap; padding-bottom:var(--s7); border-bottom:1px solid var(--line-dark); }
+  .footer-brand .logo{ color:#fff; font-size:20px; } .footer-brand .logo b{ color:var(--sky); }
+  .footer-brand p{ margin-top:var(--s3); font-size:14px; color:rgba(255,255,255,.55); max-width:40ch; }
+  .footer-contact{ display:flex; flex-direction:column; gap:8px; font-size:14px; }
+  .footer-contact a:hover{ color:#fff; }
+  .footer-contact .lbl{ font-family:var(--mono); font-size:11px; color:rgba(255,255,255,.4); letter-spacing:.08em; }
+  .footer-bottom{ display:flex; justify-content:space-between; align-items:center; gap:var(--s4); padding-top:var(--s6); flex-wrap:wrap; font-size:13px; }
+  .to-top{ display:inline-flex; align-items:center; gap:6px; color:rgba(255,255,255,.7); font-weight:var(--wsb); border:1px solid var(--line-dark); border-radius:var(--r-pill); padding:9px 16px; transition:all var(--t1) var(--ease); }
+  .to-top:hover{ color:#fff; border-color:rgba(255,255,255,.4); }
 
-    /* =================================================================
-       11 — RETROSPECTIVE (dark, text-only)
-       ================================================================= */
-    .retro-wrap{ max-width:var(--measure); margin-inline:auto; }
-    .retro-rule{ width:60px; height:3px; background:var(--brand); border-radius:3px; margin-bottom:var(--s-6); }
-    .retro-quote{
-      font-size:var(--fs-h1); font-weight:var(--w-x); letter-spacing:-0.02em; line-height:1.25; color:#fff;
-      word-break:keep-all; margin-bottom:var(--s-7);
-    }
-    .retro-quote b{ color:var(--brand); }
-    .retro-wrap p{ color:rgba(255,255,255,.7); line-height:var(--lh-body); margin-bottom:var(--s-5); font-size:var(--fs-lead); }
-    .retro-wrap p em{ color:rgba(255,255,255,.92); font-style:italic; }
-    .retro-cta{ margin-top:var(--s-7); }
+  /* =====================================================================
+     REVEAL
+     ===================================================================== */
+  [data-reveal]{ opacity:0; transform:translateY(40px); }
+  [data-reveal-scale]{ opacity:0; transform:scale(.95); }
+  .no-anim [data-reveal],.no-anim [data-reveal-scale]{ opacity:1 !important; transform:none !important; }
 
-    /* =================================================================
-       FOOTER
-       ================================================================= */
-    .site-footer{ background:var(--ink-800); color:rgba(255,255,255,.7); padding-block:var(--s-9) var(--s-7); }
-    .footer-top{ display:flex; justify-content:space-between; gap:var(--s-6); flex-wrap:wrap; padding-bottom:var(--s-7); border-bottom:1px solid var(--line-dark); }
-    .footer-brand .logo{ color:#fff; font-size:20px; }
-    .footer-brand .logo b{ color:var(--sky); }
-    .footer-brand p{ margin-top:var(--s-3); font-size:14px; color:rgba(255,255,255,.55); max-width:40ch; }
-    .footer-contact{ display:flex; flex-direction:column; gap:8px; font-size:14px; }
-    .footer-contact a:hover, .footer-contact span:hover{ color:#fff; }
-    .footer-contact .lbl{ font-family:var(--font-mono); font-size:11px; color:rgba(255,255,255,.4); letter-spacing:.06em; }
-    .footer-bottom{ display:flex; justify-content:space-between; align-items:center; gap:var(--s-4); padding-top:var(--s-6); flex-wrap:wrap; font-size:13px; }
-    .to-top{ display:inline-flex; align-items:center; gap:6px; color:rgba(255,255,255,.7); font-weight:var(--w-sb); border:1px solid var(--line-dark); border-radius:var(--r-pill); padding:8px 16px; transition:all var(--t-fast) var(--ease); }
-    .to-top:hover{ color:#fff; border-color:rgba(255,255,255,.4); }
-
-    /* =================================================================
-       REVEAL
-       ================================================================= */
-    [data-reveal]{ opacity:0; transform:translateY(42px); }
-    [data-reveal-scale]{ opacity:0; transform:scale(.94); }
-    .no-anim [data-reveal], .no-anim [data-reveal-scale]{ opacity:1 !important; transform:none !important; }
-
-    /* =================================================================
-       RESPONSIVE
-       ================================================================= */
-    @media (max-width:1199px){
-      .hero-grid{ grid-template-columns:1fr; gap:var(--s-7); min-height:auto; }
-      .hero-device{ order:2; min-height:340px; }
-      .phone-wrap{ max-width:420px; }
-      .problem-grid{ grid-template-columns:1fr; gap:var(--s-6); }
-      .prob-figure{ position:static; order:-1; max-width:520px; margin-inline:auto; }
-      .goal-grid{ grid-template-columns:repeat(2,1fr); }
-      .goal-cell:nth-child(2){ border-left:1px solid var(--line); }
-      .goal-cell:nth-child(3){ border-left:none; border-top:1px solid var(--line); }
-      .exp-grid{ grid-template-columns:repeat(2,1fr); }
-      .exp-card:nth-child(3){ grid-column:span 2; }
-      .tool-groups{ grid-template-columns:1fr; }
-      .ds-row{ grid-template-columns:1fr; }
-      .comp-grid{ grid-template-columns:repeat(2,1fr); }
-      .kpi-grid{ grid-template-columns:repeat(2,1fr); }
-      .kpi-card:nth-child(5){ grid-column:span 2; }
-      .frame-window{ height:440px; }
-    }
-    @media (max-width:767px){
-      :root{ --section-y:clamp(64px,12vw,90px); }
-      .navc{ display:none; }
-      .chip-live{ display:none; }
-      .hero-meta dl{ grid-template-columns:1fr 1fr; gap:var(--s-4); padding:var(--s-5); }
-      .hero-meta dl > div{ padding-left:0; }
-      .hero-meta dl > div::before{ display:none; }
-      .hero-meta dl > div:nth-child(2){ border-left:1px solid var(--line); padding-left:var(--s-4); }
-      .hero-meta dl > div:last-child{ grid-column:span 2; }
-      .goal-grid{ grid-template-columns:1fr; }
-      .goal-cell{ border-left:none !important; border-top:1px solid var(--line); }
-      .goal-cell:first-child{ border-top:none; }
-      .insight-row{ grid-template-columns:1fr; gap:var(--s-3); padding:var(--s-6) var(--s-3); }
-      .flow-rail{ flex-direction:column; align-items:center; }
-      .flow-node{ width:100%; max-width:280px; }
-      .flow-conn{ transform:rotate(90deg); padding:6px 0; }
-      .case-frames{ grid-template-columns:1fr; }
-      .case-wave{ display:none; }
-      .case{ padding:var(--s-5); }
-      .case03{ grid-template-columns:1fr; }
-      .c03-arrow{ transform:rotate(90deg); }
-      .exp-grid{ grid-template-columns:1fr; }
-      .exp-card:nth-child(3){ grid-column:auto; }
-      .swatches{ grid-template-columns:repeat(2,1fr); }
-      .comp-grid{ grid-template-columns:1fr; }
-      .timeline{ grid-template-columns:1fr; gap:var(--s-6); }
-      .timeline::before, .timeline::after{ display:none; }
-      .tl-step{ text-align:left; padding-left:28px; }
-      .tl-dot{ position:absolute; left:0; top:2px; margin:0; }
-      .kpi-grid{ grid-template-columns:1fr; }
-      .kpi-card:nth-child(5){ grid-column:auto; }
-      .roadmap{ flex-direction:column; }
-      .rm-arrow{ transform:rotate(90deg); justify-content:center; width:100%; }
-      .prob-figure .pin{ display:none; }
-      .pin-list{ display:block; margin-top:var(--s-4); display:flex; flex-direction:column; gap:10px; }
-      .pin-list li{
-        display:flex; gap:10px; align-items:flex-start; font-size:14px; color:var(--ink-500);
-        background:rgba(229,72,77,.06); border:1px solid rgba(229,72,77,.18); border-left:3px solid var(--danger);
-        border-radius:12px; padding:12px 14px;
-      }
-      .pin-list .n{ font-family:var(--font-mono); font-weight:var(--w-b); color:#fff; background:var(--danger); border-radius:50%; width:22px; height:22px; display:grid; place-items:center; font-size:12px; flex:none; }
-      .btn{ flex:1; }
-    }
-
-    @media (max-width:480px){
-      :root{
-        --fs-hero:clamp(34px,10vw,44px);
-        --section-y:clamp(56px,12vw,76px);
-        --pad-x:18px;
-      }
-      .sec-title{ font-size:clamp(24px,7vw,30px); }
-      .insight-row--lead .insight-num{ font-size:clamp(56px,18vw,72px); }
-      .insight-row--accent .insight-num{ font-size:clamp(52px,16vw,72px); }
-      .kpi-up{ font-size:32px; }
-      .kpi-card--high .kpi-up{ font-size:36px; }
-      .btn{ padding:12px 20px; font-size:15px; }
-      .case{ padding:var(--s-4); }
-      .tool-chip{ padding:8px 12px; font-size:13px; }
-      .hero-meta dl > div:nth-child(2){ border-left:none; padding-left:0; }
-      .hero-meta dl{ grid-template-columns:1fr; }
-      .hero-meta dl > div:last-child{ grid-column:auto; }
-    }
-
-    @media (prefers-reduced-motion:reduce){
-      html{ scroll-behavior:auto; }
-      *{ animation:none !important; }
-      [data-reveal], [data-reveal-scale]{ opacity:1 !important; transform:none !important; }
-      .pin::before{ display:none; }
-    }
+  /* =====================================================================
+     RESPONSIVE
+     ===================================================================== */
+  @media (max-width:1100px){
+    .hero-grid{ grid-template-columns:1fr; gap:var(--s8); }
+    .hero-media{ order:-1; }
+    .hero-browser{ width:min(100%,520px); }
+    .hero-meta dl{ grid-template-columns:repeat(2,1fr); gap:var(--s5) 0; }
+    .hero-meta dl > div:nth-child(3){ border-left:none; padding-left:0; }
+    .prob-cards{ grid-template-columns:repeat(2,1fr); }
+    .bench-grid{ grid-template-columns:1fr; gap:var(--s8); }
+    .ds-row{ grid-template-columns:1fr; }
+    .comp-grid{ grid-template-columns:repeat(2,1fr); }
+    .ver-grid{ grid-template-columns:1fr; max-width:480px; margin-inline:auto; }
+    .tool-groups{ grid-template-columns:1fr; }
+  }
+  @media (max-width:760px){
+    :root{ --section-y:clamp(72px,13vw,110px); }
+    .navc,.chip-live{ display:none; }
+    .goal-grid{ grid-template-columns:1fr; }
+    .exp-grid{ grid-template-columns:1fr; max-width:440px; margin-inline:auto; }
+    .prob-cards{ grid-template-columns:1fr; }
+    .insight-row{ grid-template-columns:1fr; gap:var(--s4); padding-block:var(--s7); }
+    .insight-num{ font-size:clamp(56px,18vw,96px); }
+    .compare{ grid-template-columns:1fr; gap:var(--s6); }
+    .compare__arrow{ transform:rotate(90deg); margin-inline:auto; }
+    .flow-rail{ flex-direction:column; align-items:center; }
+    .flow-node{ width:100%; max-width:280px; }
+    .flow-conn{ transform:rotate(90deg); padding:6px 0; }
+    .comp-grid{ grid-template-columns:1fr 1fr; }
+    .kpi-grid{ grid-template-columns:1fr; }
+    .timeline{ grid-template-columns:1fr; gap:var(--s6); }
+    .timeline::before,.timeline::after{ display:none; }
+    .tl-step{ text-align:left; padding-left:28px; }
+    .tl-dot{ position:absolute; left:0; top:2px; margin:0; }
+    .roadmap{ flex-direction:column; } .rm-arrow{ transform:rotate(90deg); justify-content:center; width:100%; }
+    .btn{ flex:1; }
+    .bench-takeaway{ flex-direction:column; align-items:flex-start; }
+  }
+  @media (max-width:480px){
+    :root{ --pad-x:18px; }
+    .swatches{ grid-template-columns:repeat(3,1fr); }
+    .comp-grid{ grid-template-columns:1fr; }
+    .hero-meta dl{ grid-template-columns:1fr; }
+    .hero-meta dl > div{ border-left:none; padding-left:0; }
+  }
+  @media (prefers-reduced-motion:reduce){
+    html{ scroll-behavior:auto; } *{ animation:none !important; }
+    [data-reveal],[data-reveal-scale]{ opacity:1 !important; transform:none !important; }
+    .browser__body--autoscroll img{ transition:none; }
+  }
   </style>
 </head>
 <body>
@@ -861,366 +618,390 @@
   <main>
 
     <!-- ============ 01 HERO ============ -->
-    <section id="hero" class="sec sec--mesh">
-      <div class="container">
+    <section id="hero" class="sec--mesh">
+      <div class="container container--wide">
         <div class="hero-grid">
           <div class="hero-copy">
-            <span class="eyebrow" data-reveal><span class="no">01</span> UX CASE STUDY</span>
-            <h1 class="hero-h1" data-reveal>모두매쓰 UI/UX <span class="u">리뉴얼</span></h1>
-            <p class="hero-sub" data-reveal>AI 기반 맞춤 수학 학습 서비스를 사용자 중심 경험으로 재설계하다</p>
-            <div class="hero-cta" data-reveal>
+            <span class="eyebrow" data-reveal><span class="no">01 / PROCESS</span> UX CASE STUDY</span>
+            <h1 class="hero-h1" data-reveal>모두매쓰<br><span class="grad">UI/UX 리뉴얼</span></h1>
+            <p class="hero-sub" data-reveal>한 화면에 모든 기능을 쏟아붓던 AI 수학 학습 서비스를, 사용자가 길을 잃지 않는 경험으로 다시 설계했습니다.</p>
+            <div class="cta-row" data-reveal>
               <a class="btn btn--primary" href="https://ujin2019-oss.github.io/modoomath/" target="_blank" rel="noopener">라이브 사이트 보기 ↗</a>
               <a class="btn btn--ghost" href="#problem">개선 과정 보기 ↓</a>
             </div>
           </div>
-          <div class="hero-device" data-reveal-scale>
-            <div class="hero-blob" aria-hidden="true"></div>
-            <div class="phone-wrap" id="phoneWrap">
-              <img class="phone-shot" src="./images/modoo_After.png" alt="모두매쓰 리뉴얼 후 메인 화면" />
-              <img class="phone-frame" src="./images/phone.png" alt="" aria-hidden="true" />
+          <div class="hero-media" data-reveal-scale>
+            <div class="hero-glow" aria-hidden="true"></div>
+            <p class="hero-device-hint"><span class="hero-device-hint__icon" aria-hidden="true">↕</span> 화면에 마우스를 올리면 자동으로 스크롤됩니다.</p>
+            <div class="browser hero-browser" tabindex="0" aria-label="모두매쓰 리뉴얼 후 화면 — 전체 스크롤">
+              <div class="browser__bar"><span class="browser__dots"><i></i><i></i><i></i></span>
+                <span class="browser__url"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>modoomath.app</span></div>
+              <div class="browser__body browser__body--autoscroll"><img src="./images/modoo_After_scroll.png" alt="모두매쓰 리뉴얼 후 화면 — 전체 스크롤" /></div>
             </div>
           </div>
         </div>
-        <div class="hero-meta">
+
+        <div class="hero-meta" data-reveal>
           <dl>
-            <div><dt>ROLE</dt><dd>UX/UI Design</dd></div>
-            <div><dt>CONTRIBUTION</dt><dd>기획 30% · 디자인 20% · 퍼블리싱 100%</dd></div>
-            <div><dt>DURATION</dt><dd>5 Days (집중 작업)</dd></div>
+            <div><dt>Role</dt><dd>UX·UI 디자인 / 퍼블리싱</dd></div>
+            <div><dt>Contribution</dt><dd>기획 30% · 디자인 20% · 퍼블리싱 100%</dd></div>
+            <div><dt>Duration</dt><dd>5 Days (집중 작업)</dd></div>
+            <div><dt>Stack</dt><dd>Figma · HTML · CSS · JS</dd></div>
           </dl>
         </div>
       </div>
     </section>
 
-    <!-- ============ 02 PROBLEM DISCOVERY ============ -->
-    <section id="problem" class="sec sec--mist">
-      <div class="container">
+    <!-- ============ 02 PROBLEM ============ -->
+    <section id="problem" class="sec sec--dark">
+      <div class="container container--wide">
         <div class="sec-head" data-reveal>
-          <span class="eyebrow"><span class="no">02</span> PROBLEM DISCOVERY</span>
+          <span class="eyebrow"><span class="no">02</span> PROBLEM</span>
           <h2 class="sec-title">한 화면에 모든 기능이 쏟아져,<br>무엇부터 해야 할지 알 수 없었습니다.</h2>
-          <p class="sec-lead">기획서 분석 단계에서 사용자 이탈을 유발하는 4가지 핵심 문제를 정의했습니다. <span style="color:var(--ink-400);font-size:.92em;">(출처: 모두매쓰 UX 개선 계획서 — 박효은·장수빈·유진, 2026.04.06)</span></p>
+          <p class="sec-lead">기존 메인 한 장에 서비스 소개·문제 생성·학습 자료·Q&amp;A가 동시에 등장합니다. 사용자가 가장 먼저 마주하는 화면을 분석해 이탈을 부르는 4가지 문제를 정의했습니다.</p>
         </div>
-        <div class="problem-grid">
-          <div class="prob-cards">
-            <article class="prob-card" data-prob="1" data-reveal>
-              <div class="chip">P1</div>
-              <div><h3>메인에 모든 기능을 한 번에 노출</h3><p>무엇부터 할지 몰라 이탈 가능성↑, 탐색이 길어 피로도↑.</p></div>
-            </article>
-            <article class="prob-card" data-prob="2" data-reveal>
-              <div class="chip">P2</div>
-              <div><h3>서비스 설명 부족·정체성 불명확</h3><p>프린트/바로풀기 모드를 바꿔도 메인 화면이 그대로라 사용법이 혼란스럽다.</p></div>
-            </article>
-            <article class="prob-card" data-prob="3" data-reveal>
-              <div class="chip">P3</div>
-              <div><h3>문제풀기 내 중복 이름 버튼 과다</h3><p>"바로풀기"가 서로 다른 페이지로 가는데 같은 이름, "선택" 버튼이 풀이 중에도 남아 시선이 분산된다.</p></div>
-            </article>
-            <article class="prob-card" data-prob="4" data-reveal>
-              <div class="chip">P4</div>
-              <div><h3>정답 입력 버튼을 찾기 어려움</h3><p>계산기·낙서 기능에 가려지고, 작은 햄버거 바를 눌러야 정답 입력란이 보인다.</p></div>
-            </article>
+
+        <figure class="prob-figure" data-reveal-scale>
+          <div class="browser browser--dark">
+            <div class="browser__bar"><span class="browser__dots"><i></i><i></i><i></i></span>
+              <span class="browser__url"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18"/></svg>modoomath · 기존 메인 (분석)</span></div>
+            <div class="browser__body"><img src="./images/source01.png" alt="기존 메인 화면 분석 — 한 화면에 서비스 소개, 문제 생성 단계, 학습 자료, Q&A가 모두 노출된 상태에 문제 지점을 표시" /></div>
           </div>
-          <div class="prob-figure" data-reveal-scale>
-            <div class="shot-frame">
-              <span class="shot-tag shot-tag--before">BEFORE</span>
-              <img src="./images/modoo_Before.png" alt="모두매쓰 기존 메인 화면 — 모든 기능이 한 화면에 노출된 상태" />
-              <button class="pin" data-prob="1" style="left:30%;top:16%;" aria-label="문제 1: 기능 과다 노출"><span class="dot">1</span></button>
-              <button class="pin" data-prob="2" style="left:66%;top:38%;" aria-label="문제 2: 정체성 불명확"><span class="dot">2</span></button>
-              <button class="pin" data-prob="3" style="left:40%;top:64%;" aria-label="문제 3: 중복 버튼"><span class="dot">3</span></button>
-              <button class="pin" data-prob="4" style="left:62%;top:84%;" aria-label="문제 4: 정답 입력 숨김"><span class="dot">4</span></button>
+          <figcaption class="frame-cap">기존 메인 — 핵심 동선 없이 모든 기능이 동시에 노출된 상태</figcaption>
+        </figure>
+
+        <div class="prob-cards">
+          <article class="prob-card" data-reveal>
+            <span class="pn">P1</span>
+            <h3>기능 과다 노출</h3>
+            <p>메인에 모든 기능이 한 번에 표시돼, 무엇부터 할지 몰라 이탈 가능성이 높아진다.</p>
+          </article>
+          <article class="prob-card" data-reveal>
+            <span class="pn">P2</span>
+            <h3>정체성 불명확</h3>
+            <p>프린트/바로풀기 모드를 바꿔도 메인이 그대로라 무엇을 하는 서비스인지 모호하다.</p>
+          </article>
+          <article class="prob-card" data-reveal>
+            <span class="pn">P3</span>
+            <h3>중복 이름 버튼 과다</h3>
+            <p>"바로풀기"가 서로 다른 페이지로 향하는데 이름이 같고, 풀이 중에도 "선택" 버튼이 남는다.</p>
+          </article>
+          <article class="prob-card" data-reveal>
+            <span class="pn">P4</span>
+            <h3>정답 입력 숨김</h3>
+            <p>계산기·낙서 기능에 가려져, 작은 햄버거 바를 눌러야 정답 입력란이 보인다.</p>
+          </article>
+        </div>
+        <p class="frame-cap" style="margin-top:var(--s7);text-align:left;">출처 — 모두매쓰 UX 개선 계획서 · 박효은 · 장수빈 · 유진 · 2026.04.06</p>
+      </div>
+    </section>
+
+    <!-- ============ 03 BENCHMARK ============ -->
+    <section id="benchmark" class="sec">
+      <div class="container container--wide">
+        <div class="sec-head" data-reveal>
+          <span class="eyebrow"><span class="no">03</span> BENCHMARK</span>
+          <h2 class="sec-title">잘 만든 학습 서비스는, '첫 화면'이 달랐다.</h2>
+          <p class="sec-lead">방향을 잡기 위해 학습 콘텐츠 서비스의 첫 화면을 살펴봤습니다. 공통점은 분명했습니다 — 기능을 늘어놓지 않고, '지금 할 일' 하나를 가장 앞에 둡니다.</p>
+        </div>
+        <div class="bench-grid">
+          <div class="bench-card" data-reveal>
+            <div class="browser">
+              <div class="browser__bar"><span class="browser__dots"><i></i><i></i><i></i></span><span class="browser__url">reference · 콘텐츠 탐색형</span></div>
+              <div class="browser__body"><img src="./images/source03.png" alt="학습 콘텐츠 탐색형 서비스 레퍼런스 — 검색과 카테고리 중심 구성" /></div>
             </div>
-            <p class="shot-cap">기존 메인 화면</p>
-            <ul class="pin-list">
-              <li><span class="n">1</span> 기능 과다 노출 — 메인에 모든 기능이 한 번에 표시됨</li>
-              <li><span class="n">2</span> 정체성 불명확 — 모드를 바꿔도 메인 변화 없음</li>
-              <li><span class="n">3</span> 중복 버튼 — 같은 이름의 버튼이 다른 동작</li>
-              <li><span class="n">4</span> 정답 입력 숨김 — 햄버거 바 뒤에 가려짐</li>
-            </ul>
+            <div class="bench-meta">
+              <span class="bench-name"><span class="k">REF 01</span> 콘텐츠 탐색형</span>
+              <p>상단에 <b>검색·핵심 액션</b>을 크게 배치하고, 리소스는 카테고리로 정리. 첫 화면에서 '무엇을 할 수 있는지'가 한눈에 들어온다.</p>
+            </div>
           </div>
+          <div class="bench-card" data-reveal>
+            <div class="browser">
+              <div class="browser__bar"><span class="browser__dots"><i></i><i></i><i></i></span><span class="browser__url">reference · 가치 제안형</span></div>
+              <div class="browser__body"><img src="./images/source02.png" alt="가치 제안형 학습 서비스 레퍼런스 — 한 줄 메시지와 단일 CTA 중심 구성" /></div>
+            </div>
+            <div class="bench-meta">
+              <span class="bench-name"><span class="k">REF 02</span> 가치 제안형</span>
+              <p>한 줄의 <b>가치 메시지와 단일 CTA</b>로 시작. 군더더기 없이 핵심 행동 하나로 사용자를 안내한다.</p>
+            </div>
+          </div>
+        </div>
+        <div class="bench-takeaway" data-reveal>
+          <span class="lab">Takeaway</span>
+          <p>모두매쓰에 필요한 건 '더 많은 기능'이 아니라, <span style="color:var(--brand)">가장 먼저 보여줄 한 가지</span>를 정하는 일이었다.</p>
         </div>
       </div>
     </section>
 
-    <!-- ============ 03 PROJECT GOAL ============ -->
-    <section id="goal" class="sec">
+    <!-- ============ 04 GOAL ============ -->
+    <section id="goal" class="sec sec--mist">
       <div class="container">
         <div class="sec-head sec-head--center" data-reveal>
-          <span class="eyebrow"><span class="no">03</span> PROJECT GOAL</span>
-          <h2 class="sec-title">혼란을 줄이고, 핵심에 집중하도록.</h2>
+          <span class="eyebrow"><span class="no">04</span> PROJECT GOAL</span>
+          <h2 class="sec-title">혼란을 줄이고,<br>핵심에 집중하도록.</h2>
         </div>
-        <div class="goal-wrap" data-reveal>
-          <div class="goal-quote">
-            <p>"메인에서 서비스 정체성을 알 수 있도록, 핵심 기능에 충실한 사이트로."</p>
-            <span>— 개선 방향</span>
+        <div class="goal-quote" data-reveal>
+          <blockquote>"메인에서 <b>서비스 정체성</b>을 알 수 있도록,<br><b>핵심 기능</b>에 충실한 사이트로."</blockquote>
+          <cite>— 리뉴얼 개선 방향</cite>
+        </div>
+        <div class="goal-grid">
+          <div class="goal-cell" data-reveal>
+            <span class="goal-idx">GOAL 01</span>
+            <h3>명확한 메인 구조</h3>
+            <p>한눈에 들어오는 레이아웃·카피·CTA로 혼란스러운 메인을 정리한다.</p>
+            <span class="solve">P1 · P2 해결</span>
           </div>
-          <div class="goal-grid">
-            <div class="goal-cell">
-              <span class="goal-idx">01</span>
-              <h3>명확한 메인 구조</h3>
-              <p>한눈에 들어오는 레이아웃·카피·CTA로 혼란스러운 메인을 정리한다.</p>
-              <span class="solve">해결: 무엇부터 할지 모름 · P1·P2</span>
-            </div>
-            <div class="goal-cell goal-cell--accent">
-              <span class="goal-idx">02</span>
-              <h3>최단 경로 여정 설계</h3>
-              <p>핵심 과업까지의 동선을 짧게 재설계해 긴 사용 과정을 단축한다.</p>
-              <span class="solve">해결: 긴 사용 과정 · P3</span>
-            </div>
-            <div class="goal-cell">
-              <span class="goal-idx">03</span>
-              <h3>버튼 다이어트</h3>
-              <p>기능 없는 버튼은 지우고 핵심 버튼의 가독성을 높인다.</p>
-              <span class="solve">해결: 핵심 기능 불명확 · P3·P4</span>
-            </div>
+          <div class="goal-cell goal-cell--accent" data-reveal>
+            <span class="goal-idx">GOAL 02</span>
+            <h3>최단 경로 여정</h3>
+            <p>핵심 과업까지의 동선을 짧게 재설계해 긴 사용 과정을 단축한다.</p>
+            <span class="solve">P3 해결</span>
+          </div>
+          <div class="goal-cell" data-reveal>
+            <span class="goal-idx">GOAL 03</span>
+            <h3>버튼 다이어트</h3>
+            <p>기능 없는 버튼은 지우고 핵심 버튼의 가독성과 우선순위를 높인다.</p>
+            <span class="solve">P3 · P4 해결</span>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ============ 04 KEY INSIGHTS ============ -->
+    <!-- ============ 05 INSIGHTS ============ -->
     <section id="insight" class="sec sec--dark">
       <div class="container">
         <div class="sec-head" data-reveal>
-          <span class="eyebrow"><span class="no">04</span> KEY INSIGHTS</span>
+          <span class="eyebrow"><span class="no">05</span> KEY INSIGHTS</span>
           <h2 class="sec-title">기능보다 "무엇을 할지"가 먼저였다.</h2>
         </div>
-        <div class="insight-rows">
-          <div class="insight-row insight-row--lead" data-reveal>
+        <div class="insight-list">
+          <div class="insight-row" data-reveal>
             <div class="insight-num">01</div>
-            <p>사용자는 기능 목록보다 <b>"지금 무엇을 해야 하는가"</b>를 먼저 찾는다. 메인은 기능 나열이 아니라 한 가지 길을 제시해야 한다.</p>
+            <p>사용자는 기능 목록보다 <b>"지금 무엇을 해야 하는가"</b>를 먼저 찾는다.</p>
           </div>
-          <div class="insight-row insight-row--mid" data-reveal>
+          <div class="insight-row" data-reveal>
             <div class="insight-num">02</div>
-            <p>좋은 화면은 기능을 나열하지 않고 <b>핵심 행동(Core Action)</b> 하나를 가장 먼저 보여준다.</p>
+            <p>좋은 화면은 기능을 나열하지 않고 <b>핵심 행동 하나</b>를 가장 먼저 보여준다.</p>
           </div>
-          <div class="insight-row insight-row--accent" data-reveal>
+          <div class="insight-row" data-reveal>
             <div class="insight-num">03</div>
-            <p>학습 서비스의 완주는 결국 <b>신뢰의 흐름(Trust-flow)</b>에서 시작된다.</p>
+            <p>학습 서비스의 완주는 결국 <b>신뢰의 흐름</b>에서 시작된다.</p>
           </div>
         </div>
-      </div>
-    </section>
-
-    <!-- ============ 05 USER FLOW ============ -->
-    <section id="flow" class="sec sec--mist">
-      <div class="container">
-        <div class="sec-head sec-head--center" data-reveal>
-          <span class="eyebrow"><span class="no">05</span> USER FLOW</span>
-          <h2 class="sec-title">핵심 과업까지, 가장 짧은 한 줄의 흐름.</h2>
-          <p class="sec-lead">복잡한 전체 여정을 단순한 선형 흐름으로 재정의했습니다.</p>
-        </div>
-        <div class="flow-rail" id="flowRail" data-reveal>
-          <div class="flow-node"><span class="step">01</span><span class="gly" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg></span><span class="lbl">메인</span></div>
-          <div class="flow-conn"><span class="line"></span>→</div>
-          <div class="flow-node flow-node--login"><span class="step">02</span><span class="gly" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></span><span class="lbl">로그인</span></div>
-          <div class="flow-conn"><span class="line"></span>→</div>
-          <div class="flow-node flow-node--core"><span class="step">03</span><span class="gly" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6"/><path d="M12 12v6M9 15h6"/></svg></span><span class="lbl">문제 생성</span></div>
-          <div class="flow-conn"><span class="line"></span>→</div>
-          <div class="flow-node flow-node--core"><span class="step">04</span><span class="gly" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></span><span class="lbl">문제 풀이</span></div>
-          <div class="flow-conn"><span class="line"></span>→</div>
-          <div class="flow-node"><span class="step">05</span><span class="gly" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4h7a3 3 0 0 1 3 3v13a2.5 2.5 0 0 0-2.5-2.5H2z"/><path d="M22 4h-7a3 3 0 0 0-3 3v13a2.5 2.5 0 0 1 2.5-2.5H22z"/></svg></span><span class="lbl">해설</span></div>
-          <div class="flow-conn"><span class="line"></span>→</div>
-          <div class="flow-node"><span class="step">06</span><span class="gly" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V3a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v1"/><path d="M9 13l2 2 4-4"/></svg></span><span class="lbl">오답노트</span></div>
-        </div>
-        <p class="flow-sub" data-reveal><b>보조 내비게이션:</b> 내 자료 · 프로필 · Q&#38;A</p>
       </div>
     </section>
 
     <!-- ============ 06 SOLUTION ============ -->
     <section id="solution" class="sec">
-      <div class="container">
+      <div class="container container--wide">
         <div class="sec-head" data-reveal>
           <span class="eyebrow"><span class="no">06</span> SOLUTION</span>
-          <h2 class="sec-title">무엇을 더할지가 아니라, 무엇을 덜어낼지.</h2>
-          <p class="sec-lead">네 가지 문제를 메인·전체 흐름·핵심 인터랙션 세 갈래로 나눠 화면으로 증명했습니다.</p>
+          <h2 class="sec-title">무엇을 더할지가 아니라,<br>무엇을 덜어낼지.</h2>
+          <p class="sec-lead">네 가지 문제를 메인 · 전체 흐름 · 핵심 기능 세 갈래로 나눠 화면으로 증명했습니다.</p>
         </div>
 
-        <!-- CASE 01 -->
-        <div class="case case--01" data-reveal>
+        <!-- CASE 01 — main before/after -->
+        <div class="case" data-reveal>
           <div class="case-head">
             <span class="case-no">CASE 01</span>
-            <h3>메인페이지 — Before / After 비교</h3>
+            <h3>메인페이지 — 기능 나열에서 한 줄의 메시지로</h3>
           </div>
-          <div class="ba" id="ba1">
-            <div class="ba__img"><img src="./images/modoo_Before.png" alt="기존 메인 화면 (Before)" /></div>
-            <div class="ba__after"><div class="ba__after-inner"><img src="./images/modoo_After.png" alt="리뉴얼 메인 화면 (After)" /></div></div>
-            <span class="ba__tag ba__tag--before">BEFORE</span>
-            <span class="ba__tag ba__tag--after">AFTER</span>
-            <div class="ba__handle"></div>
-            <div class="ba__knob" aria-hidden="true">⟷</div>
-            <input class="ba__range" type="range" min="0" max="100" value="50" aria-label="Before/After 비교 슬라이더" />
-            <div class="ba__hint">← 드래그하여 비교 →</div>
+          <div class="compare">
+            <div class="compare__col">
+              <div class="compare__top"><span class="tag tag--before">BEFORE</span></div>
+              <div class="browser">
+                <div class="browser__bar"><span class="browser__dots"><i></i><i></i><i></i></span><span class="browser__url">기존 메인</span></div>
+                <div class="browser__body browser__body--crop"><img src="./images/modoo_Before.png" alt="기존 메인 — 검색·로고·Q&A·드롭다운이 한 화면에 혼재" /></div>
+              </div>
+            </div>
+            <div class="compare__arrow" aria-hidden="true">→</div>
+            <div class="compare__col">
+              <div class="compare__top"><span class="tag tag--after">AFTER</span></div>
+              <div class="browser">
+                <div class="browser__bar"><span class="browser__dots"><i></i><i></i><i></i></span><span class="browser__url">리뉴얼 메인</span></div>
+                <div class="browser__body browser__body--crop"><img src="./images/modoo_After.png" alt="리뉴얼 메인 — 한 줄 메시지와 단일 CTA 중심 구성" /></div>
+              </div>
+            </div>
           </div>
-          <p class="case-cap">기능 나열형 메인 → <b>한 줄의 핵심 메시지("AI로 만드는 맞춤 수학 학습")와 단일 CTA("지금 시작하기")</b>로 정리. <span class="solve">(P1·P2 해결)</span></p>
+          <p class="case-cap">기능 나열형 메인을 <b>한 줄의 핵심 메시지("AI로 만드는 맞춤 수학 학습")와 단일 CTA("지금 시작하기")</b>로 정리했습니다. <span class="solve">P1 · P2 해결</span></p>
         </div>
 
-        <!-- CASE 02 -->
-        <div class="case case--02" data-reveal>
+        <!-- CASE 02 — full page flow -->
+        <div class="case" data-reveal>
           <div class="case-head">
             <span class="case-no">CASE 02</span>
-            <h3>전체 페이지 흐름 — 자동 스크롤 비교</h3>
+            <h3>전체 페이지 흐름 — 정보 과잉에서 목적별 섹션으로</h3>
           </div>
-          <div class="case-frames">
-            <div class="case-wave" aria-hidden="true">
-              <svg viewBox="0 0 46 600" preserveAspectRatio="none" fill="none">
-                <path d="M23 0 C 5 150, 41 300, 23 450 S 5 600, 23 600" stroke="var(--brand)" stroke-width="2" stroke-dasharray="6 7" opacity=".5"/>
-              </svg>
-              <span class="arrow">→</span>
-            </div>
-            <div class="case-frame">
-              <span class="ftag ftag--before">BEFORE</span>
-              <div class="frame-window" tabindex="0" aria-label="기존 전체 페이지 흐름 미리보기">
-                <img src="./images/modoo_Before_scroll.png" alt="기존 전체 페이지 — 정보 과잉의 긴 단일 스크롤" data-autoscroll />
+          <div class="compare">
+            <div class="compare__col">
+              <div class="compare__top"><span class="tag tag--before">BEFORE</span></div>
+              <div class="browser">
+                <div class="browser__bar"><span class="browser__dots"><i></i><i></i><i></i></span><span class="browser__url">기존 — 긴 단일 스크롤</span></div>
+                <div class="browser__body browser__body--scroll"><img src="./images/modoo_Before_scroll.png" alt="기존 전체 페이지 — 정보 과잉의 긴 텍스트 스크롤" data-autoscroll /></div>
               </div>
-              <p class="frame-cap">기존 — 정보 과잉의 긴 스크롤</p>
+              <p class="frame-cap">정보 과잉의 긴 스크롤</p>
             </div>
-            <div class="case-frame">
-              <span class="ftag ftag--after">AFTER</span>
-              <div class="frame-window" tabindex="0" aria-label="리뉴얼 전체 페이지 흐름 미리보기">
-                <img src="./images/modoo_After_scroll.png" alt="리뉴얼 전체 페이지 — 목적별 섹션으로 정돈된 흐름" data-autoscroll />
+            <div class="compare__arrow" aria-hidden="true">→</div>
+            <div class="compare__col">
+              <div class="compare__top"><span class="tag tag--after">AFTER</span></div>
+              <div class="browser">
+                <div class="browser__bar"><span class="browser__dots"><i></i><i></i><i></i></span><span class="browser__url">리뉴얼 — 목적별 섹션</span></div>
+                <div class="browser__body browser__body--scroll"><img src="./images/modoo_After_scroll.png" alt="리뉴얼 전체 페이지 — 목적별 섹션으로 정돈된 흐름" data-autoscroll /></div>
               </div>
-              <p class="frame-cap">리뉴얼 — 목적별 섹션 정돈</p>
+              <p class="frame-cap">목적별 섹션으로 정돈</p>
             </div>
           </div>
-          <p class="case-cap">정보 과잉의 긴 단일 스크롤 → <b>목적별 섹션으로 정돈된 흐름</b>, 스크롤 피로 감소. <span style="color:var(--ink-400);font-size:.9em;">(프레임 위에 마우스를 올리면 자동 스크롤이 멈춥니다)</span></p>
+          <p class="case-cap">정보 과잉의 긴 단일 스크롤을 <b>목적별 섹션으로 정돈된 흐름</b>으로 재구성해 스크롤 피로를 줄였습니다. <span style="color:var(--ink-400);font-size:.9em;">(프레임 위에 마우스를 올리면 자동 스크롤이 멈춥니다)</span></p>
         </div>
 
-        <!-- CASE 03 -->
-        <div class="case case--03" data-reveal>
+        <!-- CASE 03 — core feature screens -->
+        <div class="case" data-reveal>
           <div class="case-head">
             <span class="case-no">CASE 03</span>
-            <h3>핵심 UX 개선 — 중복 버튼 제거 · 정답 입력 동선</h3>
+            <h3>핵심 기능 — 한 화면, 하나의 목적</h3>
           </div>
-          <div class="case03">
-            <div class="c03-panel c03-panel--before">
-              <span class="c03-tag c03-tag--before">BEFORE</span>
-              <div class="c03-screen-title">문제 풀이 화면</div>
-              <div class="c03-toolbar">
-                <span class="c03-btn">선택</span>
-                <span class="c03-btn c03-btn--dup">바로풀기</span>
-                <span class="c03-btn">선택</span>
-                <span class="c03-btn c03-btn--dup">바로풀기</span>
-                <span class="c03-ico">계산기</span>
-                <span class="c03-ico">낙서</span>
-                <span class="c03-ico">☰</span>
+          <p class="case-cap" style="margin-top:0;margin-bottom:var(--s7);">중복 버튼을 걷어내고, 각 화면이 하나의 과업에만 집중하도록 재설계했습니다. 정답 입력처럼 가려져 있던 핵심 동작은 표면으로 끌어올렸습니다. <span class="solve">P3 · P4 해결</span></p>
+          <div class="feat-tabs" role="tablist" aria-label="핵심 기능 화면">
+            <button class="feat-tab is-active" data-tab="0" role="tab" aria-selected="true">문제 생성</button>
+            <button class="feat-tab" data-tab="1" role="tab" aria-selected="false">문제 출력</button>
+            <button class="feat-tab" data-tab="2" role="tab" aria-selected="false">오답노트</button>
+          </div>
+          <div class="feat-panels">
+            <div class="feat-panel is-active" data-panel="0" role="tabpanel">
+              <div class="browser">
+                <div class="browser__bar"><span class="browser__dots"><i></i><i></i><i></i></span><span class="browser__url">문제 생성</span></div>
+                <div class="browser__body"><img src="./images/sec1_slide1_1.png" alt="문제 생성 화면 — 난이도·학년·단원·문제 수를 한 화면에서 선택" /></div>
               </div>
-              <div class="c03-hidden-row">
-                <span class="c03-burger">☰</span>
-                <span class="c03-hidden-input">정답 입력란 (가려짐)</span>
-                <span class="tag-hidden">숨김</span>
-              </div>
-              <div class="c03-notes">
-                <span class="c03-note c03-note--bad">● 같은 이름, 다른 동작</span>
-                <span class="c03-note c03-note--bad">● 정답 입력이 ☰ 뒤에 숨음</span>
+              <div class="feat-desc">
+                <h4>난이도부터 문제 수까지, 한 흐름에</h4>
+                <p>흩어져 있던 선택 단계를 하나의 화면에 정리해, '문제 만들기'라는 단일 목적에 집중하게 했습니다.</p>
               </div>
             </div>
-            <div class="c03-arrow" aria-hidden="true">→</div>
-            <div class="c03-panel c03-panel--after">
-              <span class="c03-tag c03-tag--after">AFTER</span>
-              <div class="c03-screen-title">문제 풀이 화면 (개선)</div>
-              <label class="ds-input" style="display:block;margin-bottom:12px;cursor:text;">
-                <span style="font-size:11px;color:var(--ink-400);display:block;margin-bottom:4px;">정답 입력</span>
-                <input type="text" placeholder="정답을 입력하세요" aria-label="정답 입력" style="border:none;background:none;width:100%;font-size:14px;color:var(--ink-700);padding:0;outline:none;" />
-              </label>
-              <div class="c03-after-cta">정답 제출</div>
-              <a class="c03-ghost-link" href="#solution" onclick="return false;">해설 보기 →</a>
-              <div class="c03-notes">
-                <span class="c03-note c03-note--good">● 단일 핵심 동작</span>
-                <span class="c03-note c03-note--good">● 정답 입력 상시 노출</span>
+            <div class="feat-panel" data-panel="1" role="tabpanel">
+              <div class="browser">
+                <div class="browser__bar"><span class="browser__dots"><i></i><i></i><i></i></span><span class="browser__url">문제 출력</span></div>
+                <div class="browser__body"><img src="./images/sec1_slide2_1.png" alt="문제 출력 화면 — 생성한 문제를 정돈된 형태로 출력" /></div>
+              </div>
+              <div class="feat-desc">
+                <h4>생성한 문제를, 바로 프린트로</h4>
+                <p>온라인 풀이와 오프라인 출력 동선을 분리해, 각 모드가 무엇을 위한 것인지 분명해졌습니다.</p>
+              </div>
+            </div>
+            <div class="feat-panel" data-panel="2" role="tabpanel">
+              <div class="browser">
+                <div class="browser__bar"><span class="browser__dots"><i></i><i></i><i></i></span><span class="browser__url">오답노트</span></div>
+                <div class="browser__body"><img src="./images/sec1_slide3_1.png" alt="오답노트 화면 — 틀린 문제를 모아 AI 해설로 복습" /></div>
+              </div>
+              <div class="feat-desc">
+                <h4>틀린 문제는 모아서, 다시 풀도록</h4>
+                <p>풀이 결과가 자연스럽게 복습으로 이어지도록, 오답을 한곳에 모으는 흐름을 만들었습니다.</p>
               </div>
             </div>
           </div>
-          <p class="case-cap"><b>중복 버튼 제거 · 정답 입력 동선을 표면으로.</b> <span class="solve">(P3·P4 해결)</span></p>
         </div>
       </div>
     </section>
 
     <!-- ============ 07 FEATURE EXPANSION ============ -->
     <section id="expansion" class="sec sec--mist">
-      <div class="container">
+      <div class="container container--wide">
         <div class="sec-head" data-reveal>
           <span class="eyebrow"><span class="no">07</span> FEATURE EXPANSION</span>
-          <h2 class="sec-title">핵심 구조 위에, 학습을 잇는 세 화면을 더했습니다.</h2>
+          <h2 class="sec-title">핵심 구조 위에,<br>학습을 잇는 세 화면을 더했습니다.</h2>
+          <p class="sec-lead">메인을 정리한 뒤, '돌아올 이유'를 만드는 화면을 새로 설계했습니다. 복습 · 재방문 · 개인화로 이어지는 흐름입니다.</p>
         </div>
         <div class="exp-grid">
-          <article class="exp-card exp-card--correction" data-reveal>
-            <div class="exp-top">
-              <div class="exp-tile" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h3"/></svg></div>
-              <span class="badge-new">NEW</span>
+          <article class="exp-card" data-reveal>
+            <div class="exp-shot"><img src="./images/sec1_slide3_1.png" alt="오답노트 화면" /></div>
+            <div class="exp-body">
+              <div class="top"><h3>오답노트</h3><span class="badge-new">NEW</span></div>
+              <p>틀린 문제를 모아 <b>AI 해설</b>과 정답/오답 개수로 복습 흐름을 잇는다.</p>
+              <span class="exp-tag">복습 · 전환</span>
             </div>
-            <h3>오답노트</h3>
-            <p>틀린 문제를 모아 <b>AI 해설지</b>와 정답/오답 개수로 복습 흐름을 잇는다.</p>
-            <span class="exp-tag">복습 · 전환</span>
           </article>
-          <article class="exp-card exp-card--mypage" data-reveal>
-            <div class="exp-top">
-              <div class="exp-tile" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg></div>
-              <span class="badge-new">NEW</span>
+          <article class="exp-card" data-reveal>
+            <div class="exp-shot"><img src="./images/source05.png" alt="마이페이지 화면 — 최근 생성 이력과 이용권 관리" /></div>
+            <div class="exp-body">
+              <div class="top"><h3>마이페이지</h3><span class="badge-new">NEW</span></div>
+              <p><b>최근 생성 이력</b>과 이용권을 한곳에서 관리해 '이어서 하기' 동선을 만든다.</p>
+              <span class="exp-tag">재방문</span>
             </div>
-            <h3>마이페이지</h3>
-            <p><b>최근 생성 이력</b>과 이용권을 한곳에서 관리해 재방문 동선("이어서 하기")을 만든다.</p>
-            <span class="exp-tag">재방문</span>
           </article>
-          <article class="exp-card exp-card--profile" data-reveal>
-            <div class="exp-top">
-              <div class="exp-tile" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.5 5 5.5.8-4 3.9.9 5.5L12 15.5 7.6 17.2l.9-5.5-4-3.9L10 7z"/></svg></div>
-              <span class="badge-new">NEW</span>
+          <article class="exp-card" data-reveal>
+            <div class="exp-shot"><img src="./images/source06.png" alt="프로필 화면 — 회원 등급과 계정·학습 설정" /></div>
+            <div class="exp-body">
+              <div class="top"><h3>프로필</h3><span class="badge-new">NEW</span></div>
+              <p>회원 등급·업그레이드와 계정·학습 설정으로 <b>개인화·전환</b> 기반을 마련한다.</p>
+              <span class="exp-tag">개인화</span>
             </div>
-            <h3>프로필</h3>
-            <p>회원 등급·업그레이드와 계정·학습 설정으로 개인화·전환 기반을 마련한다.</p>
-            <span class="exp-tag">개인화</span>
           </article>
         </div>
       </div>
     </section>
 
-    <!-- ============ 08 DESIGN SYSTEM ============ -->
-    <section id="system" class="sec">
+    <!-- ============ 08 USER FLOW ============ -->
+    <section id="flow" class="sec">
       <div class="container">
+        <div class="sec-head sec-head--center" data-reveal>
+          <span class="eyebrow"><span class="no">08</span> USER FLOW</span>
+          <h2 class="sec-title">핵심 과업까지,<br>가장 짧은 한 줄의 흐름.</h2>
+          <p class="sec-lead">복잡한 전체 여정을 단순한 선형 흐름으로 재정의했습니다.</p>
+        </div>
+        <div class="flow-rail" id="flowRail" data-reveal>
+          <div class="flow-node"><span class="step">01</span><span class="gly" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg></span><span class="lbl">메인</span></div>
+          <div class="flow-conn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+          <div class="flow-node"><span class="step">02</span><span class="gly" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></span><span class="lbl">로그인</span></div>
+          <div class="flow-conn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+          <div class="flow-node flow-node--core"><span class="step">03</span><span class="gly" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6"/><path d="M12 12v6M9 15h6"/></svg></span><span class="lbl">문제 생성</span></div>
+          <div class="flow-conn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+          <div class="flow-node flow-node--core"><span class="step">04</span><span class="gly" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></span><span class="lbl">문제 풀이</span></div>
+          <div class="flow-conn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+          <div class="flow-node"><span class="step">05</span><span class="gly" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4h7a3 3 0 0 1 3 3v13a2.5 2.5 0 0 0-2.5-2.5H2z"/><path d="M22 4h-7a3 3 0 0 0-3 3v13a2.5 2.5 0 0 1 2.5-2.5H22z"/></svg></span><span class="lbl">해설</span></div>
+          <div class="flow-conn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+          <div class="flow-node"><span class="step">06</span><span class="gly" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V3a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v1"/><path d="M9 13l2 2 4-4"/></svg></span><span class="lbl">오답노트</span></div>
+        </div>
+        <p class="flow-sub" data-reveal><b>보조 내비게이션</b> · 내 자료 · 프로필 · Q&amp;A</p>
+      </div>
+    </section>
+
+    <!-- ============ 09 DESIGN SYSTEM ============ -->
+    <section id="system" class="sec sec--mist">
+      <div class="container container--wide">
         <div class="sec-head" data-reveal>
-          <span class="eyebrow"><span class="no">08</span> DESIGN SYSTEM</span>
+          <span class="eyebrow"><span class="no">09</span> DESIGN SYSTEM</span>
           <h2 class="sec-title">한 번 정한 규칙으로, 끝까지 일관되게.</h2>
         </div>
         <div class="ds-row">
           <div class="ds-block" data-reveal>
-            <h3>Color</h3>
+            <h3>Color System</h3>
             <div class="color-stack">
               <div>
-                <div class="col-group-label">Primary — 주요 액션</div>
+                <div class="col-label">Primary — 주요 액션</div>
                 <div class="swatch-primary">
                   <span class="ph">#4D65F9</span>
-                  <span class="ps"><b>Brand</b>버튼 · 링크 · 강조<br>AA pass · 4.62:1 (on #fff)</span>
+                  <span class="ps"><b>Brand</b>버튼 · 링크 · 강조<br>AA pass · 4.62:1</span>
                 </div>
               </div>
               <div>
-                <div class="col-group-label">Supporting — 포인트 / 서브</div>
+                <div class="col-label">Supporting / Tertiary</div>
                 <div class="swatches">
-                  <div class="swatch"><div class="chip-c" style="background:#61C1CC"></div><div class="meta"><div class="hex">#61C1CC</div><div class="role">Teal · 포인트</div><div class="wcag">AFTER · 활성</div></div></div>
-                  <div class="swatch"><div class="chip-c" style="background:#CCEAF0"></div><div class="meta"><div class="hex">#CCEAF0</div><div class="role">Sky · 서브 강조</div><div class="wcag">배지 · 칩 배경</div></div></div>
-                </div>
-              </div>
-              <div>
-                <div class="col-group-label">Tertiary — 배경 / 여백</div>
-                <div class="swatch"><div class="chip-c" style="background:#F4F8FB;border-bottom:1px solid var(--line);height:48px"></div><div class="meta"><div class="hex">#F4F8FB</div><div class="role">Mist · 섹션 배경 · 패널 필</div></div></div>
-              </div>
-              <div>
-                <div class="col-group-label">In Context — 함께 쓰일 때</div>
-                <div class="col-context">
-                  <span class="ctx-btn">지금 시작하기</span>
-                  <span class="ctx-badge">AI 해설</span>
-                  <span class="ctx-fill">배경 영역</span>
+                  <div class="swatch"><div class="chip-c" style="background:#61C1CC"></div><div class="meta"><div class="hex">#61C1CC</div><div class="role">Teal · 포인트</div></div></div>
+                  <div class="swatch"><div class="chip-c" style="background:#CCEAF0"></div><div class="meta"><div class="hex">#CCEAF0</div><div class="role">Sky · 칩 배경</div></div></div>
+                  <div class="swatch"><div class="chip-c" style="background:#F4F7FB;border-bottom:1px solid var(--line)"></div><div class="meta"><div class="hex">#F4F7FB</div><div class="role">Mist · 배경</div></div></div>
                 </div>
               </div>
             </div>
           </div>
           <div class="ds-block" data-reveal>
             <h3>Typography — Pretendard</h3>
-            <div class="type-spec">Aa 모두매쓰</div>
-            <div class="type-scale">HERO 800 · Title 700 · Body 400 · Caption 14</div>
+            <div class="type-spec">Aa 가나다</div>
             <div class="type-weights">
               <span>Regular</span><span>Medium</span><span>SemiBold</span><span>Bold</span><span>ExtraBold</span>
             </div>
+            <div class="type-meta">HERO 800 · Title 700 · Body 400 · Caption 13</div>
           </div>
         </div>
-        <div class="ds-block" data-reveal style="padding-bottom:var(--s-6)">
+        <div class="ds-block" data-reveal>
           <h3>Components</h3>
           <div class="comp-grid">
             <div class="comp-card">
@@ -1228,73 +1009,86 @@
                 <span class="btn btn--primary" style="padding:11px 20px;font-size:14px;">지금 시작하기</span>
                 <span class="btn btn--ghost" style="padding:11px 20px;font-size:14px;">해설 보기</span>
               </div>
-              <div class="comp-cap">radius pill · sh-2</div>
+              <div class="comp-cap">Button · pill · sh-2</div>
             </div>
             <div class="comp-card">
-              <div class="comp-body">
-                <div class="mini-card"><strong>오답노트</strong><span>AI 해설 + 정답/오답 개수</span></div>
-              </div>
-              <div class="comp-cap">radius 14 · sh-2</div>
+              <div class="comp-body"><div class="mini-card"><strong>오답노트</strong><span>AI 해설 + 정답/오답 개수</span></div></div>
+              <div class="comp-cap">Card · radius 14</div>
             </div>
             <div class="comp-card">
-              <div class="comp-body">
-                <input class="ds-input" type="text" placeholder="정답을 입력하세요" aria-label="컴포넌트 샘플 입력란" />
-              </div>
-              <div class="comp-cap">focus 4px brand</div>
+              <div class="comp-body"><input class="ds-input" type="text" placeholder="정답을 입력하세요" aria-label="컴포넌트 샘플 입력란" /></div>
+              <div class="comp-cap">Input · focus 4px</div>
             </div>
             <div class="comp-card">
-              <div class="comp-body">
-                <div class="badge-wrap">
-                  <span class="badge badge--new">NEW</span>
-                  <span class="badge badge--ai">AI 해설</span>
-                  <span class="badge badge--before">BEFORE</span>
-                  <span class="badge badge--after">AFTER</span>
-                </div>
-              </div>
-              <div class="comp-cap">pill · semantic color</div>
+              <div class="comp-body"><div class="badge-wrap"><span class="badge badge--new">NEW</span><span class="badge badge--ai">AI 해설</span><span class="badge badge--before">BEFORE</span><span class="badge badge--after">AFTER</span></div></div>
+              <div class="comp-cap">Badge · semantic</div>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ============ 09 DEVELOPMENT ============ -->
-    <section id="dev" class="sec sec--mist">
-      <div class="container">
+    <!-- ============ 10 EXPLORATION ============ -->
+    <section id="exploration" class="sec sec--dark">
+      <div class="container container--wide">
         <div class="sec-head" data-reveal>
-          <span class="eyebrow"><span class="no">09</span> DEVELOPMENT</span>
+          <span class="eyebrow"><span class="no">10</span> EXPLORATION</span>
+          <h2 class="sec-title">히어로의 첫인상, 세 가지 무드로 탐색했다.</h2>
+          <p class="sec-lead">메인 상단의 배경 무드를 세 방향으로 비교했습니다. 메시지를 가리지 않으면서도 'AI 학습'의 인상을 주는 시안을 골랐습니다.</p>
+        </div>
+        <div class="ver-grid">
+          <div class="ver-card" data-reveal>
+            <div class="ver-thumb"><img src="./images/source09.png" alt="히어로 배경 시안 A — 딥 블루 그라데이션" /></div>
+            <div class="ver-body"><div><div class="vt">Version A</div><div class="vs">진하게 · 딥 블루</div></div></div>
+          </div>
+          <div class="ver-card is-pick" data-reveal>
+            <div class="ver-thumb"><img src="./images/source07.png" alt="히어로 배경 시안 B — 라이트 블루 라인 (선택)" /></div>
+            <div class="ver-body"><div><div class="vt">Version B</div><div class="vs">옅게 · 라이트 라인</div></div><span class="ver-pick">선택</span></div>
+          </div>
+          <div class="ver-card" data-reveal>
+            <div class="ver-thumb"><img src="./images/source08.png" alt="히어로 배경 시안 C — 소프트 퍼플 웨이브" /></div>
+            <div class="ver-body"><div><div class="vt">Version C</div><div class="vs">소프트 · 퍼플 웨이브</div></div></div>
+          </div>
+        </div>
+        <p class="ver-note" data-reveal>가장 옅은 <b>Version B</b>를 택했습니다 — 한 줄 메시지와 CTA를 방해하지 않으면서, 잔잔한 라인이 '맞춤·생성'의 결을 은은하게 전합니다.</p>
+      </div>
+    </section>
+
+    <!-- ============ 11 DEVELOPMENT ============ -->
+    <section id="dev" class="sec">
+      <div class="container container--wide">
+        <div class="sec-head" data-reveal>
+          <span class="eyebrow"><span class="no">11</span> DEVELOPMENT</span>
           <h2 class="sec-title">기획에서 배포까지, 5일.</h2>
         </div>
         <div data-reveal>
-          <div class="dev-block-label">Toolchain</div>
+          <div class="dev-label">Toolchain</div>
           <div class="tool-groups">
-            <div class="tool-group tool-group--design">
+            <div class="tool-group">
               <span class="tool-cat">Design</span>
-              <div class="chips">
-                <span class="tool-chip"><img src="./images/ico_fig.png" alt="Figma" />Figma</span>
-              </div>
+              <div class="chips"><span class="tool-chip"><img src="./images/ico_fig.png" alt="" />Figma</span></div>
             </div>
-            <div class="tool-group tool-group--develop">
+            <div class="tool-group">
               <span class="tool-cat">Develop</span>
               <div class="chips">
-                <span class="tool-chip"><img src="./images/ico_vs.png" alt="VS Code" />VS Code</span>
+                <span class="tool-chip"><img src="./images/ico_vs.png" alt="" />VS Code</span>
                 <span class="tool-chip"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.6.5.5 5.6.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.2.8-.5v-2c-3.2.7-3.9-1.4-3.9-1.4-.5-1.3-1.3-1.7-1.3-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.7 1.3 3.4 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17 4.6 18 4.9 18 4.9c.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.3c0 .3.2.6.8.5 4.6-1.5 7.9-5.8 7.9-10.9C23.5 5.6 18.4.5 12 .5z"/></svg>GitHub</span>
                 <span class="tool-chip"><span class="lettermark lm-html">HTML</span>HTML</span>
                 <span class="tool-chip"><span class="lettermark lm-css">CSS</span>CSS</span>
                 <span class="tool-chip"><span class="lettermark lm-js">JS</span>JavaScript</span>
               </div>
             </div>
-            <div class="tool-group tool-group--deploy">
+            <div class="tool-group">
               <span class="tool-cat">Deploy</span>
               <div class="chips">
-                <span class="tool-chip"><img src="./images/ico_clau.png" alt="Claude Code" />Claude Code</span>
-                <span class="tool-chip"><img src="./images/ico_fire.png" alt="Firebase" />Firebase</span>
+                <span class="tool-chip"><img src="./images/ico_clau.png" alt="" />Claude Code</span>
+                <span class="tool-chip"><img src="./images/ico_fire.png" alt="" />Firebase</span>
               </div>
             </div>
           </div>
         </div>
         <div data-reveal>
-          <div class="dev-block-label">Project Timeline</div>
+          <div class="dev-label">Project Timeline</div>
           <div class="timeline" id="timeline">
             <div class="tl-step"><div class="tl-dot"></div><h4>기획</h4><p>문제 정의 · 목표 수립</p></div>
             <div class="tl-step"><div class="tl-dot"></div><h4>디자인</h4><p>Figma 시스템 · 화면 설계</p></div>
@@ -1305,22 +1099,23 @@
       </div>
     </section>
 
-    <!-- ============ 10 OUTCOME ============ -->
+    <!-- ============ 12 OUTCOME ============ -->
     <section id="outcome" class="sec sec--brand">
-      <div class="container">
+      <div class="container container--wide">
         <div class="sec-head" data-reveal>
-          <span class="eyebrow"><span class="no">10</span> OUTCOME</span>
+          <span class="eyebrow"><span class="no">12</span> OUTCOME</span>
           <h2 class="sec-title">기대 효과</h2>
-          <p class="sec-lead">정량 수치 대신, 개선이 향하는 방향을 정의했습니다.</p>
+          <p class="sec-lead">정량 수치 대신, 이번 개선이 향하는 방향을 정의했습니다.</p>
         </div>
         <div class="kpi-grid">
           <article class="kpi-card kpi-card--high" data-reveal><div class="kpi-up">↑</div><h3>가입자 증대</h3><p>명확한 메인·CTA가 첫 가입 장벽을 낮춘다.</p><span class="kpi-tag">PRIMARY · EXPECTED</span></article>
           <article class="kpi-card kpi-card--high" data-reveal><div class="kpi-up">↑</div><h3>학습 시작·완주율 향상</h3><p>최단 경로 여정으로 이탈 구간을 줄인다.</p><span class="kpi-tag">PRIMARY · EXPECTED</span></article>
           <article class="kpi-card" data-reveal><div class="kpi-up">↑</div><h3>재방문 회원수 증가</h3><p>마이페이지·오답노트가 돌아올 이유를 만든다.</p><span class="kpi-tag">EXPECTED</span></article>
-          <article class="kpi-card" data-reveal><div class="kpi-up">↑</div><h3>오프라인 출력 활용성 확대</h3><p>프린트 동선을 표면화한다.</p><span class="kpi-tag">EXPECTED</span></article>
-          <article class="kpi-card kpi-card--mid" data-reveal><div class="kpi-up">↑</div><h3>유료 오답노트 전환율 증대</h3><p>AI 해설 가치로 전환을 유도한다.</p><span class="kpi-tag">CONVERSION · EXPECTED</span></article>
+          <article class="kpi-card" data-reveal><div class="kpi-up">↑</div><h3>오프라인 출력 활용 확대</h3><p>프린트 동선을 표면화한다.</p><span class="kpi-tag">EXPECTED</span></article>
+          <article class="kpi-card" data-reveal><div class="kpi-up">↑</div><h3>유료 오답노트 전환율</h3><p>AI 해설 가치로 전환을 유도한다.</p><span class="kpi-tag">CONVERSION · EXPECTED</span></article>
+          <article class="kpi-card" data-reveal><div class="kpi-up">↓</div><h3>탐색 피로도 감소</h3><p>버튼 다이어트로 인지 부하를 낮춘다.</p><span class="kpi-tag">EXPECTED</span></article>
         </div>
-        <p class="kpi-note">수치는 검증 전 기대 방향입니다.</p>
+        <p class="kpi-note">※ 수치는 검증 전 기대 방향입니다.</p>
         <div class="roadmap" data-reveal>
           <div class="rm-step"><div class="rm-pill"><span class="n">1</span>유저테스트</div><div class="rm-sub">프로토타입 검증</div></div>
           <div class="rm-arrow">→</div>
@@ -1335,14 +1130,14 @@
       </div>
     </section>
 
-    <!-- ============ 11 RETROSPECTIVE ============ -->
+    <!-- ============ 13 RETROSPECTIVE ============ -->
     <section id="retro" class="sec sec--dark">
       <div class="container">
         <div class="retro-wrap" data-reveal>
-          <span class="eyebrow"><span class="no">11</span> RETROSPECTIVE</span>
+          <span class="eyebrow"><span class="no">13</span> RETROSPECTIVE</span>
           <div class="retro-rule" aria-hidden="true"></div>
           <blockquote class="retro-quote">"더하는 것보다 <b>무엇을 덜어낼지</b> 정하는 일이 더 어렵고, 더 중요했다."</blockquote>
-          <p>좋은 UX는 기능을 나열하는 게 아니라, 사용자가 <em>목표에 가장 빨리 닿도록 돕는 것</em>이었습니다. 모두매쓰의 메인은 모든 걸 보여주려다 아무것도 안내하지 못하고 있었습니다.</p>
+          <p>좋은 UX는 기능을 나열하는 게 아니라, 사용자가 <em>목표에 가장 빨리 닿도록 돕는 것</em>이었습니다. 모두매쓰의 메인은 모든 걸 보여주려다, 정작 아무것도 안내하지 못하고 있었습니다.</p>
           <p>이번 리뉴얼에서 가장 큰 결정은 '추가'가 아니라 '제거'였습니다 — 중복 버튼을 지우고, 핵심 행동 하나를 가장 앞에 두는 것. 사용자를 위한 디자인은 결국 선택과 절제의 문제임을 배웠습니다.</p>
           <div class="cta-row retro-cta">
             <a class="btn btn--primary" href="https://ujin2019-oss.github.io/modoomath/" target="_blank" rel="noopener">라이브 사이트 보기 ↗</a>
@@ -1356,7 +1151,7 @@
 
   <!-- ============ FOOTER ============ -->
   <footer class="site-footer">
-    <div class="container">
+    <div class="container container--wide">
       <div class="footer-top">
         <div class="footer-brand">
           <a class="logo" href="./index.html">PORT<b>FOLIO</b></a>
@@ -1393,7 +1188,7 @@
       var h = document.documentElement;
       var max = h.scrollHeight - h.clientHeight;
       var p = max > 0 ? (h.scrollTop || document.body.scrollTop) / max : 0;
-      bar.style.transform = "scaleX(" + Math.min(1, Math.max(0, p)) + ")";
+      if(bar) bar.style.transform = "scaleX(" + Math.min(1, Math.max(0, p)) + ")";
       ticking = false;
     }
     window.addEventListener("scroll", function(){
@@ -1421,51 +1216,22 @@
       });
     }
 
-    /* ---------- Before/After slider ---------- */
-    function initBA(id){
-      var ba = document.getElementById(id);
-      if(!ba) return;
-      var after = ba.querySelector(".ba__after");
-      var inner = ba.querySelector(".ba__after-inner");
-      var handle = ba.querySelector(".ba__handle");
-      var knob = ba.querySelector(".ba__knob");
-      var range = ba.querySelector(".ba__range");
-      function setPos(p){
-        p = Math.max(0, Math.min(100, p));
-        after.style.width = p + "%";
-        inner.style.width = ba.clientWidth + "px";
-        handle.style.left = p + "%";
-        knob.style.left = p + "%";
-      }
-      range.addEventListener("input", function(){
-        ba.classList.add("touched");
-        setPos(parseFloat(range.value));
-      });
-      window.addEventListener("resize", function(){ setPos(parseFloat(range.value)); });
-      setPos(50);
-    }
-    initBA("ba1");
-
-    /* ---------- Problem pins <-> cards linking ---------- */
-    function linkProb(){
-      var nodes = document.querySelectorAll("[data-prob]");
-      function setActive(n, on){
-        document.querySelectorAll('[data-prob="' + n + '"]').forEach(function(el){
-          el.classList.toggle("is-active", on);
+    /* ---------- Core-feature tabs (Case 03) ---------- */
+    (function initTabs(){
+      var tabs = Array.prototype.slice.call(document.querySelectorAll(".feat-tab"));
+      var panels = Array.prototype.slice.call(document.querySelectorAll(".feat-panel"));
+      if(!tabs.length) return;
+      tabs.forEach(function(tab){
+        tab.addEventListener("click", function(){
+          var i = tab.getAttribute("data-tab");
+          tabs.forEach(function(t){ var on = t === tab; t.classList.toggle("is-active", on); t.setAttribute("aria-selected", on ? "true" : "false"); });
+          panels.forEach(function(p){ p.classList.toggle("is-active", p.getAttribute("data-panel") === i); });
         });
-      }
-      nodes.forEach(function(el){
-        var n = el.getAttribute("data-prob");
-        el.addEventListener("mouseenter", function(){ setActive(n, true); });
-        el.addEventListener("mouseleave", function(){ setActive(n, false); });
-        el.addEventListener("focusin", function(){ setActive(n, true); });
-        el.addEventListener("focusout", function(){ setActive(n, false); });
       });
-    }
-    linkProb();
+    })();
 
     /* ---------- Auto-scroll comparison frames (Case 02) ---------- */
-    function initAutoScroll(){
+    (function initAutoScroll(){
       var imgs = document.querySelectorAll("[data-autoscroll]");
       imgs.forEach(function(img){
         var win = img.parentElement;
@@ -1477,11 +1243,8 @@
           if(dist <= 0) return;
           img.style.transition = "transform 16s linear";
           var dir = 0;
-          function step(){
-            dir = dir === 0 ? 1 : 0;
-            img.style.transform = "translateY(" + (dir === 1 ? -dist : 0) + "px)";
-          }
-          var t = setInterval(step, 16500);
+          function step(){ dir = dir === 0 ? 1 : 0; img.style.transform = "translateY(" + (dir === 1 ? -dist : 0) + "px)"; }
+          setInterval(step, 16500);
           step();
           function pause(){ var cs = getComputedStyle(img).transform; img.style.transition = "none"; img.style.transform = cs; }
           function resume(){ img.style.transition = "transform 16s linear"; }
@@ -1492,8 +1255,7 @@
         }
         if(img.complete){ run(); } else { img.addEventListener("load", run); }
       });
-    }
-    initAutoScroll();
+    })();
 
     /* ---------- Reveal + connectors ---------- */
     if(!hasGSAP || reduce){
@@ -1508,45 +1270,28 @@
       /* Hero immediate */
       gsap.set("#hero [data-reveal], #hero [data-reveal-scale]", { opacity:0 });
       gsap.to("#hero [data-reveal]", { opacity:1, y:0, duration:.8, ease:"power3.out", stagger:.1, delay:.1 });
-      gsap.fromTo("#hero [data-reveal-scale]", { opacity:0, scale:.94 }, { opacity:1, scale:1, duration:.9, ease:"power3.out", delay:.25 });
+      gsap.fromTo("#hero [data-reveal-scale]", { opacity:0, scale:.95 }, { opacity:1, scale:1, duration:.9, ease:"power3.out", delay:.25 });
 
-      /* Generic reveals (outside hero) */
+      /* Generic reveals */
       gsap.utils.toArray("[data-reveal]").forEach(function(el){
         if(el.closest("#hero")) return;
-        gsap.fromTo(el, { opacity:0, y:42 }, {
-          opacity:1, y:0, duration:.8, ease:"power3.out",
-          scrollTrigger:{ trigger:el, start:"top 88%", once:true }
-        });
+        gsap.fromTo(el, { opacity:0, y:40 }, { opacity:1, y:0, duration:.8, ease:"power3.out", scrollTrigger:{ trigger:el, start:"top 88%", once:true } });
       });
       gsap.utils.toArray("[data-reveal-scale]").forEach(function(el){
         if(el.closest("#hero")) return;
-        gsap.fromTo(el, { opacity:0, scale:.94 }, {
-          opacity:1, scale:1, duration:.8, ease:"power3.out",
-          scrollTrigger:{ trigger:el, start:"top 88%", once:true }
-        });
+        gsap.fromTo(el, { opacity:0, scale:.95 }, { opacity:1, scale:1, duration:.8, ease:"power3.out", scrollTrigger:{ trigger:el, start:"top 88%", once:true } });
       });
-
-      /* Hero float */
-      gsap.to("#phoneWrap", { y:-10, duration:3, ease:"sine.inOut", yoyo:true, repeat:-1 });
 
       /* Flow connectors draw */
       var rail = document.getElementById("flowRail");
       if(rail){
-        ScrollTrigger.create({
-          trigger:rail, start:"top 80%", once:true,
-          onEnter:function(){
-            var conns = rail.querySelectorAll(".flow-conn");
-            conns.forEach(function(c, i){ setTimeout(function(){ c.classList.add("drawn"); }, i*120); });
-          }
-        });
+        ScrollTrigger.create({ trigger:rail, start:"top 80%", once:true, onEnter:function(){
+          rail.querySelectorAll(".flow-conn").forEach(function(c, i){ setTimeout(function(){ c.classList.add("drawn"); }, i*120); });
+        }});
       }
-
       /* Timeline track fill */
       var tline = document.getElementById("timeline");
-      if(tline){
-        ScrollTrigger.create({ trigger:tline, start:"top 80%", once:true,
-          onEnter:function(){ tline.classList.add("drawn"); } });
-      }
+      if(tline){ ScrollTrigger.create({ trigger:tline, start:"top 80%", once:true, onEnter:function(){ tline.classList.add("drawn"); } }); }
     }
   })();
   </script>
