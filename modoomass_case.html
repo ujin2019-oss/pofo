@@ -257,21 +257,10 @@
   .hero-browser:hover .browser__body--autoscroll img,.hero-browser:focus-within .browser__body--autoscroll img{ object-position:center bottom; }
   .hero-glow{ position:absolute; inset:-12% -8% -8% -8%; z-index:-1; background:radial-gradient(60% 60% at 70% 30%,rgba(77,101,249,.18),transparent 70%),radial-gradient(50% 50% at 20% 80%,rgba(97,193,204,.16),transparent 70%); filter:blur(20px); }
 
-  .hero-meta{ margin-top:clamp(40px,6vw,84px); }
-  /* 프로스트 글래스 카드 — 웨이브 배경 위에서도 메타 정보가 또렷하게 */
-  .hero-meta dl{
-    display:grid; grid-template-columns:repeat(4,1fr); gap:0;
-    background:rgba(255,255,255,.55);
-    -webkit-backdrop-filter:blur(16px) saturate(160%);
-    backdrop-filter:blur(16px) saturate(160%);
-    border:1px solid rgba(255,255,255,.7);
-    border-radius:var(--r-lg);
-    box-shadow:0 10px 34px -8px rgba(30,45,120,.14), inset 0 1px 0 rgba(255,255,255,.6);
-    padding:clamp(22px,2.6vw,30px) clamp(22px,2.2vw,32px);
-  }
+  .hero-meta{ margin-top:clamp(48px,7vw,96px); }
+  .hero-meta dl{ display:grid; grid-template-columns:repeat(4,1fr); gap:0; border-top:1px solid var(--line); padding-top:var(--s6); }
   .hero-meta dl > div{ padding-right:var(--s5); padding-left:var(--s5); border-left:1px solid var(--line); }
   .hero-meta dl > div:first-child{ border-left:none; padding-left:0; }
-  .hero-meta dl > div:last-child{ padding-right:0; }
   .hero-meta dt{ font-family:var(--mono); font-size:11px; font-weight:var(--wb); letter-spacing:.14em; text-transform:uppercase; color:var(--ink-400); margin-bottom:10px; }
   .hero-meta dd{ font-weight:var(--wsb); color:var(--ink-800); font-size:var(--fs-body); line-height:1.5; }
 
@@ -282,13 +271,37 @@
   .prob-figure .browser{ box-shadow:0 40px 90px -30px rgba(0,0,0,.7); }
   .prob-shot{ position:relative; }
   .prob-shot img{ width:100%; display:block; }
+  /* 인터랙티브 빨간 핀 — 카드(P1~P4)와 연동 */
+  .pin{ position:absolute; z-index:6; transform:translate(-50%,-50%); width:46px; height:46px; }
+  .pin__dot{
+    position:absolute; inset:0; margin:auto; width:42px; height:42px; border-radius:50%;
+    background:var(--danger); color:#fff; display:grid; place-items:center;
+    font-family:var(--mono); font-size:19px; font-weight:var(--wb);
+    border:3px solid rgba(255,255,255,.92); box-shadow:0 6px 20px rgba(229,72,77,.6);
+    transition:transform var(--t2) var(--ease);
+  }
+  .pin::before{ content:""; position:absolute; inset:0; margin:auto; width:42px; height:42px; border-radius:50%; border:2.5px solid var(--danger); animation:pinPulse 2s var(--ease-soft) infinite; }
+  @keyframes pinPulse{ 0%{ transform:scale(1); opacity:.7; } 70%,100%{ transform:scale(2.2); opacity:0; } }
+  .pin__label{
+    position:absolute; left:50%; bottom:calc(100% + 13px); transform:translateX(-50%) translateY(6px);
+    white-space:nowrap; background:var(--danger); color:#fff; font-size:17px; font-weight:var(--wb);
+    padding:11px 20px; border-radius:var(--r-pill); box-shadow:var(--sh2);
+    opacity:0; pointer-events:none; transition:opacity var(--t2) var(--ease), transform var(--t2) var(--ease);
+  }
+  .pin__label::after{ content:""; position:absolute; top:100%; left:50%; transform:translateX(-50%); border:7px solid transparent; border-top-color:var(--danger); }
+  .pin:hover .pin__dot,.pin.is-active .pin__dot{ box-shadow:0 8px 24px rgba(229,72,77,.7); }
+  .pin:hover{ z-index:7; }
+  .pin:hover .pin__dot,.pin.is-active .pin__dot{ transform:scale(1.18); }
+  .pin:hover .pin__label,.pin.is-active .pin__label{ opacity:1; transform:translateX(-50%) translateY(0); }
   .prob-cards{ display:grid; grid-template-columns:repeat(4,1fr); gap:var(--s4); margin-top:var(--s8); }
   .prob-card{
     background:var(--d-card); border:1px solid var(--line-dark); border-top:2px solid var(--danger);
     border-radius:var(--r-md); padding:var(--s5);
     transition:transform var(--t2) var(--ease), background var(--t2) var(--ease);
   }
-  .prob-card:hover{ transform:translateY(-4px); background:var(--d-card-2); }
+  .prob-card{ cursor:default; }
+  .prob-card:hover,.prob-card.is-active{ transform:translateY(-4px); background:var(--d-card-2); }
+  .prob-card.is-active{ box-shadow:0 0 0 1px rgba(229,72,77,.5), 0 18px 40px -14px rgba(229,72,77,.4); }
   .prob-card .pn{ font-family:var(--mono); font-size:12px; font-weight:var(--wb); color:var(--danger); letter-spacing:.1em; display:block; margin-bottom:var(--s3); }
   .prob-card h3{ font-size:var(--fs-h3); font-weight:var(--wb); color:#fff; margin-bottom:var(--s3); line-height:1.3; word-break:keep-all; }
   .prob-card p{ font-size:14px; color:rgba(255,255,255,.6); line-height:1.6; }
@@ -563,6 +576,7 @@
     .goal-grid{ grid-template-columns:1fr; }
     .exp-grid{ grid-template-columns:1fr; max-width:440px; margin-inline:auto; }
     .prob-cards{ grid-template-columns:1fr; }
+    .pin{ display:none; }
     .insight-row{ grid-template-columns:1fr; gap:var(--s4); padding-block:var(--s7); }
     .insight-num{ font-size:clamp(56px,18vw,96px); }
     .compare{ grid-template-columns:1fr; gap:var(--s6); }
@@ -622,11 +636,11 @@
       <div class="container container--wide">
         <div class="hero-grid">
           <div class="hero-copy">
-            <span class="eyebrow" data-reveal><span class="no">01 / PROCESS</span> UX CASE STUDY</span>
+            <span class="eyebrow" data-reveal><span class="no">01 PROJECT</span> UX CASE STUDY</span>
             <h1 class="hero-h1" data-reveal>모두매쓰<br><span class="grad">UI/UX 리뉴얼</span></h1>
-            <p class="hero-sub" data-reveal>한 화면에 모든 기능을 쏟아붓던 AI 수학 학습 서비스를, 사용자가 길을 잃지 않는 경험으로 다시 설계했습니다.</p>
+            <p class="hero-sub" data-reveal>한 화면에 모든 기능을 쏟아붓던 AI 수학 학습 서비스를, <br>사용자가 길을 잃지 않는 경험으로 다시 설계했습니다.</p>
             <div class="cta-row" data-reveal>
-              <a class="btn btn--primary" href="https://ujin2019-oss.github.io/modoomath/" target="_blank" rel="noopener">라이브 사이트 보기 ↗</a>
+              <a class="btn btn--primary" href="https://ujin2019-oss.github.io/modoomath/" target="_blank" rel="noopener">Live Site ↗</a>
               <a class="btn btn--ghost" href="#problem">개선 과정 보기 ↓</a>
             </div>
           </div>
@@ -665,34 +679,48 @@
           <div class="browser browser--dark">
             <div class="browser__bar"><span class="browser__dots"><i></i><i></i><i></i></span>
               <span class="browser__url"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18"/></svg>modoomath · 기존 메인 (분석)</span></div>
-            <div class="browser__body"><img src="./images/source01.png" alt="기존 메인 화면 분석 — 한 화면에 서비스 소개, 문제 생성 단계, 학습 자료, Q&A가 모두 노출된 상태에 문제 지점을 표시" /></div>
+            <div class="browser__body prob-shot">
+              <img src="./images/source01.png" alt="기존 메인 화면 분석 — 한 화면에 서비스 소개, 문제 생성 단계, 학습 자료, Q&A가 모두 노출된 상태에 문제 지점을 표시" />
+              <button class="pin" data-prob="1" style="left:50%;top:18%;" aria-label="P1 정체성 불명확 — 서비스 소개 영역">
+                <span class="pin__dot">1</span><span class="pin__label">P1 · 정체성 불명확</span>
+              </button>
+              <button class="pin" data-prob="2" style="left:85%;top:16%;" aria-label="P2 기능 과다 노출 — 학습기록 패널">
+                <span class="pin__dot">2</span><span class="pin__label">P2 · 기능 과다 노출</span>
+              </button>
+              <button class="pin" data-prob="3" style="left:48%;top:50%;" aria-label="P3 정보 위계질서 붕괴 — FAQ 상단 배치">
+                <span class="pin__dot">3</span><span class="pin__label">P3 · 정보 위계질서 붕괴</span>
+              </button>
+              <button class="pin" data-prob="4" style="left:12%;top:82%;" aria-label="P4 중복 이름 버튼 과다 — 문제생성 버튼 분산">
+                <span class="pin__dot">4</span><span class="pin__label">P4 · 중복 이름 버튼 과다</span>
+              </button>
+            </div>
           </div>
-          <figcaption class="frame-cap">기존 메인 — 핵심 동선 없이 모든 기능이 동시에 노출된 상태</figcaption>
+          <figcaption class="frame-cap">기존 메인 — 핵심 동선 없이 모든 기능이 동시에 노출된 상태 · <span style="color:var(--danger)">●</span> 핀에 마우스를 올려 보세요</figcaption>
         </figure>
 
         <div class="prob-cards">
-          <article class="prob-card" data-reveal>
+          <article class="prob-card" data-prob="1" data-reveal>
             <span class="pn">P1</span>
-            <h3>기능 과다 노출</h3>
-            <p>메인에 모든 기능이 한 번에 표시돼, 무엇부터 할지 몰라 이탈 가능성이 높아진다.</p>
-          </article>
-          <article class="prob-card" data-reveal>
-            <span class="pn">P2</span>
             <h3>정체성 불명확</h3>
-            <p>프린트/바로풀기 모드를 바꿔도 메인이 그대로라 무엇을 하는 서비스인지 모호하다.</p>
+            <p>프린트·바로풀기 모드를 바꿔도 메인이 그대로라, 무엇을 하는 서비스인지 한눈에 와닿지 않는다.</p>
           </article>
-          <article class="prob-card" data-reveal>
+          <article class="prob-card" data-prob="2" data-reveal>
+            <span class="pn">P2</span>
+            <h3>기능 과다 노출</h3>
+            <p>메인에 모든 기능이 한 번에 쏟아져, 무엇부터 해야 할지 몰라 이탈로 이어진다.</p>
+          </article>
+          <article class="prob-card" data-prob="3" data-reveal>
             <span class="pn">P3</span>
-            <h3>중복 이름 버튼 과다</h3>
-            <p>"바로풀기"가 서로 다른 페이지로 향하는데 이름이 같고, 풀이 중에도 "선택" 버튼이 남는다.</p>
+            <h3>정보 위계질서 붕괴</h3>
+            <p>제목·기능·안내가 모두 같은 비중으로 놓여, 무엇이 먼저인지 시선의 우선순위가 사라진다.</p>
           </article>
-          <article class="prob-card" data-reveal>
+          <article class="prob-card" data-prob="4" data-reveal>
             <span class="pn">P4</span>
-            <h3>정답 입력 숨김</h3>
-            <p>계산기·낙서 기능에 가려져, 작은 햄버거 바를 눌러야 정답 입력란이 보인다.</p>
+            <h3>중복 이름 버튼 과다</h3>
+            <p>"바로풀기"가 서로 다른 페이지로 향하는데 이름이 같고, 풀이 중에도 "선택" 버튼이 남아 시선이 분산된다.</p>
           </article>
         </div>
-        <p class="frame-cap" style="margin-top:var(--s7);text-align:left;">출처 — 모두매쓰 UX 개선 계획서 · 박효은 · 장수빈 · 유진 · 2026.04.06</p>
+
       </div>
     </section>
 
@@ -761,7 +789,7 @@
             <span class="goal-idx">GOAL 03</span>
             <h3>버튼 다이어트</h3>
             <p>기능 없는 버튼은 지우고 핵심 버튼의 가독성과 우선순위를 높인다.</p>
-            <span class="solve">P3 · P4 해결</span>
+            <span class="solve">P4 해결</span>
           </div>
         </div>
       </div>
@@ -860,7 +888,7 @@
             <span class="case-no">CASE 03</span>
             <h3>핵심 기능 — 한 화면, 하나의 목적</h3>
           </div>
-          <p class="case-cap" style="margin-top:0;margin-bottom:var(--s7);">중복 버튼을 걷어내고, 각 화면이 하나의 과업에만 집중하도록 재설계했습니다. 정답 입력처럼 가려져 있던 핵심 동작은 표면으로 끌어올렸습니다. <span class="solve">P3 · P4 해결</span></p>
+          <p class="case-cap" style="margin-top:0;margin-bottom:var(--s7);">중복 버튼을 걷어내고, 각 화면이 하나의 과업에만 집중하도록 재설계했습니다. 같은 비중으로 흩어져 있던 요소에 위계를 세워, 지금 할 행동이 가장 먼저 보이도록 했습니다. <span class="solve">P3 · P4 해결</span></p>
           <div class="feat-tabs" role="tablist" aria-label="핵심 기능 화면">
             <button class="feat-tab is-active" data-tab="0" role="tab" aria-selected="true">문제 생성</button>
             <button class="feat-tab" data-tab="1" role="tab" aria-selected="false">문제 출력</button>
@@ -1227,6 +1255,21 @@
           tabs.forEach(function(t){ var on = t === tab; t.classList.toggle("is-active", on); t.setAttribute("aria-selected", on ? "true" : "false"); });
           panels.forEach(function(p){ p.classList.toggle("is-active", p.getAttribute("data-panel") === i); });
         });
+      });
+    })();
+
+    /* ---------- Problem 핀 ↔ 카드(P1~P4) 연동 ---------- */
+    (function linkProb(){
+      var nodes = document.querySelectorAll("[data-prob]");
+      function setActive(n, on){
+        document.querySelectorAll('[data-prob="' + n + '"]').forEach(function(el){ el.classList.toggle("is-active", on); });
+      }
+      nodes.forEach(function(el){
+        var n = el.getAttribute("data-prob");
+        el.addEventListener("mouseenter", function(){ setActive(n, true); });
+        el.addEventListener("mouseleave", function(){ setActive(n, false); });
+        el.addEventListener("focusin", function(){ setActive(n, true); });
+        el.addEventListener("focusout", function(){ setActive(n, false); });
       });
     })();
 
