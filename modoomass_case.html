@@ -283,16 +283,16 @@
   .pin::before{ content:""; position:absolute; inset:0; margin:auto; width:42px; height:42px; border-radius:50%; border:2.5px solid var(--danger); animation:pinPulse 2s var(--ease-soft) infinite; }
   @keyframes pinPulse{ 0%{ transform:scale(1); opacity:.7; } 70%,100%{ transform:scale(2.2); opacity:0; } }
   .pin__label{
-    position:absolute; left:50%; bottom:calc(100% + 13px); transform:translateX(-50%) translateY(6px);
+    position:absolute; left:calc(100% + 14px); top:50%; transform:translateY(-50%) translateX(8px);
     white-space:nowrap; background:var(--danger); color:#fff; font-size:17px; font-weight:var(--wb);
-    padding:11px 20px; border-radius:var(--r-pill); box-shadow:var(--sh2);
+    padding:10px 18px; border-radius:var(--r-pill); box-shadow:var(--sh2);
     opacity:0; pointer-events:none; transition:opacity var(--t2) var(--ease), transform var(--t2) var(--ease);
   }
-  .pin__label::after{ content:""; position:absolute; top:100%; left:50%; transform:translateX(-50%); border:7px solid transparent; border-top-color:var(--danger); }
+  .pin__label::after{ content:""; position:absolute; right:100%; top:50%; transform:translateY(-50%); border:7px solid transparent; border-right-color:var(--danger); }
+  .pin:hover .pin__label,.pin.is-active .pin__label{ opacity:1; transform:translateY(-50%) translateX(0); }
   .pin:hover .pin__dot,.pin.is-active .pin__dot{ box-shadow:0 8px 24px rgba(229,72,77,.7); }
   .pin:hover{ z-index:7; }
   .pin:hover .pin__dot,.pin.is-active .pin__dot{ transform:scale(1.18); }
-  .pin:hover .pin__label,.pin.is-active .pin__label{ opacity:1; transform:translateX(-50%) translateY(0); }
   .prob-cards{ display:grid; grid-template-columns:repeat(4,1fr); gap:var(--s4); margin-top:var(--s8); }
   .prob-card{
     background:var(--d-card); border:1px solid var(--line-dark); border-top:2px solid var(--danger);
@@ -681,17 +681,23 @@
               <span class="browser__url"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18"/></svg>modoomath · 기존 메인 (분석)</span></div>
             <div class="browser__body prob-shot">
               <img src="./images/source01.png" alt="기존 메인 화면 분석 — 한 화면에 서비스 소개, 문제 생성 단계, 학습 자료, Q&A가 모두 노출된 상태에 문제 지점을 표시" />
-              <button class="pin" data-prob="1" style="left:50%;top:18%;" aria-label="P1 정체성 불명확 — 서비스 소개 영역">
-                <span class="pin__dot">1</span><span class="pin__label">P1 · 정체성 불명확</span>
+              <button class="pin" data-prob="1" style="left:80%;top:23%;" aria-label="학습기록 (P1)">
+                <span class="pin__dot">1</span><span class="pin__label">학습기록</span>
               </button>
-              <button class="pin" data-prob="2" style="left:85%;top:16%;" aria-label="P2 기능 과다 노출 — 학습기록 패널">
-                <span class="pin__dot">2</span><span class="pin__label">P2 · 기능 과다 노출</span>
+              <button class="pin" data-prob="2" style="left:31%;top:8%;" aria-label="서비스 소개 미흡 (P2)">
+                <span class="pin__dot">2</span><span class="pin__label">서비스 소개 미흡</span>
               </button>
-              <button class="pin" data-prob="3" style="left:48%;top:50%;" aria-label="P3 정보 위계질서 붕괴 — FAQ 상단 배치">
-                <span class="pin__dot">3</span><span class="pin__label">P3 · 정보 위계질서 붕괴</span>
+              <button class="pin" data-prob="3" style="left:62%;top:37%;" aria-label="원치않는 FAQ 상단 배치 (P3)">
+                <span class="pin__dot">3</span><span class="pin__label">원치않는 FAQ 상단 배치</span>
               </button>
-              <button class="pin" data-prob="4" style="left:12%;top:82%;" aria-label="P4 중복 이름 버튼 과다 — 문제생성 버튼 분산">
-                <span class="pin__dot">4</span><span class="pin__label">P4 · 중복 이름 버튼 과다</span>
+              <button class="pin" data-prob="4" style="left:5%;top:42%;" aria-label="문제생성 Part1 단위 선택 (P4)">
+                <span class="pin__dot">4</span><span class="pin__label">문제생성 Part1 · 단위 선택</span>
+              </button>
+              <button class="pin" data-prob="4" style="left:4%;top:55%;" aria-label="문제생성 Part2 페이지·문제수 선택 (P4)">
+                <span class="pin__dot">4</span><span class="pin__label">문제생성 Part2 · 페이지·문제수 선택</span>
+              </button>
+              <button class="pin" data-prob="4" style="left:32%;top:78%;" aria-label="문제생성 Part3 단위·과목·유형 선택 (P4)">
+                <span class="pin__dot">4</span><span class="pin__label">문제생성 Part3 · 단위·과목·유형 선택</span>
               </button>
             </div>
           </div>
