@@ -244,7 +244,7 @@
   .hero-grid{ display:grid; grid-template-columns:1.02fr 1.1fr; gap:clamp(32px,5vw,80px); align-items:center; }
   .hero-h1{ font-size:var(--fs-hero); font-weight:var(--wx); letter-spacing:var(--ls-hero); line-height:var(--lh-tight); color:var(--ink-900); word-break:keep-all; margin-bottom:var(--s5); }
   .hero-h1 .grad{ background:linear-gradient(120deg,var(--brand),var(--teal)); -webkit-background-clip:text; background-clip:text; color:transparent; }
-  .hero-sub{ font-size:var(--fs-lead); font-weight:var(--wm); color:var(--ink-500); max-width:32ch; margin-bottom:var(--s6); line-height:1.6; }
+  .hero-sub{ font-size:var(--fs-lead); font-weight:var(--wm); color:var(--ink-500); max-width:min(100%,600px); margin-bottom:var(--s6); line-height:1.6; }
   .hero-media{ position:relative; display:flex; flex-direction:column; align-items:center; gap:clamp(10px,1.4vw,16px); }
   /* macOS/Safari 스타일 브라우저 프레임 (hover 시 긴 화면 자동 스크롤) */
   .hero-device-hint{ display:inline-flex; align-items:center; gap:6px; color:var(--ink-400); font-size:var(--fs-cap); font-weight:var(--wm); letter-spacing:.01em; word-break:keep-all; text-align:center; }
@@ -327,15 +327,17 @@
   .bench-takeaway p{ font-size:var(--fs-lead); font-weight:var(--wsb); color:var(--ink-800); max-width:none; }
 
   /* =====================================================================
-     04 — GOAL
+     04 — GOAL — 한 화면(100vh)에 들어오도록
      ===================================================================== */
-  .goal-quote{ max-width:30ch; margin:0 auto var(--s8); text-align:center; }
+  #goal{ min-height:100vh; display:flex; flex-direction:column; justify-content:center; padding-block:clamp(40px,5vh,88px); }
+  #goal .sec-head{ margin-bottom:clamp(18px,3.4vh,44px); }
+  .goal-quote{ max-width:min(92vw,600px); margin:0 auto clamp(24px,4.2vh,52px); text-align:center; }
   .goal-quote blockquote{ font-size:var(--fs-h2); font-weight:var(--wb); color:var(--ink-900); letter-spacing:-0.02em; line-height:1.4; word-break:keep-all; }
   .goal-quote blockquote b{ color:var(--brand); }
   .goal-quote cite{ display:block; margin-top:var(--s4); font-family:var(--mono); font-size:var(--fs-cap); color:var(--ink-400); font-style:normal; }
   .goal-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:var(--s5); }
   .goal-cell{
-    background:#fff; border:1px solid var(--line); border-radius:var(--r-lg); padding:var(--s7) var(--s6); position:relative;
+    background:#fff; border:1px solid var(--line); border-radius:var(--r-lg); padding:clamp(24px,3.4vh,40px) var(--s6); position:relative;
     transition:transform var(--t2) var(--ease), box-shadow var(--t2) var(--ease), border-color var(--t2) var(--ease);
   }
   .goal-cell:hover{ transform:translateY(-5px); box-shadow:var(--sh3); border-color:var(--line-2); }
@@ -346,17 +348,19 @@
   .goal-cell .solve{ display:inline-block; margin-top:var(--s5); font-family:var(--mono); font-size:11px; font-weight:var(--wb); color:var(--brand); background:rgba(77,101,249,.07); border-radius:var(--r-pill); padding:6px 12px; letter-spacing:.04em; }
 
   /* =====================================================================
-     05 — INSIGHTS (dark)
+     05 — INSIGHTS (dark) — 한 화면(100vh)에 들어오도록
      ===================================================================== */
-  .insight-list{ margin-top:var(--s7); display:flex; flex-direction:column; }
+  #insight{ min-height:100vh; display:flex; flex-direction:column; justify-content:center; padding-block:clamp(72px,9vh,112px); }
+  #insight .sec-head{ margin-bottom:0; }
+  .insight-list{ margin-top:clamp(36px,6.5vh,84px); display:flex; flex-direction:column; }
   .insight-row{
-    display:grid; grid-template-columns:minmax(120px,0.4fr) 1fr; gap:clamp(24px,5vw,72px);
-    align-items:center; padding-block:clamp(40px,6vw,72px); border-top:1px solid var(--line-dark);
+    display:grid; grid-template-columns:auto 1fr; gap:clamp(36px,6vw,104px);
+    align-items:center; padding-block:clamp(14px,2.6vh,34px); border-top:1px solid var(--line-dark);
   }
   .insight-row:last-child{ border-bottom:1px solid var(--line-dark); }
-  .insight-num{ font-family:var(--mono); font-weight:var(--wx); font-size:var(--fs-mega); line-height:.9; color:transparent; -webkit-text-stroke:1.5px rgba(204,234,240,.5); }
-  .insight-row:hover .insight-num{ color:var(--brand); -webkit-text-stroke:1.5px var(--brand); transition:color var(--t3) var(--ease); }
-  .insight-row p{ font-size:clamp(20px,2.4vw,32px); font-weight:var(--wb); color:#fff; line-height:1.4; max-width:24ch; }
+  .insight-num{ font-family:var(--font); font-weight:var(--wx); font-size:clamp(48px,10vh,128px); line-height:.9; color:rgba(204,234,240,.24); letter-spacing:-0.02em; transition:color var(--t3) var(--ease); }
+  .insight-row:hover .insight-num{ color:var(--brand); }
+  .insight-row p{ font-size:clamp(18px,2.6vh,30px); font-weight:var(--wb); color:#fff; line-height:1.38; max-width:none; }
   .insight-row p b{ color:var(--sky); }
 
   /* =====================================================================
@@ -573,10 +577,12 @@
   @media (max-width:760px){
     :root{ --section-y:clamp(72px,13vw,110px); }
     .navc,.chip-live{ display:none; }
+    #goal{ min-height:auto; display:block; padding-block:var(--section-y); }
     .goal-grid{ grid-template-columns:1fr; }
     .exp-grid{ grid-template-columns:1fr; max-width:440px; margin-inline:auto; }
     .prob-cards{ grid-template-columns:1fr; }
     .pin{ display:none; }
+    #insight{ min-height:auto; display:block; padding-block:var(--section-y); }
     .insight-row{ grid-template-columns:1fr; gap:var(--s4); padding-block:var(--s7); }
     .insight-num{ font-size:clamp(56px,18vw,96px); }
     .compare{ grid-template-columns:1fr; gap:var(--s6); }
@@ -735,34 +741,34 @@
       <div class="container container--wide">
         <div class="sec-head" data-reveal>
           <span class="eyebrow"><span class="no">03</span> BENCHMARK</span>
-          <h2 class="sec-title">잘 만든 학습 서비스는, '첫 화면'이 달랐다.</h2>
-          <p class="sec-lead">방향을 잡기 위해 학습 콘텐츠 서비스의 첫 화면을 살펴봤습니다. 공통점은 분명했습니다 — 기능을 늘어놓지 않고, '지금 할 일' 하나를 가장 앞에 둡니다.</p>
+          <h2 class="sec-title">잘 만든 학습 서비스는, 명확했다.</h2>
+          <p class="sec-lead">방향을 잡기 위해 학습 콘텐츠 서비스의 주요 화면을 살펴봤습니다. <br> 학습 유도를 위하여 기능을 늘어놓지 않고, '지금 할 일' 하나를 가장 앞에 둡니다.</p>
         </div>
         <div class="bench-grid">
-          <div class="bench-card" data-reveal>
-            <div class="browser">
-              <div class="browser__bar"><span class="browser__dots"><i></i><i></i><i></i></span><span class="browser__url">reference · 콘텐츠 탐색형</span></div>
-              <div class="browser__body"><img src="./images/source03.png" alt="학습 콘텐츠 탐색형 서비스 레퍼런스 — 검색과 카테고리 중심 구성" /></div>
-            </div>
-            <div class="bench-meta">
-              <span class="bench-name"><span class="k">REF 01</span> 콘텐츠 탐색형</span>
-              <p>상단에 <b>검색·핵심 액션</b>을 크게 배치하고, 리소스는 카테고리로 정리. 첫 화면에서 '무엇을 할 수 있는지'가 한눈에 들어온다.</p>
-            </div>
-          </div>
           <div class="bench-card" data-reveal>
             <div class="browser">
               <div class="browser__bar"><span class="browser__dots"><i></i><i></i><i></i></span><span class="browser__url">reference · 가치 제안형</span></div>
               <div class="browser__body"><img src="./images/source02.png" alt="가치 제안형 학습 서비스 레퍼런스 — 한 줄 메시지와 단일 CTA 중심 구성" /></div>
             </div>
             <div class="bench-meta">
-              <span class="bench-name"><span class="k">REF 02</span> 가치 제안형</span>
-              <p>한 줄의 <b>가치 메시지와 단일 CTA</b>로 시작. 군더더기 없이 핵심 행동 하나로 사용자를 안내한다.</p>
+              <span class="bench-name"><span class="k">REF 01</span> 가치 제안형</span>
+              <p>한 줄의 <b>가치 메시지와 단일 CTA</b>로 시작 하여 군더더기 없이 <br>핵심 행동 하나로 사용자를 안내하는 히어로 페이지를 구성했다.</p>
+            </div>
+          </div>
+          <div class="bench-card" data-reveal>
+            <div class="browser">
+              <div class="browser__bar"><span class="browser__dots"><i></i><i></i><i></i></span><span class="browser__url">reference · 콘텐츠 탐색형</span></div>
+              <div class="browser__body"><img src="./images/source03.png" alt="학습 콘텐츠 탐색형 서비스 레퍼런스 — 검색과 카테고리 중심 구성" /></div>
+            </div>
+            <div class="bench-meta">
+              <span class="bench-name"><span class="k">REF 02</span> 콘텐츠 탐색형</span>
+              <p>상단에 <b>검색·핵심 액션</b>을 크게 배치하고, 좌측에 학습 관련 콘텐츠를 일목요연하게 배치해 학습 시 '무엇을 할 수 있는지'가 한눈에 들어온다.</p>
             </div>
           </div>
         </div>
         <div class="bench-takeaway" data-reveal>
           <span class="lab">Takeaway</span>
-          <p>모두매쓰에 필요한 건 '더 많은 기능'이 아니라, <span style="color:var(--brand)">가장 먼저 보여줄 한 가지</span>를 정하는 일이었다.</p>
+          <p>모두매쓰의 수많은 기능을 분리해 <span style="color:var(--brand)">명확한 사용자 과정</span>을 만들어야 한다.</p>
         </div>
       </div>
     </section>
@@ -787,8 +793,8 @@
           </div>
           <div class="goal-cell goal-cell--accent" data-reveal>
             <span class="goal-idx">GOAL 02</span>
-            <h3>최단 경로 여정</h3>
-            <p>핵심 과업까지의 동선을 짧게 재설계해 긴 사용 과정을 단축한다.</p>
+            <h3>사용자 여정 재설계</h3>
+            <p>핵심 과업까지의 동선을 재설계해 사용 과정에서 불편을 해소한다.</p>
             <span class="solve">P3 해결</span>
           </div>
           <div class="goal-cell" data-reveal>
@@ -811,15 +817,15 @@
         <div class="insight-list">
           <div class="insight-row" data-reveal>
             <div class="insight-num">01</div>
-            <p>사용자는 기능 목록보다 <b>"지금 무엇을 해야 하는가"</b>를 먼저 찾는다.</p>
+            <p>사용자는 기능 목록보다<br><b>"지금 무엇을 해야 하는가"</b>를 먼저 찾는다.</p>
           </div>
           <div class="insight-row" data-reveal>
             <div class="insight-num">02</div>
-            <p>좋은 화면은 기능을 나열하지 않고 <b>핵심 행동 하나</b>를 가장 먼저 보여준다.</p>
+            <p>좋은 화면은 기능을 나열하지 않고<br><b>핵심 행동 하나</b>를 가장 먼저 보여준다.</p>
           </div>
           <div class="insight-row" data-reveal>
             <div class="insight-num">03</div>
-            <p>학습 서비스의 완주는 결국 <b>신뢰의 흐름</b>에서 시작된다.</p>
+            <p>학습 서비스의 완주는 결국<br><b>신뢰의 흐름</b>에서 시작된다.</p>
           </div>
         </div>
       </div>
