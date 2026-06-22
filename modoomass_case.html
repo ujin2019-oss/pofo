@@ -212,59 +212,96 @@
      ===================================================================== */
   .site-header{
     position:fixed; inset:0 0 auto 0; height:var(--header-h); z-index:1000;
-    background:rgba(255,255,255,.7); backdrop-filter:saturate(180%) blur(16px);
-    -webkit-backdrop-filter:saturate(180%) blur(16px); border-bottom:1px solid var(--line);
+    background:rgba(255,255,255,.92); backdrop-filter:saturate(180%) blur(18px);
+    -webkit-backdrop-filter:saturate(180%) blur(18px); border-bottom:1px solid var(--line-2);
+    box-shadow:0 4px 20px rgba(16,18,30,.05);
   }
   .site-header__inner{
     max-width:var(--container-wide); margin-inline:auto; padding-inline:var(--pad-x);
     height:var(--header-h); display:flex; align-items:center; justify-content:space-between; gap:var(--s4);
   }
-  .logo{ font-size:18px; font-weight:var(--wx); letter-spacing:-0.02em; color:var(--ink-900); }
+  .logo{ font-size:19px; font-weight:var(--wx); letter-spacing:-0.02em; color:var(--ink-900); }
   .logo b{ color:var(--brand); }
   .navc{ display:flex; gap:var(--s6); }
-  .navc a{ font-size:15px; font-weight:var(--wsb); color:var(--ink-500); position:relative; padding:6px 2px; transition:color var(--t1) var(--ease); }
+  .navc a{ font-size:16px; font-weight:var(--wsb); color:var(--ink-700); position:relative; padding:6px 2px; transition:color var(--t1) var(--ease); }
   .navc a::after{ content:""; position:absolute; left:0; right:0; bottom:0; height:2px; background:var(--brand); transform:scaleX(0); transform-origin:left; transition:transform var(--t2) var(--ease); }
-  .navc a:hover,.navc a.is-active{ color:var(--ink-900); }
+  .navc a:hover,.navc a.is-active{ color:var(--brand); }
+  .navc a.is-active{ font-weight:var(--wb); }
   .navc a.is-active::after{ transform:scaleX(1); }
   .header-right{ display:flex; align-items:center; gap:var(--s3); }
-  .pill-back{ display:inline-flex; align-items:center; gap:6px; font-size:15px; font-weight:var(--wsb); color:var(--ink-700); border:1px solid var(--line-2); border-radius:var(--r-pill); padding:9px 15px; transition:all var(--t1) var(--ease); }
-  .pill-back:hover{ border-color:var(--brand); color:var(--brand); }
-  .chip-live{ display:inline-flex; align-items:center; gap:5px; font-size:15px; font-weight:var(--wb); color:var(--brand); background:var(--sky); border-radius:var(--r-pill); padding:8px 13px; transition:all var(--t1) var(--ease); }
-  .chip-live:hover{ background:var(--brand); color:#fff; }
+  .pill-back{ display:inline-flex; align-items:center; gap:6px; font-size:15px; font-weight:var(--wb); color:var(--ink-800); border:1px solid var(--line-2); border-radius:var(--r-pill); padding:9px 15px; transition:all var(--t1) var(--ease); }
+  .pill-back:hover{ border-color:var(--brand); color:var(--brand); background:rgba(77,101,249,.05); }
+  .chip-live{ display:inline-flex; align-items:center; gap:5px; font-size:15px; font-weight:var(--wb); color:#fff; background:var(--brand); border-radius:var(--r-pill); padding:9px 15px; box-shadow:var(--sh-glow); transition:all var(--t1) var(--ease); }
+  .chip-live:hover{ background:var(--brand-600); transform:translateY(-1px); }
   .progress-bar{ position:absolute; left:0; bottom:-2px; height:2px; width:100%; background:linear-gradient(90deg,var(--brand),var(--teal)); transform:scaleX(0); transform-origin:left; will-change:transform; }
 
   /* =====================================================================
-     01 — HERO
+     01 — HERO (디자인 시안 재구성 · BEFORE 윈도우 + 태블릿)
      ===================================================================== */
-  #hero{ padding-top:calc(var(--header-h) + clamp(48px,8vw,110px)); padding-bottom:var(--section-y); overflow:hidden;
-    background-color:#F7FAFF;
-    background-image:url(./images/hero_sub.png);
-    background-size:cover; background-position:center; background-repeat:no-repeat;
+  #hero{ position:relative; min-height:100vh; min-height:100svh; display:flex; flex-direction:column; overflow:hidden;
+    padding-top:calc(var(--header-h) + clamp(16px,2.5vh,40px)); padding-bottom:clamp(16px,2vh,32px);
+    background-color:#F4F8FF;
+    background-image:
+      radial-gradient(48% 52% at 92% 14%, rgba(77,101,249,.10), transparent 70%),
+      radial-gradient(40% 44% at 0% 96%, rgba(97,193,204,.08), transparent 72%);
   }
-  .hero-grid{ display:grid; grid-template-columns:1.02fr 1.1fr; gap:clamp(32px,5vw,80px); align-items:stretch; }
-  .hero-copy{ display:flex; flex-direction:column; padding-top:clamp(16px,3vh,40px); }
-  .hero-copy .cta-row{ margin-top:auto; margin-bottom:clamp(48px,8vh,96px); }
-  .hero-h1{ font-size:var(--fs-hero); font-weight:var(--wx); letter-spacing:var(--ls-hero); line-height:var(--lh-tight); color:var(--ink-900); word-break:keep-all; margin-bottom:var(--s5); }
-  .hero-h1 .grad{ background:linear-gradient(120deg,var(--brand),var(--teal)); -webkit-background-clip:text; background-clip:text; color:transparent; }
-  .hero-sub{ font-size:var(--fs-lead); font-weight:var(--wm); color:var(--ink-500); max-width:min(100%,600px); margin-bottom:var(--s6); line-height:1.6; }
-  .hero-media{ position:relative; display:flex; flex-direction:column; align-items:center; gap:clamp(10px,1.4vw,16px); }
-  /* macOS/Safari 스타일 브라우저 프레임 (hover 시 긴 화면 자동 스크롤) */
-  .hero-device-hint{ display:inline-flex; align-items:center; gap:6px; color:var(--ink-400); font-size:var(--fs-cap); font-weight:var(--wm); letter-spacing:.01em; word-break:keep-all; text-align:center; order:2; margin-top:var(--s2); }
-  .hero-device-hint__icon{ font-size:1.1em; line-height:1; animation:hintBounce 1.6s var(--ease-soft) infinite; }
+  #hero > .container{ flex:1 1 auto; display:flex; flex-direction:column; }
   @keyframes hintBounce{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(5px); } }
-  .hero-browser{ width:min(100%,580px); transition:transform var(--t3) var(--ease), box-shadow var(--t3) var(--ease); }
-  .hero-browser:hover{ transform:translateY(-4px); box-shadow:0 50px 100px -28px rgba(24,38,110,.4), 0 14px 34px rgba(16,18,30,.1); }
-  .browser__body--autoscroll{ height:clamp(340px,48vh,470px); overflow:hidden; background:#EDEDED; }
-  .browser__body--autoscroll img{ width:100%; height:100%; object-fit:cover; object-position:center top; transition:object-position 8s linear; }
-  .hero-browser:hover .browser__body--autoscroll img,.hero-browser:focus-within .browser__body--autoscroll img{ object-position:center bottom; }
-  .hero-glow{ position:absolute; inset:-12% -8% -8% -8%; z-index:-1; background:radial-gradient(60% 60% at 70% 30%,rgba(77,101,249,.18),transparent 70%),radial-gradient(50% 50% at 20% 80%,rgba(97,193,204,.16),transparent 70%); filter:blur(20px); }
 
-  .hero-meta{ margin-top:clamp(48px,7vw,96px); }
-  .hero-meta dl{ display:grid; grid-template-columns:repeat(4,1fr); gap:0; border-top:1px solid var(--line); padding-top:var(--s6); }
-  .hero-meta dl > div{ padding-right:var(--s5); padding-left:var(--s5); border-left:1px solid var(--line); }
-  .hero-meta dl > div:first-child{ border-left:none; padding-left:0; }
-  .hero-meta dt{ font-family:var(--mono); font-size:15px; font-weight:var(--wb); letter-spacing:.14em; text-transform:uppercase; color:var(--ink-400); margin-bottom:10px; }
-  .hero-meta dd{ font-weight:var(--wsb); color:var(--ink-800); font-size:var(--fs-body); line-height:1.5; }
+  .hero-top{ position:relative; z-index:1; flex:1 1 auto; display:grid; grid-template-columns:0.86fr 1.14fr; gap:clamp(28px,4vw,64px); align-items:center; }
+  .hero-copy{ display:flex; flex-direction:column; align-items:flex-start; }
+
+  /* 아이브로우 */
+  .hero-eyebrow{ font-family:var(--mono); font-size:15px; font-weight:var(--wb); letter-spacing:.2em;
+    text-transform:uppercase; color:var(--brand); margin-bottom:var(--s5); }
+
+  /* 타이틀 */
+  .hero-title{ font-size:clamp(30px,3.6vw,48px); font-weight:var(--wx); line-height:1.18;
+    letter-spacing:-0.02em; color:var(--ink-900); margin-bottom:var(--s5); word-break:keep-all; }
+  .hero-title .blue{ color:var(--brand); }
+  .hero-sub{ font-size:var(--fs-lead); font-weight:var(--wm); color:var(--ink-500);
+    max-width:min(100%,520px); margin-bottom:var(--s7); line-height:1.6; }
+
+  /* 스탯 카드 */
+  .hero-stats{ display:grid; grid-template-columns:repeat(3,1fr); gap:clamp(12px,1.4vw,18px); width:100%; max-width:560px; }
+  .stat-card{ background:rgba(255,255,255,.78); -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px);
+    border:1px solid var(--line); border-radius:var(--r-lg); padding:clamp(16px,1.6vw,22px); box-shadow:var(--sh2);
+    transition:transform var(--t2) var(--ease), box-shadow var(--t2) var(--ease); }
+  .stat-card:hover{ transform:translateY(-4px); box-shadow:var(--sh3); }
+  .stat-card__ico{ width:38px; height:38px; border-radius:var(--r-md); background:var(--mist); color:var(--brand);
+    display:grid; place-items:center; margin-bottom:var(--s4); }
+  .stat-card__ico svg{ width:19px; height:19px; }
+  .stat-card__num{ font-size:clamp(26px,2.8vw,36px); font-weight:var(--wx); color:var(--brand); line-height:1; letter-spacing:-0.02em; }
+  .stat-card__label{ font-size:var(--fs-body); font-weight:var(--wb); color:var(--ink-900); margin-top:8px; }
+  .stat-card__desc{ font-size:13px; color:var(--ink-400); margin-top:5px; line-height:1.4; word-break:keep-all; }
+
+  /* 우측 비주얼 — BEFORE 윈도우 + 태블릿(AFTER) */
+  .hero-visual{ position:relative; min-height:clamp(460px,48vw,620px); }
+  /* BEFORE · AFTER — 동일한 검은 프레임, 동일 크기로 대각선 겹침 */
+  .hv-device{ position:absolute; width:52%; min-width:190px;
+    transition:transform var(--t3) var(--ease), box-shadow var(--t3) var(--ease); }
+  .hv-before{ left:0; top:0; z-index:1; }
+  .hv-tablet{ right:0; top:16%; z-index:2; }
+  .hv-device__frame{ background:#0B0D14; border-radius:30px; padding:13px 11px;
+    box-shadow:var(--sh-float), 0 0 0 1.5px rgba(255,255,255,.06) inset; }
+  .hv-device__screen{ border-radius:16px; overflow:hidden; background:#fff; aspect-ratio:3/4; }
+  .hv-device__screen img{ width:100%; height:100%; object-fit:cover; object-position:center top;
+    transition:object-position 7s linear; }
+  /* BEFORE / AFTER 라벨 — 프레임 위로 띄움 */
+  .hv-device__tag{ position:absolute; top:-14px; right:18px; z-index:7;
+    font-family:var(--mono); font-size:13px; font-weight:var(--wb); letter-spacing:.14em; color:#fff;
+    padding:7px 16px; border-radius:var(--r-pill); box-shadow:var(--sh3); }
+  .hv-device__tag--before{ background:var(--danger); }
+  .hv-device__tag--after{ background:var(--brand); }
+  /* 호버 — 해당 화면이 앞으로 나오며 살짝 확대 + 전체 화면이 위→아래로 흐름 */
+  .hv-device:hover,.hv-device:focus-within{ z-index:6; transform:scale(1.06) translateY(-6px); }
+  .hv-device:hover .hv-device__screen img,
+  .hv-device:focus-within .hv-device__screen img{ object-position:center bottom; }
+
+  /* 스크롤 안내 */
+  .hero-scroll{ position:relative; z-index:1; flex:none; display:flex; flex-direction:column; align-items:center; gap:8px; margin-top:clamp(12px,2vh,24px);
+    color:var(--brand); font-family:var(--mono); font-size:13px; font-weight:var(--wb); letter-spacing:.22em; }
+  .hero-scroll svg{ width:18px; height:18px; animation:hintBounce 1.6s var(--ease-soft) infinite; }
 
   /* =====================================================================
      02 — PROBLEM (dark, annotated)
@@ -632,11 +669,8 @@
      RESPONSIVE
      ===================================================================== */
   @media (max-width:1100px){
-    .hero-grid{ grid-template-columns:1fr; gap:var(--s8); }
-    .hero-media{ order:-1; }
-    .hero-browser{ width:min(100%,520px); }
-    .hero-meta dl{ grid-template-columns:repeat(2,1fr); gap:var(--s5) 0; }
-    .hero-meta dl > div:nth-child(3){ border-left:none; padding-left:0; }
+    .hero-top{ grid-template-columns:1fr; gap:clamp(40px,7vw,72px); }
+    .hero-visual{ order:-1; min-height:clamp(440px,90vw,620px); max-width:560px; margin-inline:auto; width:100%; }
     .prob-cards{ grid-template-columns:repeat(2,1fr); }
     .bench-grid{ grid-template-columns:1fr; gap:var(--s8); }
     .ds-row{ grid-template-columns:1fr; }
@@ -651,6 +685,10 @@
     .goal-grid{ grid-template-columns:1fr; }
     .exp-grid{ grid-template-columns:1fr; max-width:440px; margin-inline:auto; }
     .prob-cards{ grid-template-columns:1fr; }
+    /* 히어로 — 모바일 */
+    .hero-stats{ grid-template-columns:repeat(3,1fr); gap:10px; }
+    .stat-card{ padding:14px; }
+    .stat-card__desc{ font-size:12px; }
     .pin{ display:none; }
     #insight{ min-height:auto; display:block; padding-block:var(--section-y); }
     .insight-row{ grid-template-columns:1fr; gap:var(--s4); padding-block:var(--s7); }
@@ -674,13 +712,12 @@
     :root{ --pad-x:18px; }
     .swatches{ grid-template-columns:repeat(3,1fr); }
     .comp-grid{ grid-template-columns:1fr; }
-    .hero-meta dl{ grid-template-columns:1fr; }
-    .hero-meta dl > div{ border-left:none; padding-left:0; }
+    .hero-stats{ grid-template-columns:1fr; }
   }
   @media (prefers-reduced-motion:reduce){
     html{ scroll-behavior:auto; } *{ animation:none !important; }
     [data-reveal],[data-reveal-scale]{ opacity:1 !important; transform:none !important; }
-    .browser__body--autoscroll img{ transition:none; }
+    .browser__body--autoscroll img,.hv-device__screen img{ transition:none; }
   }
   </style>
 </head>
@@ -709,36 +746,57 @@
     <!-- ============ 01 HERO ============ -->
     <section id="hero" class="sec--mesh">
       <div class="container container--wide">
-        <div class="hero-grid">
+        <div class="hero-top">
+          <!-- 좌측: 카피 -->
           <div class="hero-copy">
-            <span class="eyebrow" data-reveal><span class="no">01 PROJECT</span> UX CASE STUDY</span>
-            <h1 class="hero-h1" data-reveal>모두매쓰<br><span class="grad">UI/UX 리뉴얼</span></h1>
-            <p class="hero-sub" data-reveal>한 화면에 모든 기능을 쏟아붓던 AI 수학 학습 서비스를, <br>사용자가 길을 잃지 않는 경험으로 다시 설계했습니다.</p>
-            <div class="cta-row" data-reveal>
-              <a class="btn btn--primary" href="https://ujin2019-oss.github.io/modoomath/" target="_blank" rel="noopener">Live Site ↗</a>
-              <a class="btn btn--ghost" href="#problem">개선 과정 보기 ↓</a>
+            <span class="hero-eyebrow" data-reveal>PROJECT 01</span>
+            <h1 class="hero-title" data-reveal><span class="blue">UIUX 개선 프로젝트</span><br>AI 생성 맞춤형 수학 학습 사이트</h1>
+            <p class="hero-sub" data-reveal>복잡한 기능 중심 구조를 사용자 중심 경험으로 개선하여
+초중고 학생 누구나 쉽게 학습을 시작할 수 있도록 했습니다.</p>
+
+            <div class="hero-stats" data-reveal>
+              <div class="stat-card">
+                <span class="stat-card__ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v9l7 4"/><circle cx="12" cy="12" r="9"/></svg></span>
+                <div class="stat-card__num">40%</div>
+                <div class="stat-card__label">기획</div>
+                <p class="stat-card__desc">사용자 분석 · 정보 구조 설계</p>
+              </div>
+              <div class="stat-card">
+                <span class="stat-card__ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></span>
+                <div class="stat-card__num">30%</div>
+                <div class="stat-card__label">디자인</div>
+                <p class="stat-card__desc">UIUX 디자인 · 프로토타입</p>
+              </div>
+              <div class="stat-card">
+                <span class="stat-card__ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m16 18 6-6-6-6"/><path d="m8 6-6 6 6 6"/></svg></span>
+                <div class="stat-card__num">100%</div>
+                <div class="stat-card__label">퍼블리싱</div>
+                <p class="stat-card__desc">HTML · CSS · JS 구현</p>
+              </div>
             </div>
           </div>
-          <div class="hero-media" data-reveal-scale>
-            <div class="hero-glow" aria-hidden="true"></div>
-            <p class="hero-device-hint"><span class="hero-device-hint__icon" aria-hidden="true">↕</span> 화면에 마우스를 올리면 자동으로 스크롤됩니다.</p>
-            <div class="browser hero-browser" tabindex="0" aria-label="모두매쓰 리뉴얼 후 화면 — 전체 스크롤">
-              <div class="browser__bar"><span class="browser__dots"><i></i><i></i><i></i></span>
-                <span class="browser__url"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>modoomath.app</span></div>
-              <div class="browser__body browser__body--autoscroll"><img src="./images/modoo_After_scroll.png" alt="모두매쓰 리뉴얼 후 화면 — 전체 스크롤" /></div>
+
+          <!-- 우측: BEFORE 윈도우 + 태블릿(AFTER) -->
+          <div class="hero-visual" data-reveal-scale>
+            <figure class="hv-before hv-device" tabindex="0" aria-label="모두매쓰 기존 전체 화면 — 마우스를 올리면 스크롤됩니다">
+              <span class="hv-device__tag hv-device__tag--before">BEFORE</span>
+              <div class="hv-device__frame">
+                <div class="hv-device__screen"><img src="./images/modoo_Before_scroll.png" alt="모두매쓰 기존 전체 화면 — 복잡한 기능 중심 구조" /></div>
+              </div>
+            </figure>
+            <div class="hv-tablet hv-device" tabindex="0" aria-label="모두매쓰 리뉴얼 후 전체 화면 — 마우스를 올리면 스크롤됩니다">
+              <span class="hv-device__tag hv-device__tag--after">AFTER</span>
+              <div class="hv-device__frame">
+                <div class="hv-device__screen"><img src="./images/modoo_After_scroll.png" alt="모두매쓰 리뉴얼 후 전체 화면 — 사용자 중심의 명확한 경험" /></div>
+              </div>
             </div>
           </div>
         </div>
 
-        <div class="hero-meta" data-reveal>
-          <dl>
-            <div><dt>Role</dt><dd>·  전체 기획안 작성<br>·  문제풀이 화면디자인<br>·  UX개선
-전체 퍼블리싱</dd></div>
-            <div><dt>Contribution</dt><dd>기획 40% · 디자인 30% ·<br> 퍼블리싱 100%</dd></div>
-            <div><dt>Duration</dt><dd>5 Days (집중 작업)</dd></div>
-            <div><dt>Stack</dt><dd>Figma · HTML · CSS · JS</dd></div>
-          </dl>
-        </div>
+        <a class="hero-scroll" href="#problem" data-reveal>
+          SCROLL
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+        </a>
       </div>
     </section>
 
