@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!--
   =====================================================================
-  모두매쓰(MODOOMASS) — AI 기반 맞춤 수학 학습 서비스 / UI·UX 리뉴얼
+  모두매쓰(MODOOMATH) — AI 기반 맞춤 수학 학습 서비스 / UI·UX 리뉴얼
   UX Case Study — 이미지 중심 전면 리디자인 (Apple × Linear)
   단일 자급식 HTML5 · Vanilla CSS/JS · Pretendard + GSAP/ScrollTrigger
   =====================================================================
@@ -59,7 +59,7 @@
 
     /* Spacing */
     --s1:4px; --s2:8px; --s3:12px; --s4:16px; --s5:24px; --s6:32px; --s7:48px; --s8:72px; --s9:104px;
-    --section-y:clamp(96px,14vw,200px);
+    --section-y:clamp(48px,7vw,100px);
     --pad-x:clamp(20px,5vw,64px);
     --container:1280px; --container-wide:1440px;
 
@@ -121,7 +121,7 @@
     margin-bottom:var(--s5);
   }
   .eyebrow .no{ color:var(--brand); }
-  .eyebrow::before{ content:""; width:22px; height:1.5px; background:var(--line-2); display:inline-block; }
+  .eyebrow::before{ display:none; }
   .sec--dark .eyebrow{ color:rgba(255,255,255,.6); }
   .sec--dark .eyebrow .no{ color:var(--sky); }
   .sec--dark .eyebrow::before{ background:rgba(255,255,255,.24); }
@@ -210,12 +210,26 @@
   /* =====================================================================
      HEADER
      ===================================================================== */
-  .site-header{
-    position:fixed; inset:0 0 auto 0; height:var(--header-h); z-index:1000;
-    background:rgba(255,255,255,.92); backdrop-filter:saturate(180%) blur(18px);
-    -webkit-backdrop-filter:saturate(180%) blur(18px); border-bottom:1px solid var(--line-2);
-    box-shadow:0 4px 20px rgba(16,18,30,.05);
-  }
+  .site-header{ display:none; }
+
+  /* 플로팅 메뉴 (우측 하단) — 원형 아이콘, 호버 시 텍스트 펼침 */
+  .float-menu{ position:fixed; right:clamp(16px,2.4vw,32px); bottom:clamp(16px,2.4vw,32px); z-index:1000;
+    display:flex; flex-direction:column; align-items:flex-end; gap:12px; }
+  .float-menu__btn{ display:inline-flex; align-items:center; height:56px; border-radius:28px; overflow:hidden;
+    box-shadow:var(--sh3); transition:transform var(--t2) var(--ease), background var(--t2) var(--ease),
+      border-color var(--t2) var(--ease), color var(--t2) var(--ease), box-shadow var(--t2) var(--ease); }
+  .float-menu__btn:hover{ transform:translateY(-2px); }
+  .fab__icon{ width:56px; height:56px; flex:none; display:grid; place-items:center; }
+  .fab__icon svg{ width:22px; height:22px; }
+  .fab__label{ max-width:0; opacity:0; white-space:nowrap; font-size:15px; font-weight:var(--wb);
+    padding-left:0; transition:max-width var(--t3) var(--ease), opacity var(--t2) var(--ease), padding var(--t3) var(--ease); }
+  .float-menu__btn:hover .fab__label,
+  .float-menu__btn:focus-visible .fab__label{ max-width:220px; opacity:1; padding-left:20px; }
+  .float-menu__btn--ghost{ background:rgba(255,255,255,.94); -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px);
+    color:var(--ink-800); border:1px solid var(--line-2); }
+  .float-menu__btn--ghost:hover{ border-color:var(--brand); color:var(--brand); }
+  .float-menu__btn--live{ background:var(--brand); color:#fff; box-shadow:var(--sh-glow); }
+  .float-menu__btn--live:hover{ background:var(--brand-600); }
   .site-header__inner{
     max-width:var(--container-wide); margin-inline:auto; padding-inline:var(--pad-x);
     height:var(--header-h); display:flex; align-items:center; justify-content:space-between; gap:var(--s4);
@@ -239,7 +253,7 @@
      01 — HERO (디자인 시안 재구성 · BEFORE 윈도우 + 태블릿)
      ===================================================================== */
   #hero{ position:relative; min-height:100vh; min-height:100svh; display:flex; flex-direction:column; overflow:hidden;
-    padding-top:calc(var(--header-h) + clamp(16px,2.5vh,40px)); padding-bottom:clamp(16px,2vh,32px);
+    padding-top:clamp(20px,3vh,48px); padding-bottom:clamp(16px,2vh,32px);
     background-color:#F4F8FF;
     background-image:
       radial-gradient(48% 52% at 92% 14%, rgba(77,101,249,.10), transparent 70%),
@@ -252,8 +266,10 @@
   .hero-copy{ display:flex; flex-direction:column; align-items:flex-start; }
 
   /* 아이브로우 */
-  .hero-eyebrow{ font-family:var(--mono); font-size:15px; font-weight:var(--wb); letter-spacing:.2em;
-    text-transform:uppercase; color:var(--brand); margin-bottom:var(--s5); }
+  .hero-eyebrow{ display:inline-flex; align-items:center; gap:var(--s3);
+    font-family:var(--mono); font-size:15px; font-weight:var(--wb); letter-spacing:.16em;
+    text-transform:uppercase; color:var(--ink-400); margin-bottom:var(--s5); }
+  .hero-eyebrow .no{ color:var(--brand); }
 
   /* 타이틀 */
   .hero-title{ font-size:clamp(30px,3.6vw,48px); font-weight:var(--wx); line-height:1.18;
@@ -679,7 +695,7 @@
     .tool-groups{ grid-template-columns:1fr; }
   }
   @media (max-width:760px){
-    :root{ --section-y:clamp(72px,13vw,110px); }
+    :root{ --section-y:clamp(36px,6.5vw,55px); }
     .navc,.chip-live{ display:none; }
     #goal{ min-height:auto; display:block; padding-block:var(--section-y); }
     .goal-grid{ grid-template-columns:1fr; }
@@ -741,6 +757,18 @@
     <div class="progress-bar" id="progressBar" aria-hidden="true"></div>
   </header>
 
+  <!-- ============ 플로팅 메뉴 (우측 하단) ============ -->
+  <div class="float-menu" aria-label="바로가기">
+    <a class="float-menu__btn float-menu__btn--ghost" href="./index.html#design3" aria-label="모두매쓰 파트로 가기">
+      <span class="fab__label">메인으로 가기</span>
+      <span class="fab__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M19 12H5M11 6l-6 6 6 6"/></svg></span>
+    </a>
+    <a class="float-menu__btn float-menu__btn--live" href="https://ujin2019-oss.github.io/modoomath/" target="_blank" rel="noopener" aria-label="웹사이트 보기">
+      <span class="fab__label">웹사이트 보기</span>
+      <span class="fab__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
+    </a>
+  </div>
+
   <main>
 
     <!-- ============ 01 HERO ============ -->
@@ -749,8 +777,8 @@
         <div class="hero-top">
           <!-- 좌측: 카피 -->
           <div class="hero-copy">
-            <span class="hero-eyebrow" data-reveal>PROJECT 01</span>
-            <h1 class="hero-title" data-reveal><span class="blue">UIUX 개선 프로젝트</span><br>AI 생성 맞춤형 수학 학습 사이트</h1>
+            <span class="hero-eyebrow" data-reveal><span class="no">01</span> Project Summary</span>
+            <h1 class="hero-title" data-reveal><span class="blue">UIUX 개선 프로젝트</span><br>AI 생성형 수학 학습 사이트</h1>
             <p class="hero-sub" data-reveal>복잡한 기능 중심 구조를 사용자 중심 경험으로 개선하여
 초중고 학생 누구나 쉽게 학습을 시작할 수 있도록 했습니다.</p>
 
@@ -1199,7 +1227,6 @@
               <span class="tool-cat">Develop</span>
               <div class="chips">
                 <span class="tool-chip"><img src="./images/ico_vs.png" alt="" />VS Code</span>
-                <span class="tool-chip"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.6.5.5 5.6.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.2.8-.5v-2c-3.2.7-3.9-1.4-3.9-1.4-.5-1.3-1.3-1.7-1.3-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.7 1.3 3.4 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17 4.6 18 4.9 18 4.9c.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.3c0 .3.2.6.8.5 4.6-1.5 7.9-5.8 7.9-10.9C23.5 5.6 18.4.5 12 .5z"/></svg>GitHub</span>
                 <span class="tool-chip"><span class="lettermark lm-html">HTML</span>HTML</span>
                 <span class="tool-chip"><span class="lettermark lm-css">CSS</span>CSS</span>
                 <span class="tool-chip"><span class="lettermark lm-js">JS</span>JavaScript</span>
@@ -1209,7 +1236,7 @@
               <span class="tool-cat">Deploy</span>
               <div class="chips">
                 <span class="tool-chip"><img src="./images/ico_clau.png" alt="" />Claude Code</span>
-                <span class="tool-chip"><img src="./images/ico_fire.png" alt="" />Firebase</span>
+                <span class="tool-chip"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.6.5.5 5.6.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.2.8-.5v-2c-3.2.7-3.9-1.4-3.9-1.4-.5-1.3-1.3-1.7-1.3-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.7 1.3 3.4 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17 4.6 18 4.9 18 4.9c.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.3c0 .3.2.6.8.5 4.6-1.5 7.9-5.8 7.9-10.9C23.5 5.6 18.4.5 12 .5z"/></svg>GitHub</span>
               </div>
             </div>
           </div>
@@ -1267,8 +1294,8 @@
           <p>좋은 UX는 기능을 나열하는 게 아니라, 사용자가 <em>목표에 가장 빨리 닿도록 돕는 것</em>이었습니다. 모두매쓰의 메인은 모든 걸 보여주려다, 정작 아무것도 안내하지 못하고 있었습니다.</p>
           <p>이번 리뉴얼에서 가장 큰 결정은 '추가'가 아니라 '제거'였습니다 — 중복 버튼을 지우고, 핵심 행동 하나를 가장 앞에 두는 것. 사용자를 위한 디자인은 결국 선택과 절제의 문제임을 배웠습니다.</p>
           <div class="cta-row retro-cta">
-            <a class="btn btn--primary" href="https://ujin2019-oss.github.io/modoomath/" target="_blank" rel="noopener">라이브 사이트 보기 ↗</a>
-            <a class="btn btn--ghost" href="./index.html">← 포트폴리오로 돌아가기</a>
+            <a class="btn btn--ghost" href="./index.html#design3">← 포트폴리오로 돌아가기</a>
+            <a class="btn btn--primary" href="https://ujin2019-oss.github.io/modoomath/" target="_blank" rel="noopener">모두매쓰 사이트 가기 ↗</a>
           </div>
         </div>
       </div>

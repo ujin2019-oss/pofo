@@ -316,13 +316,48 @@
        위치를 계산할 수 있도록 "components:loaded" 이벤트를 기다립니다.
      - 보장용으로 DOMContentLoaded 시점에도 한 번 실행합니다.
      ----------------------------------------------------------- */
+  /* -----------------------------------------------------------
+     해시(#섹션)로 진입한 경우 처리
+     - 케이스 페이지에서 "포트폴리오로 돌아가기" 등으로 #design3 같은
+       앵커로 들어오면, 슬로건 섹션 pin/이미지 로드로 레이아웃 길이가
+       바뀌어 브라우저의 기본 점프가 빗나갑니다(최상단으로 밀림).
+     - ScrollTrigger.refresh() 로 위치 계산이 끝난 뒤, 헤더 높이만큼
+       보정해 해당 섹션으로 다시 스크롤합니다.
+     ----------------------------------------------------------- */
+  function scrollToHashTarget() {
+    const hash = window.location.hash;
+    if (!hash || hash.length < 2) return;
+    let target;
+    try {
+      target = document.querySelector(hash);
+    } catch (e) {
+      return;
+    }
+    if (!target) return;
+    // 핀/이미지 로드 후 위치가 안정되도록 약간 지연한 뒤 측정
+    setTimeout(() => {
+      if (window.ScrollTrigger) ScrollTrigger.refresh();
+      const header = document.getElementById("header");
+      const offset = header ? header.offsetHeight : 0;
+      const y =
+        target.getBoundingClientRect().top + window.pageYOffset - offset - 8;
+      window.scrollTo({ top: Math.max(0, y), behavior: "smooth" });
+    }, 220);
+  }
+
   let started = false;
+  function afterLoad() {
+    if (window.ScrollTrigger) ScrollTrigger.refresh();
+    scrollToHashTarget();
+  }
   function startOnce() {
     if (started) return;
     started = true;
     init();
-    if (window.ScrollTrigger) {
-      window.addEventListener("load", () => ScrollTrigger.refresh());
+    if (document.readyState === "complete") {
+      afterLoad();
+    } else {
+      window.addEventListener("load", afterLoad);
     }
   }
 

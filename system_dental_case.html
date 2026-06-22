@@ -55,10 +55,11 @@
       --lh-tight: 1.12; --lh-normal: 1.6; --lh-loose: 1.85;
 
       /* 레이아웃 / 여백 (Apple 스타일: 넓게) */
-      --section-gap: clamp(84px, 13vw, 184px);
+      --section-gap: clamp(42px, 6.5vw, 92px);
       --block-gap: clamp(30px, 4.5vw, 60px);
-      --pad-x: clamp(20px, 5.5vw, 96px);
-      --container: 1240px;
+      --pad-x: clamp(20px, 5vw, 64px);
+      --container: 1280px;
+      --container-wide: 1440px;
 
       /* 8px Grid 기반 라운드 */
       --radius-sm: 12px; --radius-md: 20px; --radius-lg: 32px; --radius-pill: 999px;
@@ -85,13 +86,14 @@
        3) 공통
        ================================================================= */
     .container { width: 100%; max-width: var(--container); margin: 0 auto; padding-left: var(--pad-x); padding-right: var(--pad-x); }
+    .container--wide { max-width: var(--container-wide); }
     .section { padding-top: var(--section-gap); padding-bottom: var(--section-gap); }
     .section--soft { background: var(--color-bg-soft); }
     .section--gray { background: var(--color-light-gray); }
     .section--ink { background: var(--color-deep); color: #fff; }
 
     .label { display: inline-flex; align-items: center; gap: 10px; font-size: var(--fs-small); font-weight: var(--fw-bold); letter-spacing: 0.2em; text-transform: uppercase; color: var(--color-burgundy); margin-bottom: 20px; }
-    .label::before { content: ""; width: 28px; height: 2px; background: var(--color-burgundy); }
+    .label::before { display: none; }
     .section--ink .label { color: var(--color-soft-red); }
     .section--ink .label::before { background: var(--color-soft-red); }
     .title { font-size: var(--fs-h1); font-weight: var(--fw-black); line-height: var(--lh-tight); letter-spacing: -0.025em; word-break: keep-all; }
@@ -115,7 +117,21 @@
     /* =================================================================
        HEADER / FOOTER
        ================================================================= */
-    .site-header { position: fixed; top: 0; left: 0; width: 100%; height: var(--header-h); display: flex; align-items: center; z-index: 1000; background: rgba(255,255,255,0.82); backdrop-filter: saturate(180%) blur(14px); -webkit-backdrop-filter: saturate(180%) blur(14px); border-bottom: 1px solid var(--color-line); }
+    .site-header { display: none; }
+
+    /* 플로팅 메뉴 (우측 하단) — 원형 아이콘, 호버 시 텍스트 펼침 */
+    .float-menu { position: fixed; right: clamp(16px, 2.4vw, 32px); bottom: clamp(16px, 2.4vw, 32px); z-index: 1000; display: flex; flex-direction: column; align-items: flex-end; gap: 12px; }
+    .float-menu__btn { display: inline-flex; align-items: center; height: 56px; border-radius: 28px; overflow: hidden; box-shadow: var(--shadow-card); transition: transform .25s var(--ease), background-color .25s, border-color .25s, color .25s; }
+    .float-menu__btn:hover { transform: translateY(-2px); }
+    .fab__icon { width: 56px; height: 56px; flex: none; display: grid; place-items: center; }
+    .fab__icon svg { width: 22px; height: 22px; }
+    .fab__label { max-width: 0; opacity: 0; white-space: nowrap; font-size: var(--fs-small); font-weight: var(--fw-bold); padding-left: 0; transition: max-width .5s var(--ease), opacity .3s var(--ease), padding .5s var(--ease); }
+    .float-menu__btn:hover .fab__label, .float-menu__btn:focus-visible .fab__label { max-width: 220px; opacity: 1; padding-left: 20px; }
+    .float-menu__btn--ghost { background: rgba(255,255,255,0.95); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); color: var(--color-text); border: 1px solid var(--color-line); }
+    .float-menu__btn--ghost:hover { border-color: var(--color-burgundy); color: var(--color-burgundy); }
+    .float-menu__btn--live { background: var(--color-burgundy); color: #fff; }
+    .float-menu__btn--live:hover { background: var(--color-soft-red); }
+
     .site-header__inner { display: flex; align-items: center; justify-content: space-between; width: 100%; }
     .site-header__logo { font-size: var(--fs-h3); font-weight: var(--fw-black); letter-spacing: -0.02em; }
     .site-header__logo b { color: var(--color-burgundy); }
@@ -134,17 +150,52 @@
     .site-footer__copy { width: 100%; margin-top: 36px; padding-top: 22px; border-top: 1px solid rgba(255,255,255,0.14); font-size: var(--fs-small); color: rgba(255,255,255,0.45); }
 
     /* =================================================================
-       01) HERO
+       01) HERO — 풀 뷰포트, BEFORE/AFTER 디바이스 콜라주
        ================================================================= */
-    .hero { padding-top: calc(var(--header-h) + clamp(48px, 9vw, 130px)); padding-bottom: var(--section-gap); }
-    .hero__grid { display: grid; grid-template-columns: 1fr; gap: var(--block-gap); align-items: center; }
-    .hero__title { font-size: var(--fs-display); font-weight: var(--fw-black); line-height: 1.04; letter-spacing: -0.035em; word-break: keep-all; }
+    .hero { position: relative; min-height: 100vh; min-height: 100svh; display: flex; flex-direction: column; overflow: hidden;
+      padding-top: clamp(20px, 3vh, 48px); padding-bottom: clamp(16px, 2vh, 32px);
+      background:
+        radial-gradient(46% 50% at 92% 14%, rgba(161,45,46,0.08), transparent 70%),
+        radial-gradient(40% 44% at 0% 96%, rgba(211,59,59,0.06), transparent 72%),
+        var(--color-bg); }
+    .hero > .container { flex: 1 1 auto; display: flex; flex-direction: column; }
+    .hero__top { flex: 1 1 auto; display: grid; grid-template-columns: 1fr; gap: var(--block-gap); align-items: center; }
+    .hero__copy { display: flex; flex-direction: column; align-items: flex-start; }
+    .hero__eyebrow { display: inline-flex; align-items: center; gap: 12px; font-size: 15px; font-weight: var(--fw-bold); letter-spacing: 0.16em; text-transform: uppercase; color: var(--color-burgundy); margin-bottom: 24px; }
+    .hero__eyebrow .no { color: var(--color-burgundy); }
+    .hero__title { font-size: clamp(30px, 3.6vw, 48px); font-weight: var(--fw-black); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 24px; word-break: keep-all; }
     .hero__title em { font-style: normal; background: var(--gradient-brand); -webkit-background-clip: text; background-clip: text; color: transparent; }
-    .hero__desc { margin-top: 24px; max-width: 48ch; color: var(--color-text-muted); line-height: var(--lh-loose); word-break: keep-all; }
-    .hero__meta { display: grid; grid-template-columns: 1fr 1fr; gap: 24px 28px; margin-top: var(--block-gap); padding-top: 30px; border-top: 1px solid var(--color-line); }
-    .hero__meta dt { font-size: var(--fs-small); font-weight: var(--fw-bold); letter-spacing: 0.06em; color: var(--color-burgundy); margin-bottom: 8px; }
-    .hero__meta dd { font-size: var(--fs-small); font-weight: var(--fw-medium); line-height: 1.8; }
-    .hero__mock .img-slot { box-shadow: var(--shadow-card); }
+    .hero__desc { font-size: clamp(17px, 1.35vw, 22px); font-weight: var(--fw-medium); margin-bottom: 48px; max-width: 520px; color: var(--color-text-muted); line-height: 1.6; word-break: keep-all; }
+    /* 스탯 카드 */
+    .hero__stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(12px, 1.4vw, 18px); width: 100%; max-width: 560px; }
+    .hstat { background: var(--color-white); border: 1px solid var(--color-line); border-radius: var(--radius-md); padding: clamp(16px, 1.6vw, 22px); box-shadow: var(--shadow-soft); transition: transform .3s var(--ease), box-shadow .3s; }
+    .hstat:hover { transform: translateY(-4px); box-shadow: var(--shadow-card); }
+    .hstat__ico { width: 38px; height: 38px; border-radius: var(--radius-sm); background: var(--color-light-gray); color: var(--color-burgundy); display: grid; place-items: center; margin-bottom: 16px; }
+    .hstat__ico svg { width: 19px; height: 19px; }
+    .hstat__num { font-size: clamp(26px, 2.8vw, 36px); font-weight: var(--fw-black); color: var(--color-burgundy); line-height: 1; letter-spacing: -0.02em; }
+    .hstat__label { font-size: clamp(16px, 1.2vw, 18px); font-weight: var(--fw-bold); color: var(--color-text); margin-top: 8px; }
+    .hstat__desc { font-size: 13px; color: var(--color-text-muted); margin-top: 5px; line-height: 1.4; word-break: keep-all; }
+    /* 우측 디바이스 콜라주 (BEFORE 뒤 / AFTER 앞, 대각선 겹침) */
+    .hero__visual { position: relative; min-height: clamp(460px, 48vw, 620px); }
+    .hv-device { position: absolute; width: 52%; min-width: 190px; transition: transform .6s var(--ease), box-shadow .6s var(--ease); }
+    .hv-before { left: 0; top: 0; z-index: 1; }
+    .hv-after { right: 0; top: 16%; z-index: 2; }
+    .hv-device__frame { background: #1B1614; border-radius: 30px; padding: 13px 11px; box-shadow: var(--shadow-card), 0 0 0 1.5px rgba(255,255,255,0.06) inset; }
+    .hv-device__screen { border-radius: 16px; overflow: hidden; background: #fff; aspect-ratio: 3 / 4; }
+    .hv-device__screen img { width: 100%; height: 100%; object-fit: cover; object-position: center top; transition: object-position 7s linear; }
+    .hv-device:hover, .hv-device:focus-within { z-index: 6; transform: scale(1.06) translateY(-6px); }
+    .hv-device:hover .hv-device__screen img, .hv-device:focus-within .hv-device__screen img { object-position: center bottom; }
+    .hv-device__tag { position: absolute; top: -14px; right: 18px; z-index: 7; font-size: var(--fs-small); font-weight: var(--fw-bold); letter-spacing: 0.14em; color: #fff; padding: 7px 16px; border-radius: var(--radius-pill); box-shadow: var(--shadow-soft); }
+    .hv-device__tag--before { background: var(--color-text-muted); }
+    .hv-device__tag--after { background: var(--color-burgundy); }
+    /* 스크롤 안내 */
+    .hero__scroll { flex: none; display: flex; flex-direction: column; align-items: center; gap: 8px; margin-top: clamp(12px, 2vh, 24px); color: var(--color-burgundy); font-size: var(--fs-small); font-weight: var(--fw-bold); letter-spacing: 0.22em; }
+    .hero__scroll svg { width: 18px; height: 18px; animation: dHintBounce 1.6s var(--ease) infinite; }
+    @keyframes dHintBounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(5px); } }
+    @media (prefers-reduced-motion: reduce) { .hv-device__screen img { transition: none; } .hero__scroll svg { animation: none; } }
+    @media (min-width: 1101px) { .hero__top { grid-template-columns: 0.86fr 1.14fr; gap: clamp(28px, 4vw, 64px); } }
+    @media (max-width: 1100px) { .hero__visual { order: -1; min-height: clamp(440px, 90vw, 620px); max-width: 560px; margin-inline: auto; width: 100%; } }
+    @media (max-width: 480px) { .hero__stats { grid-template-columns: 1fr; } }
 
     /* =================================================================
        02) WHY THIS PROJECT (stats)
@@ -288,11 +339,12 @@
     /* =================================================================
        12) RETROSPECTIVE
        ================================================================= */
-    .retro { text-align: center; }
-    .retro__quote { max-width: 24ch; margin: 0 auto; font-size: clamp(24px,4vw,46px); font-weight: var(--fw-black); line-height: 1.4; letter-spacing: -0.02em; word-break: keep-all; }
+    .retro__wrap { max-width: 64ch; margin-inline: auto; }
+    .retro__rule { width: 60px; height: 3px; background: var(--gradient-brand); border-radius: 3px; margin-bottom: 32px; }
+    .retro__quote { margin: 0 0 24px; font-size: clamp(28px, 3.6vw, 52px); font-weight: var(--fw-black); line-height: 1.28; letter-spacing: -0.02em; word-break: keep-all; }
     .retro__quote b { color: var(--color-burgundy); }
-    .retro__sub { max-width: 50ch; margin: 22px auto 0; color: var(--color-text-muted); line-height: var(--lh-loose); word-break: keep-all; }
-    .retro__cta { margin-top: var(--block-gap); display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+    .retro__sub { margin: 0; color: var(--color-text-muted); line-height: 1.72; font-size: clamp(17px, 1.35vw, 22px); word-break: keep-all; }
+    .retro__cta { margin-top: 48px; display: flex; gap: 12px; justify-content: flex-start; flex-wrap: wrap; }
 
     /* =================================================================
        REVEAL
@@ -306,9 +358,6 @@
        반응형 — 폭이 늘수록 폰트/간격/여백/그리드 확장
        ================================================================= */
     @media (min-width: 768px) {
-      .site-nav { display: flex; }
-      .hero__grid { grid-template-columns: 1.05fr 0.95fr; }
-      .hero__meta { grid-template-columns: repeat(4, 1fr); }
       .why__grid { grid-template-columns: 1.05fr 0.95fr; }
       .bento { grid-template-columns: repeat(6, 1fr); }
       .pcard { grid-column: span 2; }
@@ -343,31 +392,72 @@
     </div>
   </header>
 
+  <!-- ============ 플로팅 메뉴 (우측 하단) ============ -->
+  <div class="float-menu" aria-label="바로가기">
+    <a class="float-menu__btn float-menu__btn--ghost" href="./index.html#design4" aria-label="시스템치과 파트로 가기">
+      <span class="fab__label">메인으로 가기</span>
+      <span class="fab__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M19 12H5M11 6l-6 6 6 6"/></svg></span>
+    </a>
+    <a class="float-menu__btn float-menu__btn--live" href="https://kkm15921598.github.io/system_dental/index.html" target="_blank" rel="noopener" aria-label="웹사이트 보기">
+      <span class="fab__label">웹사이트 보기</span>
+      <span class="fab__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
+    </a>
+  </div>
+
   <main>
     <!-- ============ 01 HERO ============ -->
     <section class="hero">
-      <div class="container">
-        <div class="hero__grid">
-          <div class="hero__intro">
+      <div class="container container--wide">
+        <div class="hero__top">
+          <!-- 좌측: 카피 -->
+          <div class="hero__copy">
+            <span class="hero__eyebrow" data-reveal>Project Summary</span>
             <h1 class="hero__title" data-reveal>가격이 아닌<br /><em>신뢰</em>를 전하는<br />시스템치과 홈페이지 리뉴얼</h1>
             <p class="hero__desc" data-reveal>21년 이상 운영된 시스템치과의 온라인 경험을 분석하고, 브랜드 신뢰도를 강화하기 위해 진행한 UX/UI 리디자인 프로젝트입니다.</p>
-            <dl class="hero__meta" data-reveal>
-              <div><dt>Role</dt><dd>UX Research · IA · UI Design · Publishing</dd></div>
-              <div><dt>Contribution</dt><dd>기획 30% · 디자인 20% · 퍼블리싱 100%</dd></div>
-              <div><dt>Duration</dt><dd>2026.05 ~ 06</dd></div>
-              <div><dt>Type</dt><dd>웹사이트 리뉴얼</dd></div>
-            </dl>
+            <div class="hero__stats" data-reveal>
+              <div class="hstat">
+                <span class="hstat__ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v9l7 4"/><circle cx="12" cy="12" r="9"/></svg></span>
+                <div class="hstat__num">60%</div>
+                <div class="hstat__label">기획</div>
+                <p class="hstat__desc">UX 리서치 · 정보 구조</p>
+              </div>
+              <div class="hstat">
+                <span class="hstat__ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></span>
+                <div class="hstat__num">20%</div>
+                <div class="hstat__label">디자인</div>
+                <p class="hstat__desc">UI 디자인 · 프로토타입</p>
+              </div>
+              <div class="hstat">
+                <span class="hstat__ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m16 18 6-6-6-6"/><path d="m8 6-6 6 6 6"/></svg></span>
+                <div class="hstat__num">30%</div>
+                <div class="hstat__label">퍼블리싱</div>
+                <p class="hstat__desc">HTML · CSS · JS 구현</p>
+              </div>
+            </div>
           </div>
-          <!-- 이미지 슬롯: 대형 목업 -->
-          <div class="hero__mock" data-reveal-scale>
-            <div class="img-slot img-slot--hero" data-label="대형 목업 이미지"></div>
+
+          <!-- 우측: BEFORE / AFTER 디바이스 콜라주 -->
+          <div class="hero__visual" data-reveal-scale>
+            <figure class="hv-device hv-before" tabindex="0" aria-label="시스템치과 기존 전체 화면 — 마우스를 올리면 스크롤됩니다">
+              <span class="hv-device__tag hv-device__tag--before">BEFORE</span>
+              <div class="hv-device__frame"><div class="hv-device__screen"><img src="./images/system_Before_scroll.png" alt="시스템치과 기존 전체 화면" /></div></div>
+            </figure>
+            <div class="hv-device hv-after" tabindex="0" aria-label="시스템치과 리뉴얼 후 전체 화면 — 마우스를 올리면 스크롤됩니다">
+              <span class="hv-device__tag hv-device__tag--after">AFTER</span>
+              <div class="hv-device__frame"><div class="hv-device__screen"><img src="./images/system_After_scroll.png" alt="시스템치과 리뉴얼 후 전체 화면" /></div></div>
+            </div>
           </div>
         </div>
+
+        <a class="hero__scroll" href="#why" data-reveal>
+          SCROLL
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+        </a>
       </div>
     </section>
 
     <!-- ============ 02 WHY THIS PROJECT ============ -->
-    <section class="section section--soft">
+    <section class="section section--soft" id="why">
       <div class="container">
         <div class="why__grid">
           <div class="why__text">
@@ -720,12 +810,15 @@
     <!-- ============ 12 RETROSPECTIVE ============ -->
     <section class="section retro">
       <div class="container">
-        <span class="label" data-reveal>Retrospective</span>
-        <p class="retro__quote" data-reveal>좋은 의료 웹사이트는 많은 정보를 보여주는 것이 아니라, 사용자가 <b>신뢰를 형성하는 과정</b>을 설계하는 것이었습니다.</p>
-        <p class="retro__sub" data-reveal>또한 UX는 화면을 꾸미는 작업이 아니라, 비즈니스 목표와 사용자를 연결하는 구조라는 점을 경험했습니다.</p>
-        <div class="retro__cta" data-reveal>
-          <a class="btn btn--primary" href="https://kkm15921598.github.io/system_dental/index.html" target="_blank" rel="noopener">웹사이트 바로가기 <span aria-hidden="true">→</span></a>
-          <a class="btn btn--ghost" href="./index.html">← 포트폴리오로 돌아가기</a>
+        <div class="retro__wrap">
+          <span class="label" data-reveal>Retrospective</span>
+          <div class="retro__rule" data-reveal aria-hidden="true"></div>
+          <p class="retro__quote" data-reveal>좋은 의료 웹사이트는 많은 정보를 보여주는 것이 아니라, 사용자가 <b>신뢰를 형성하는 과정</b>을 설계하는 것이었습니다.</p>
+          <p class="retro__sub" data-reveal>또한 UX는 화면을 꾸미는 작업이 아니라, 비즈니스 목표와 사용자를 연결하는 구조라는 점을 경험했습니다.</p>
+          <div class="retro__cta" data-reveal>
+            <a class="btn btn--ghost" href="./index.html#design4">← 포트폴리오로 돌아가기</a>
+            <a class="btn btn--primary" href="https://kkm15921598.github.io/system_dental/index.html" target="_blank" rel="noopener">웹사이트 바로가기 <span aria-hidden="true">→</span></a>
+          </div>
         </div>
       </div>
     </section>
