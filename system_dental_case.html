@@ -113,6 +113,9 @@
     .img-slot--wide { aspect-ratio: 16 / 10; }
     .img-slot--hero { aspect-ratio: 4 / 3; }
     .img-slot--tall { aspect-ratio: 4 / 5; }
+    /* 슬롯에 실제 이미지를 넣으면 슬롯을 꽉 채우고(넘치면 크롭), 플레이스홀더 라벨은 숨김 */
+    .img-slot img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .img-slot:has(img)::after { display: none; }
 
     /* =================================================================
        HEADER / FOOTER
@@ -217,6 +220,37 @@
     .pcard__ico svg { width: 26px; height: 26px; }
     .pcard__no { font-size: var(--fs-small); font-weight: var(--fw-bold); letter-spacing: 0.12em; color: var(--color-soft-red); }
     .pcard__title { margin-top: 8px; font-size: var(--fs-h3); font-weight: var(--fw-bold); word-break: keep-all; }
+
+    /* Problem Discovery — 이미지 위 주석형 인터랙션 */
+    .pdiscover { margin-top: var(--block-gap); }
+    .pdiscover__stage { position: relative; max-width: 960px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 14px; }
+    .pdiscover__img { width: clamp(260px, 72vw, 380px); border-radius: var(--radius-lg); box-shadow: var(--shadow-card); border: 1px solid var(--color-line); }
+    .pann { width: 100%; max-width: 440px; background: var(--color-white); border: 1px solid var(--color-line); border-left: 3px solid var(--color-soft-red); border-radius: var(--radius-md); box-shadow: var(--shadow-soft); padding: 16px 18px; transition: transform .35s var(--ease), box-shadow .3s, border-color .3s; }
+    .pann:hover { transform: translateY(-4px); box-shadow: var(--shadow-card); border-left-color: var(--color-burgundy); }
+    .pann__no { display: inline-flex; align-items: center; gap: 8px; font-size: var(--fs-small); font-weight: var(--fw-bold); letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-soft-red); }
+    .pann__no i { width: 24px; height: 24px; border-radius: 50%; background: var(--color-light-gray); color: var(--color-burgundy); display: grid; place-items: center; font-style: normal; font-weight: var(--fw-black); font-size: 13px; transition: background .3s, color .3s, transform .3s; }
+    .pann:hover .pann__no i { background: var(--color-burgundy); color: #fff; transform: scale(1.1); }
+    .pann__title { margin-top: 6px; font-size: var(--fs-h3); font-weight: var(--fw-bold); word-break: keep-all; }
+    @media (min-width: 992px) {
+      .pdiscover__stage { display: block; min-height: clamp(480px, 40vw, 580px); }
+      .pdiscover__img { position: relative; z-index: 1; display: block; margin: 0 auto; width: clamp(300px, 28vw, 360px); }
+      .pann { position: absolute; width: clamp(200px, 21vw, 250px); margin: 0; }
+      .pann::after { content: ""; position: absolute; top: 30px; height: 2px; width: 32px; background: var(--color-soft-red); opacity: .45; transition: opacity .3s, background .3s; }
+      .pann::before { content: ""; position: absolute; top: 26px; width: 10px; height: 10px; border-radius: 50%; background: var(--color-soft-red); transition: background .3s, transform .3s; }
+      .pann:hover::after { opacity: 1; background: var(--color-burgundy); }
+      .pann:hover::before { background: var(--color-burgundy); transform: scale(1.35); }
+      .pann--1, .pann--2, .pann--3 { left: 0; }
+      .pann--1::after, .pann--2::after, .pann--3::after { right: -32px; }
+      .pann--1::before, .pann--2::before, .pann--3::before { right: -38px; }
+      .pann--4, .pann--5 { right: 0; }
+      .pann--4::after, .pann--5::after { left: -32px; }
+      .pann--4::before, .pann--5::before { left: -38px; }
+      .pann--1 { top: 4%; }
+      .pann--2 { top: 40%; }
+      .pann--3 { top: 76%; }
+      .pann--4 { top: 12%; }
+      .pann--5 { top: 46%; }
+    }
 
     /* =================================================================
        04) COMPETITIVE ANALYSIS (table)
@@ -465,14 +499,14 @@
             <h2 class="title" data-reveal>병원의 경쟁력은 충분했지만<br />온라인 경험은 그렇지 못했습니다.</h2>
             <p class="lead" data-reveal>시스템치과는 21년 이상 운영된 치과로 풍부한 진료 경험과 다양한 콘텐츠를 보유하고 있었습니다. 하지만 홈페이지에서는 그 강점이 효과적으로 전달되지 않았고, 사용자가 신뢰를 형성하기 어려운 구조였습니다.</p>
             <div class="stats" data-reveal>
-              <div class="stat"><div class="stat__num">21+</div><p class="stat__label">Years Experience</p></div>
-              <div class="stat"><div class="stat__num">2000+</div><p class="stat__label">Cases</p></div>
-              <div class="stat"><div class="stat__num">3</div><p class="stat__label">Critical Issues</p></div>
+              <div class="stat"><div class="stat__num">21년</div><p class="stat__label">21년 경력<br>치과 노하우</p></div>
+              <div class="stat"><div class="stat__num">0.1%</div><p class="stat__label">O사 임플란트<br>최다식립상위</p></div>
+              <div class="stat"><div class="stat__num">4+</div><p class="stat__label">서울대 출신<br>치과 전문 의료진</p></div>
             </div>
           </div>
           <!-- 이미지 슬롯: 기존 홈페이지 캡처 -->
           <div class="why__shot" data-reveal-scale>
-            <div class="img-slot" data-label="기존 홈페이지 캡처"></div>
+            <div class="img-slot" data-label="기존 홈페이지 캡처"><img src="images/system_2_1.png" alt="기존 홈페이지 캡처"></div>
           </div>
         </div>
       </div>
@@ -485,27 +519,15 @@
           <span class="label" data-reveal>Problem Discovery</span>
           <h2 class="title" data-reveal>강점은 분명했지만<br />사용자는 그것을 발견하기 어려웠습니다.</h2>
         </div>
-        <div class="bento">
-          <article class="pcard" data-reveal>
-            <div class="pcard__ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.4 7.4H22l-6 4.4 2.3 7.2-6.3-4.6L5.7 21l2.3-7.2-6-4.4h7.6z"/></svg></div>
-            <p class="pcard__no">PROBLEM 01</p><h3 class="pcard__title">브랜드 표현력 부족</h3>
-          </article>
-          <article class="pcard" data-reveal>
-            <div class="pcard__ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
-            <p class="pcard__no">PROBLEM 02</p><h3 class="pcard__title">신뢰 형성 요소 부족</h3>
-          </article>
-          <article class="pcard" data-reveal>
-            <div class="pcard__ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l18-5v12L3 13v-2z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg></div>
-            <p class="pcard__no">PROBLEM 03</p><h3 class="pcard__title">CTA 설계 부족</h3>
-          </article>
-          <article class="pcard" data-reveal>
-            <div class="pcard__ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg></div>
-            <p class="pcard__no">PROBLEM 04</p><h3 class="pcard__title">정보 구조 혼선</h3>
-          </article>
-          <article class="pcard" data-reveal>
-            <div class="pcard__ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/></svg></div>
-            <p class="pcard__no">PROBLEM 05</p><h3 class="pcard__title">시각적 피로도 증가</h3>
-          </article>
+        <div class="pdiscover" data-reveal-scale>
+          <div class="pdiscover__stage">
+            <img class="pdiscover__img" src="./images/system_3_1.jpg" alt="시스템치과 기존 메인 화면 — 문제 분석" />
+            <article class="pann pann--1"><p class="pann__no"><i>1</i> Problem 01</p><h3 class="pann__title">브랜드 표현 부족</h3></article>
+            <article class="pann pann--2"><p class="pann__no"><i>2</i> Problem 02</p><h3 class="pann__title">신뢰 형성 요소 부족</h3></article>
+            <article class="pann pann--3"><p class="pann__no"><i>3</i> Problem 03</p><h3 class="pann__title">CTA 설계 부족</h3></article>
+            <article class="pann pann--4"><p class="pann__no"><i>4</i> Problem 04</p><h3 class="pann__title">시각적 피로도 증가</h3></article>
+            <article class="pann pann--5"><p class="pann__no"><i>5</i> Problem 05</p><h3 class="pann__title">정보 구조 혼선</h3></article>
+          </div>
         </div>
       </div>
     </section>
