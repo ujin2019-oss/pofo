@@ -45,36 +45,51 @@
   }
 
   /* -----------------------------------------------------------
-     TRACKSY 폰 화면 : tracksy1~4 자동 크로스페이드
-     - .tracksy-mock__screen 들 중 .is-active 한 장만 보이고
-       일정 간격으로 다음 장으로 부드럽게 전환
+     TRACKSY 폰 화면 : tracksy1~6 자동 슬라이드
+     - 다음 장은 오른쪽에서 들어오고(translateX 100%→0),
+       이전 장은 왼쪽으로 빠집니다(0→-100%). 뷰포트로 클립.
      ----------------------------------------------------------- */
   function initTracksyScreens() {
     const screens = Array.from(document.querySelectorAll(".tracksy-mock__screen"));
     if (screens.length < 2 || prefersReduced) return; // 모션 줄이기면 첫 장 고정
 
-    let i = 0;
+    let active = 0;
+    let paused = false;
+
+    // 폰 목업에 마우스를 올리면 슬라이드 일시정지, 벗어나면 재개
+    const mock = document.querySelector(".tracksy-mock");
+    if (mock) {
+      mock.addEventListener("mouseenter", function () { paused = true; });
+      mock.addEventListener("mouseleave", function () { paused = false; });
+    }
 
     setInterval(function () {
-      const prev = screens[i];
-      i = (i + 1) % screens.length;
-      const next = screens[i];
+      if (paused) return; // 호버 중에는 현재 화면 유지
+      const prev = screens[active];
+      active = (active + 1) % screens.length;
+      const next = screens[active];
 
-      /* z-index 를 고정 단계로 유지 (폰 프레임은 z-index:10 으로 항상 위):
-         - 들어오는 장 next = 3 (가장 위, 단 프레임 아래)
-         - 직전 장 prev = 2 (next 바로 아래에서 불투명하게 깔림 → dip 방지)
-         - 나머지 = 1
-         단계를 고정해 z-index 가 무한정 커져 프레임을 덮는 문제를 막습니다. */
-      screens.forEach(function (s) { s.style.zIndex = "1"; });
-      prev.style.zIndex = "2";
-      next.style.zIndex = "3";
+      // 직전·다음을 제외한 화면은 애니메이션 없이 오른쪽 대기 위치로 리셋
+      screens.forEach(function (s) {
+        if (s !== prev && s !== next) {
+          s.classList.add("no-trans");
+          s.classList.remove("is-active", "is-out");
+          void s.offsetWidth;
+          s.classList.remove("no-trans");
+        }
+      });
 
-      /* next 를 0 → 1 로 다시 페이드인 (remove → 리플로우 → add 로 재트리거).
-         next 가 투명한 동안엔 아래 prev(불투명)가 보여 배경 깜빡임이 없습니다. */
-      next.classList.remove("is-active");
+      // 다음 화면: 오른쪽(100%)에 즉시 배치 후 0으로 슬라이드 인
+      next.classList.add("no-trans");
+      next.classList.remove("is-active", "is-out");
       void next.offsetWidth;
+      next.classList.remove("no-trans");
       next.classList.add("is-active");
-    }, 1600); // 한 장당 노출 시간 (ms)
+
+      // 이전 화면: 왼쪽(-100%)으로 슬라이드 아웃
+      prev.classList.remove("is-active");
+      prev.classList.add("is-out");
+    }, 2200); // 한 장당 노출 시간 (ms)
   }
 
   /* -----------------------------------------------------------
@@ -282,23 +297,29 @@
 
     toggles.forEach((toggle) => {
       const section = toggle.closest(".project");
-      const image = section && section.querySelector(".project-modoo__image");
-      if (!image) return;
-
-      const afterImage = image.dataset.afterImage;
-      const beforeImage = image.dataset.beforeImage;
-      const afterAlt = image.dataset.afterAlt || image.alt;
-      const beforeAlt = image.dataset.beforeAlt || image.alt;
-      if (!afterImage || !beforeImage) return;
+      // 데스크톱 + 모바일 등 같은 섹션의 모든 화면 이미지를 함께 전환
+      const images = section
+        ? Array.from(section.querySelectorAll(".project-modoo__image"))
+        : [];
+      const targets = images.filter(
+        (img) => img.dataset.afterImage && img.dataset.beforeImage
+      );
+      if (!targets.length) return;
 
       function setBefore(isBefore) {
-        image.src = isBefore ? beforeImage : afterImage;
-        image.alt = isBefore ? beforeAlt : afterAlt;
+        targets.forEach((img) => {
+          const afterImage = img.dataset.afterImage;
+          const beforeImage = img.dataset.beforeImage;
+          const afterAlt = img.dataset.afterAlt || img.alt;
+          const beforeAlt = img.dataset.beforeAlt || img.alt;
+          img.src = isBefore ? beforeImage : afterImage;
+          img.alt = isBefore ? beforeAlt : afterAlt;
+        });
         // 토글 ON(pressed=true) = After(리뉴얼 후, 현재 기본 이미지)
         toggle.setAttribute("aria-pressed", String(!isBefore));
         toggle.setAttribute(
           "aria-label",
-          isBefore ? "모두매쓰 After 이미지 보기" : "모두매쓰 Before 이미지 보기"
+          isBefore ? "After 이미지 보기" : "Before 이미지 보기"
         );
       }
 

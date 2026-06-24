@@ -149,10 +149,11 @@
             <div class="info-block" data-reveal>
               <h3 class="section-label">Skills</h3>
               <ul class="skills-list">
-                <li>피그마 컴포넌트를 통한 웹사이트 디자인 레이아웃 구성</li>
-                <li>미리캔버스, 캔바 활용한 카드뉴스 및 상세페이지 디자인</li>
-                <li>HTML, CSS 웹사이트 디자인 레이아웃 구현</li>
-                <li>Chat GPT / 제미나이 / 미드저니 통한 디자인 소스 생성</li>
+                <li>피그마 컴포넌트를 통한 웹사이트 UIUX 설계 및 레이아웃 구성</li>
+                <li>미리캔버스, 캔바 활용한 카드뉴스 및 상세페이지 디자인 제작</li>
+                <li>HTML, CSS 기반 반응형 웹 사이트 퍼블리싱</li>
+                <li>Claude Code, Codex 통한 프론트엔드 개발 및 코드 최적화</li>
+                <li>ChatGPT, Gemini, Midjourney 통한 디자인 리소스 및 콘텐츠 생성</li>
                 <li>프리미어프로, 캡컷 활용한 영상 컷 편집</li>
                 <li>파워포인트를 통한 기획안 및 제안서 작성 능력</li>
               </ul>
@@ -258,7 +259,7 @@
           </dl>
 
           <div class="project__foot">
-            <a class="btn-outline" href="https://ujin2019-oss.github.io/jejustay/" target="_blank" rel="noopener">VIEW MORE <span aria-hidden="true">→</span></a>
+            <a class="btn-outline" href="https://ujin2019-oss.github.io/jejustay/" target="_blank" rel="noopener"><span class="btn-swap"><span class="btn-swap-en">Live Site</span><span class="btn-swap-ko">사이트 가기</span></span> <span aria-hidden="true">→</span></a>
           </div>
         </div>
       </div>
@@ -327,7 +328,7 @@
           </dl>
 
           <div class="project__foot">
-            <a class="btn-outline" href="https://ujin2019-oss.github.io/blossomwide_lotte/" target="_blank" rel="noopener">VIEW MORE <span aria-hidden="true">→</span></a>
+            <a class="btn-outline" href="https://ujin2019-oss.github.io/blossomwide_lotte/" target="_blank" rel="noopener"><span class="btn-swap"><span class="btn-swap-en">Live Site</span><span class="btn-swap-ko">사이트 가기</span></span> <span aria-hidden="true">→</span></a>
           </div>
         </div>
       </div>
@@ -395,7 +396,7 @@
           </dl>
 
           <div class="project__foot">
-            <a class="btn-outline" href="https://ujin2019-oss.github.io/moodify_music/" target="_blank" rel="noopener">VIEW MORE <span aria-hidden="true">→</span></a>
+            <a class="btn-outline" href="https://ujin2019-oss.github.io/moodify_music/" target="_blank" rel="noopener"><span class="btn-swap"><span class="btn-swap-en">Live Site</span><span class="btn-swap-ko">사이트 가기</span></span> <span aria-hidden="true">→</span></a>
           </div>
         </div>
       </div>
@@ -422,17 +423,38 @@
             화면을 터치하면 자동으로 스크롤됩니다.
           </p>
 
-          <!-- ① 화면 이미지 — data-after-image(리뉴얼 후) / data-before-image(리뉴얼 전) 경로만 교체 -->
-          <div class="project-modoo__device">
-            <img
-              class="project-modoo__image"
-              src="./images/system_After_scroll.png"
-              alt="시스템치과 리뉴얼 후 화면"
-              data-after-image="./images/system_After_scroll.png"
-              data-before-image="./images/system_Before_scroll.png"
-              data-after-alt="시스템치과 리뉴얼 후 화면"
-              data-before-alt="시스템치과 리뉴얼 전 화면"
-            />
+          <!-- ① 화면 이미지 — 데스크톱(큰 화면) + 모바일(폰)이 함께 표시됩니다.
+               · 데스크톱 캡처 : .project-modoo__device 안 img 의 data-*-image
+               · 모바일 캡처   : .project-modoo__phone 안 img 의 data-*-image (system_MBefore/MAfter_scroll)
+               Before/After 토글은 두 화면을 동시에 전환합니다. -->
+          <div class="project-modoo__stage">
+            <!-- 데스크톱 화면 -->
+            <div class="project-modoo__device">
+              <img
+                class="project-modoo__image"
+                src="./images/system_After_scroll.png"
+                alt="시스템치과 리뉴얼 후 화면"
+                data-after-image="./images/system_After_scroll.png"
+                data-before-image="./images/system_Before_scroll.png"
+                data-after-alt="시스템치과 리뉴얼 후 화면"
+                data-before-alt="시스템치과 리뉴얼 전 화면"
+              />
+            </div>
+
+            <!-- 모바일 화면 (데스크톱 우측 앞에 겹쳐 세움) -->
+            <div class="project-modoo__phone" aria-hidden="false">
+              <div class="project-modoo__phone-screen">
+                <img
+                  class="project-modoo__image project-modoo__image--mobile"
+                  src="./images/system_MAfter_scroll.jpg"
+                  alt="시스템치과 모바일 리뉴얼 후 화면"
+                  data-after-image="./images/system_MAfter_scroll.jpg"
+                  data-before-image="./images/system_MBefore_scroll.jpg"
+                  data-after-alt="시스템치과 모바일 리뉴얼 후 화면"
+                  data-before-alt="시스템치과 모바일 리뉴얼 전 화면"
+                />
+              </div>
+            </div>
           </div>
         </div>
 
@@ -468,7 +490,7 @@
           <!-- ⑤ 버튼: Overview(케이스 페이지) / Live Site(실제 사이트) -->
           <div class="dental__actions">
             <a class="btn-outline" href="./system_dental_case.html">
-              <span aria-hidden="true">→</span> Overview
+              <span aria-hidden="true">→</span> <span class="btn-swap"><span class="btn-swap-en">Overview</span><span class="btn-swap-ko">자세히 보기</span></span>
             </a>
             <a
               class="btn-outline"
@@ -476,7 +498,7 @@
               target="_blank"
               rel="noopener"
             >
-              <span aria-hidden="true">→</span> Live Site
+              <span aria-hidden="true">→</span> <span class="btn-swap"><span class="btn-swap-en">Live Site</span><span class="btn-swap-ko">사이트 가기</span></span>
             </a>
           </div>
         </div>
@@ -590,8 +612,8 @@
           </p>
 
           <div class="project-modoo__actions">
-            <a class="btn-outline" href="./modoomath_case.html"><span aria-hidden="true">→</span> Overview</a>
-            <a class="btn-outline" href="https://ujin2019-oss.github.io/modoomath/" target="_blank" rel="noopener"><span aria-hidden="true">→</span> Live Site</a>
+            <a class="btn-outline" href="./modoomath_case.html"><span aria-hidden="true">→</span> <span class="btn-swap"><span class="btn-swap-en">Overview</span><span class="btn-swap-ko">자세히 보기</span></span></a>
+            <a class="btn-outline" href="https://ujin2019-oss.github.io/modoomath/" target="_blank" rel="noopener"><span aria-hidden="true">→</span> <span class="btn-swap"><span class="btn-swap-en">Live Site</span><span class="btn-swap-ko">사이트 가기</span></span></a>
           </div>
         </div>
       </div>
@@ -658,13 +680,15 @@
         <!-- 왼쪽: phone.png(손+폰, 화면부 투명) 뒤로 tracksy1 화면이 비쳐 보이도록 레이어 -->
         <div class="project-modoo__visual" data-reveal>
           <div class="tracksy-mock">
-            <!-- 폰 화면: tracksy1~4 가 자동으로 부드럽게 교차됨 -->
-            <img class="tracksy-mock__screen is-active" src="./images/tracksy1.png" alt="TRACKSY 앱 화면" />
-            <img class="tracksy-mock__screen" src="./images/tracksy2.png" alt="" aria-hidden="true" />
-            <img class="tracksy-mock__screen" src="./images/tracksy3.png" alt="" aria-hidden="true" />
-            <img class="tracksy-mock__screen" src="./images/tracksy4.png" alt="" aria-hidden="true" />
-            <img class="tracksy-mock__screen" src="./images/tracksy5.png" alt="" aria-hidden="true" />
-            <img class="tracksy-mock__screen" src="./images/tracksy6.png" alt="" aria-hidden="true" />
+            <!-- 폰 화면: tracksy1~6 가 오른쪽→왼쪽으로 슬라이드 (뷰포트로 클립) -->
+            <div class="tracksy-mock__viewport">
+              <img class="tracksy-mock__screen is-active" src="./images/tracksy1.png" alt="TRACKSY 앱 화면" />
+              <img class="tracksy-mock__screen" src="./images/tracksy2.png" alt="" aria-hidden="true" />
+              <img class="tracksy-mock__screen" src="./images/tracksy3.png" alt="" aria-hidden="true" />
+              <img class="tracksy-mock__screen" src="./images/tracksy4.png" alt="" aria-hidden="true" />
+              <img class="tracksy-mock__screen" src="./images/tracksy5.png" alt="" aria-hidden="true" />
+              <img class="tracksy-mock__screen" src="./images/tracksy6.png" alt="" aria-hidden="true" />
+            </div>
             <img
               class="tracksy-mock__frame"
               src="./images/phone.png"
@@ -684,18 +708,18 @@
           <p class="project-modoo__desc">
             러닝 기록을 한곳에 모으고, 감각적인 러닝카드로 꾸며 저장·공유하는
             러닝 기록 앱입니다. 기록 입력부터 주간 통계, 커뮤니티까지 이어지는
-            사용 흐름을 직접 기획하고 UIUX 디자인과 프론트엔드 개발까지 진행했습니다.
+            사용 흐름을 직접 기획하고 UIUX 디자인과 프론트엔드 및 개발까지 진행했습니다.
           </p>
 
           <div class="project-modoo__actions">
-            <a class="btn-outline" href="./tracksy_case.html"><span aria-hidden="true">→</span> Overview</a>
+            <a class="btn-outline" href="./tracksy_case.html"><span aria-hidden="true">→</span> <span class="btn-swap"><span class="btn-swap-en">Overview</span><span class="btn-swap-ko">자세히 보기</span></span></a>
             <a
               class="btn-outline"
               href="https://tracksy-rouge.vercel.app/"
               target="_blank"
               rel="noopener"
             >
-              <span aria-hidden="true">→</span> Live Site
+              <span aria-hidden="true">→</span> <span class="btn-swap"><span class="btn-swap-en">Live Site</span><span class="btn-swap-ko">사이트 가기</span></span>
             </a>
           </div>
         </div>
