@@ -52,6 +52,7 @@
       --block-gap: clamp(28px, 4vw, 56px);
       --pad-x: clamp(20px, 5vw, 88px);
       --container: 1200px;
+      --container-wide: 1440px;
 
       --radius-sm: 12px; --radius-md: 20px; --radius-lg: 30px; --radius-pill: 999px;
       --shadow-card: 0 20px 50px rgba(80, 50, 160, 0.10);
@@ -105,9 +106,23 @@
     .img-slot--ink { background: #221C33; color: #6E648C; }
 
     /* =================================================================
-       4) HEADER / FOOTER (공통)
+       4) HEADER / FOOTER (공통) — 헤더 숨김, 우측 하단 플로팅 메뉴로 이동
        ================================================================= */
-    .site-header { position: fixed; top: 0; left: 0; width: 100%; height: var(--header-h); display: flex; align-items: center; z-index: 1000; background: rgba(255,255,255,0.8); backdrop-filter: saturate(180%) blur(14px); -webkit-backdrop-filter: saturate(180%) blur(14px); border-bottom: 1px solid var(--color-line); }
+    .site-header { display: none; }
+
+    /* 플로팅 메뉴 (우측 하단) — 원형 아이콘, 호버 시 텍스트 펼침 (모두매쓰·치과 서브와 공통) */
+    .float-menu { position: fixed; right: clamp(16px, 2.4vw, 32px); bottom: clamp(16px, 2.4vw, 32px); z-index: 1000; display: flex; flex-direction: column; align-items: flex-end; gap: 12px; }
+    .float-menu__btn { display: inline-flex; align-items: center; height: 56px; border-radius: 28px; overflow: hidden; box-shadow: var(--shadow-card); transition: transform .25s var(--ease), background-color .25s, border-color .25s, color .25s; }
+    .float-menu__btn:hover { transform: translateY(-2px); }
+    .fab__icon { width: 56px; height: 56px; flex: none; display: grid; place-items: center; }
+    .fab__icon svg { width: 22px; height: 22px; }
+    .fab__label { max-width: 0; opacity: 0; white-space: nowrap; font-size: var(--fs-small); font-weight: var(--fw-bold); padding-left: 0; transition: max-width .5s var(--ease), opacity .3s var(--ease), padding .5s var(--ease); }
+    .float-menu__btn:hover .fab__label, .float-menu__btn:focus-visible .fab__label { max-width: 220px; opacity: 1; padding-left: 20px; }
+    .float-menu__btn--ghost { background: rgba(255,255,255,0.95); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); color: var(--color-text); border: 1px solid var(--color-line); }
+    .float-menu__btn--ghost:hover { border-color: var(--color-primary); color: var(--color-primary); }
+    .float-menu__btn--live { background: var(--color-primary); color: #fff; }
+    .float-menu__btn--live:hover { background: #7C3AED; }
+
     .site-header__inner { display: flex; align-items: center; justify-content: space-between; width: 100%; }
     .site-header__logo { font-size: var(--fs-h3); font-weight: var(--fw-black); letter-spacing: -0.02em; }
     .site-header__logo b { color: var(--color-primary); }
@@ -129,21 +144,44 @@
        01) HERO  (split, Apple 미니멀)
        ================================================================= */
     .hero { padding-top: calc(var(--header-h) + clamp(44px, 8vw, 110px)); padding-bottom: var(--section-gap); }
+    .hero .container { max-width: var(--container-wide); } /* 다른 서브 히어로와 동일한 와이드 폭 */
     .hero__grid { display: grid; grid-template-columns: 1fr; gap: var(--block-gap); align-items: center; }
     .hero__mock { order: -1; max-width: 320px; margin: 0 auto; width: 100%; }
-    .hero__title { font-size: var(--fs-display); font-weight: var(--fw-black); line-height: 0.95; letter-spacing: -0.04em; background: var(--gradient-brand); -webkit-background-clip: text; background-clip: text; color: transparent; }
-    .hero__tagline { margin-top: 20px; font-size: clamp(20px, 2.6vw, 34px); font-weight: var(--fw-bold); line-height: 1.3; letter-spacing: -0.01em; word-break: keep-all; }
-    .hero__desc { margin-top: 18px; max-width: 46ch; color: var(--color-text-muted); line-height: var(--lh-loose); word-break: keep-all; }
-    .hero__meta { display: grid; grid-template-columns: 1fr 1fr; gap: 22px 28px; margin-top: var(--block-gap); padding-top: 28px; border-top: 1px solid var(--color-line); }
-    .hero__meta dt { font-size: var(--fs-small); font-weight: var(--fw-bold); letter-spacing: 0.06em; color: var(--color-primary); margin-bottom: 7px; }
-    .hero__meta dd { font-size: var(--fs-body); font-weight: var(--fw-medium); line-height: 1.6; }
+    /* 히어로 카피 (모두매쓰·치과 서브와 공통 구성: eyebrow → 헤드라인(em 강조) → 설명) */
+    .hero__eyebrow { display: inline-flex; align-items: center; gap: 12px; font-size: 15px; font-weight: var(--fw-bold); letter-spacing: 0.16em; text-transform: uppercase; color: var(--color-primary); margin-bottom: 24px; }
+    .hero__title { font-size: clamp(30px, 3.6vw, 48px); font-weight: var(--fw-black); line-height: 1.18; letter-spacing: -0.02em; word-break: keep-all; }
+    .hero__title em { font-style: normal; background: var(--gradient-brand); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .hero__desc { margin-top: 24px; max-width: 520px; font-size: clamp(16px, 1.3vw, 21px); font-weight: var(--fw-medium); color: var(--color-text-muted); line-height: 1.65; word-break: keep-all; }
+    /* 히어로 기여도 3카드 (모두매쓰·치과 서브와 공통 레이아웃) */
+    .hero__stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(12px, 1.4vw, 18px); width: 100%; max-width: 560px; margin-top: var(--block-gap); }
+    .hstat { background: var(--color-white); border: 1px solid var(--color-line); border-radius: var(--radius-md); padding: clamp(16px, 1.6vw, 22px); box-shadow: var(--shadow-soft); transition: transform .3s var(--ease), box-shadow .3s; }
+    .hstat:hover { transform: translateY(-4px); box-shadow: var(--shadow-card); }
+    .hstat__ico { width: 38px; height: 38px; border-radius: var(--radius-sm); background: var(--color-light); color: var(--color-primary); display: grid; place-items: center; margin-bottom: 16px; }
+    .hstat__ico svg { width: 19px; height: 19px; }
+    .hstat__num { font-size: clamp(26px, 2.8vw, 36px); font-weight: var(--fw-black); color: var(--color-primary); line-height: 1; letter-spacing: -0.02em; }
+    .hstat__label { font-size: clamp(16px, 1.2vw, 18px); font-weight: var(--fw-bold); color: var(--color-text); margin-top: 8px; }
+    .hstat__desc { font-size: 13px; color: var(--color-text-muted); margin-top: 5px; line-height: 1.4; word-break: keep-all; }
+    @media (max-width: 480px) { .hero__stats { grid-template-columns: 1fr; } }
+    /* 폰 목업(손+폰)을 쓰는 히어로 슬롯: 320px 제한 해제 */
+    .hero__mock--device { max-width: 520px; }
+    /* TRACKSY 폰 목업: phone.png(배경 투명, 손+폰) + 뒤에 tracksy 화면이 비쳐 보임 */
+    .tracksy-mock { position: relative; width: 100%; aspect-ratio: 1070 / 846; margin: 0 auto; }
+    .tracksy-mock__frame { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; z-index: 10; pointer-events: none; filter: drop-shadow(0 22px 40px rgba(60, 30, 160, 0.28)); }
+    .tracksy-mock__viewport { position: absolute; left: 59.1%; top: 4.4%; width: 28.9%; height: 79.8%; overflow: hidden; z-index: 1; border-radius: 16px; background: #B89CFF; }
+    .tracksy-mock__screen { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center top; background: #B89CFF; transform: translateX(100%); transition: transform 0.7s cubic-bezier(0.65, 0, 0.35, 1); }
+    .tracksy-mock__screen.is-active { transform: translateX(0); }
+    .tracksy-mock__screen.is-out { transform: translateX(-100%); }
+    .tracksy-mock__screen.no-trans { transition: none; }
+    @media (prefers-reduced-motion: reduce) { .tracksy-mock__screen { transition: none; } }
 
     /* =================================================================
        02) PROBLEM
        ================================================================= */
     .problem__top { display: grid; grid-template-columns: 1fr; gap: var(--block-gap); align-items: start; margin-bottom: var(--block-gap); }
-    .problem__shot .img-slot { aspect-ratio: 4/3; box-shadow: var(--shadow-card); }
-    .pcards { display: grid; grid-template-columns: 1fr; gap: clamp(14px,2vw,22px); }
+    .problem__shot .img-slot { aspect-ratio: auto; max-width: 260px; margin-inline: auto; box-shadow: var(--shadow-card); }
+    .problem__shot .img-slot img { width: 100%; height: auto; }
+    .img-slot:has(img)::after { display: none; } /* 이미지가 들어간 슬롯은 플레이스홀더 라벨 숨김 */
+    .pcards { display: grid; grid-template-columns: 1fr; gap: clamp(14px,2vw,22px); margin-top: var(--block-gap); }
     .pcard { padding: clamp(22px,3vw,34px); border-radius: var(--radius-md); background: var(--color-white); border: 1px solid var(--color-line); box-shadow: var(--shadow-soft); }
     .pcard__tag { font-size: var(--fs-small); font-weight: var(--fw-bold); letter-spacing: 0.1em; color: var(--color-primary); }
     .pcard__title { margin-top: 10px; font-size: var(--fs-h3); font-weight: var(--fw-bold); word-break: keep-all; }
@@ -295,11 +333,16 @@
        ================================================================= */
     @media (min-width: 768px) {
       .site-nav { display: flex; }
-      .hero__grid { grid-template-columns: 0.9fr 1.1fr; }
+      /* 히어로 하단 패딩 제거 → 폰 목업(손+팔) 하단이 섹션 최하단과 맞닿음 */
+      .hero { padding-bottom: 0; }
+      .hero__grid { grid-template-columns: 1.14fr 0.86fr; align-items: end; }
       .hero__mock { order: 0; margin: 0; }
-      .hero__meta { grid-template-columns: repeat(4, 1fr); }
-      .problem__top { grid-template-columns: 1.1fr 0.9fr; }
-      .pcards { grid-template-columns: repeat(3, 1fr); }
+      /* 폰 목업 크게+왼쪽으로: 컬럼보다 넓게(왼쪽으로 확장) + 하단 정렬(팔이 섹션 바닥에서 올라오는 형태) */
+      .hero__mock--device { max-width: none; align-self: end; width: 115%; margin-left: -15%; }
+      /* 텍스트는 세로 가운데 정렬 + 하단 여백으로 목업과 균형 */
+      .hero__intro { align-self: center; padding-bottom: clamp(48px, 7vw, 110px); }
+      .problem__top { grid-template-columns: 1.7fr 0.8fr; }
+      .pcards { grid-template-columns: repeat(3, 1fr); } /* 카드 가로 3열 */
       .goals { grid-template-columns: repeat(3, 1fr); }
       .flow__step { grid-template-columns: 1fr 1.1fr; }
       .flow__step--reverse .flow__media { order: 2; }
@@ -310,6 +353,14 @@
       .devcards { grid-template-columns: repeat(4, 1fr); }
       .cases { grid-template-columns: repeat(3, 1fr); }
       .kpis { grid-template-columns: repeat(4, 1fr); }
+    }
+    /* 다른 서브와 동일: 1100px 이하에서는 히어로를 세로 스택(카피 전체 폭) → 큰 타이틀도 2줄 유지 */
+    @media (min-width: 768px) and (max-width: 1100px) {
+      .hero { padding-bottom: var(--section-gap); }
+      .hero__grid { grid-template-columns: 1fr; align-items: center; }
+      .hero__mock { order: -1; }
+      .hero__mock--device { width: 100%; max-width: 560px; margin: 0 auto; align-self: center; }
+      .hero__intro { align-self: auto; padding-bottom: 0; }
     }
   </style>
 </head>
@@ -329,25 +380,62 @@
     </div>
   </header>
 
+  <!-- ============ 플로팅 메뉴 (우측 하단) — 모두매쓰·치과 서브와 공통 ============ -->
+  <div class="float-menu" aria-label="바로가기">
+    <a class="float-menu__btn float-menu__btn--ghost" href="./index.html#tracksy" aria-label="TRACKSY 파트로 가기">
+      <span class="fab__label">메인으로 가기</span>
+      <span class="fab__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M19 12H5M11 6l-6 6 6 6"/></svg></span>
+    </a>
+    <a class="float-menu__btn float-menu__btn--live" href="https://tracksy-rouge.vercel.app/" target="_blank" rel="noopener" aria-label="웹사이트 보기">
+      <span class="fab__label">웹사이트 보기</span>
+      <span class="fab__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
+    </a>
+  </div>
+
   <main>
     <!-- ============ 01 HERO ============ -->
     <section class="hero">
       <div class="container">
         <div class="hero__grid">
-          <!-- 이미지 슬롯: 모바일 목업 (좌측) -->
-          <div class="hero__mock" data-reveal-scale>
-            <div class="img-slot img-slot--phone" data-label="MOBILE MOCKUP"></div>
+          <!-- 모바일 목업 (좌측): 손+폰(phone.png) 뒤로 tracksy 화면이 오른쪽→왼쪽 슬라이드 -->
+          <div class="hero__mock hero__mock--device" data-reveal-scale>
+            <div class="tracksy-mock">
+              <!-- 폰 화면: tracksy1~6 가 슬라이드 (뷰포트로 클립) -->
+              <div class="tracksy-mock__viewport">
+                <img class="tracksy-mock__screen is-active" src="./images/tracksy1.png" alt="TRACKSY 앱 화면" />
+                <img class="tracksy-mock__screen" src="./images/tracksy2.png" alt="" aria-hidden="true" />
+                <img class="tracksy-mock__screen" src="./images/tracksy3.png" alt="" aria-hidden="true" />
+                <img class="tracksy-mock__screen" src="./images/tracksy4.png" alt="" aria-hidden="true" />
+                <img class="tracksy-mock__screen" src="./images/tracksy5.png" alt="" aria-hidden="true" />
+                <img class="tracksy-mock__screen" src="./images/tracksy6.png" alt="" aria-hidden="true" />
+              </div>
+              <img class="tracksy-mock__frame" src="./images/phone.png" alt="" aria-hidden="true" />
+            </div>
           </div>
           <div class="hero__intro">
-            <h1 class="hero__title" data-reveal>TRACKSY</h1>
-            <p class="hero__tagline" data-reveal>오늘의 러닝을,<br />나만의 이야기로</p>
-            <p class="hero__desc" data-reveal>기존 러닝앱이 제공하지 못했던 감성 기록 경험을 만들기 위해 기획한 AI 기반 러닝 다이어리 서비스입니다.</p>
-            <dl class="hero__meta" data-reveal>
-              <div><dt>Role</dt><dd>UX/UI Design</dd></div>
-              <div><dt>Contribution</dt><dd>기획 40% · 디자인 50% · 퍼블리싱 30%</dd></div>
-              <div><dt>Team</dt><dd>4명</dd></div>
-              <div><dt>Duration</dt><dd>2026.04 ~ 05</dd></div>
-            </dl>
+            <span class="hero__eyebrow" data-reveal>Project Summary</span>
+            <h1 class="hero__title" data-reveal>기록이 아닌 <em>경험</em>을 남기는<br />러닝 다이어리 TRACKSY</h1>
+            <p class="hero__desc" data-reveal>기존 러닝앱이 담지 못한 감성과 경험에 주목해,<br />러닝을 나만의 이야기로 남기도록 만든 AI 기반 러닝 다이어리입니다.</p>
+            <div class="hero__stats" data-reveal>
+              <div class="hstat">
+                <span class="hstat__ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v9l7 4"/><circle cx="12" cy="12" r="9"/></svg></span>
+                <div class="hstat__num">60%</div>
+                <div class="hstat__label">기획</div>
+                <p class="hstat__desc">프로젝트 리딩 · 아이디어 기획 · 정보 구조 설계</p>
+              </div>
+              <div class="hstat">
+                <span class="hstat__ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></span>
+                <div class="hstat__num">40%</div>
+                <div class="hstat__label">디자인</div>
+                <p class="hstat__desc">메인 HOME 화면 UI 디자인 · 전체 프로토타입</p>
+              </div>
+              <div class="hstat">
+                <span class="hstat__ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m16 18 6-6-6-6"/><path d="m8 6-6 6 6 6"/></svg></span>
+                <div class="hstat__num">30%</div>
+                <div class="hstat__label">퍼블리싱/개발</div>
+                <p class="hstat__desc">HTML · CSS · JS 구현<br>깃허브 브랜치 협업</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -361,16 +449,17 @@
             <span class="eyebrow" data-reveal>Problem Definition</span>
             <h2 class="section-title" data-reveal>러닝 기록은 남지만,<br />경험은 남지 않았다.</h2>
             <p class="lead" data-reveal>기존 러닝 앱은 거리, 시간, 페이스 등 수치 중심 정보 제공에 집중되어 있습니다. 하지만 사용자는 단순 기록보다 자신의 성취감과 경험을 공유하고 싶어합니다.</p>
+            <!-- 3개 카드: 텍스트 아래 세로 정렬 -->
+            <div class="pcards">
+              <div class="pcard" data-reveal><p class="pcard__tag">Problem 01</p><h3 class="pcard__title">기록 중심 UI</h3></div>
+              <div class="pcard" data-reveal><p class="pcard__tag">Problem 02</p><h3 class="pcard__title">SNS 공유 최적화 부족</h3></div>
+              <div class="pcard" data-reveal><p class="pcard__tag">Problem 03</p><h3 class="pcard__title">감성 표현의 한계</h3></div>
+            </div>
           </div>
           <!-- 이미지 슬롯: 기존 러닝앱 예시 (우측) -->
           <div class="problem__shot" data-reveal-scale>
-            <div class="img-slot" data-label="기존 러닝앱 예시"></div>
+            <div class="img-slot" data-label="기존 러닝앱 예시"><img src="images/garmin_app.png" alt="기존 러닝앱 예시"></div>
           </div>
-        </div>
-        <div class="pcards">
-          <div class="pcard" data-reveal><p class="pcard__tag">Problem 01</p><h3 class="pcard__title">기록 중심 UI</h3></div>
-          <div class="pcard" data-reveal><p class="pcard__tag">Problem 02</p><h3 class="pcard__title">SNS 공유 최적화 부족</h3></div>
-          <div class="pcard" data-reveal><p class="pcard__tag">Problem 03</p><h3 class="pcard__title">감성 표현의 한계</h3></div>
         </div>
       </div>
     </section>
@@ -652,8 +741,8 @@
           UX 설계만큼 <b>개발 환경과 협업 구조</b> 설계가 중요하다는 것을 경험했습니다.
         </p>
         <div class="retro__cta" data-reveal>
-          <a class="btn btn--primary" href="https://tracksy-rouge.vercel.app/" target="_blank" rel="noopener">웹사이트 바로가기 <span aria-hidden="true">→</span></a>
-          <a class="btn btn--ghost" href="./index.html">← 포트폴리오로 돌아가기</a>
+          <a class="btn btn--ghost" href="./index.html#tracksy">← 포트폴리오로 돌아가기</a>
+          <a class="btn btn--primary" href="https://tracksy-rouge.vercel.app/" target="_blank" rel="noopener">TRACKSY 사이트 가기 ↗</a>
         </div>
       </div>
     </section>
@@ -708,8 +797,52 @@
         gsap.to(".hero [data-reveal], .hero [data-reveal-scale]", { opacity: 1, y: 0, scale: 1, duration: 1, ease: "power3.out", stagger: 0.1 });
       }
 
+      /* ---- TRACKSY 폰 화면 슬라이드 (오른쪽→왼쪽, 호버 시 일시정지) ---- */
+      function initTracksyMock() {
+        var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        var screens = Array.prototype.slice.call(document.querySelectorAll(".tracksy-mock__screen"));
+        if (screens.length < 2 || reduce) return; // 모션 줄이기면 첫 장 고정
+
+        var active = 0;
+        var paused = false;
+        var mock = document.querySelector(".tracksy-mock");
+        if (mock) {
+          mock.addEventListener("mouseenter", function () { paused = true; });
+          mock.addEventListener("mouseleave", function () { paused = false; });
+        }
+
+        setInterval(function () {
+          if (paused) return; // 호버 중에는 현재 화면 유지
+          var prev = screens[active];
+          active = (active + 1) % screens.length;
+          var next = screens[active];
+
+          // 직전·다음 외 화면은 애니메이션 없이 오른쪽 대기 위치로 리셋
+          screens.forEach(function (s) {
+            if (s !== prev && s !== next) {
+              s.classList.add("no-trans");
+              s.classList.remove("is-active", "is-out");
+              void s.offsetWidth;
+              s.classList.remove("no-trans");
+            }
+          });
+
+          // 다음 화면: 오른쪽(100%)에 즉시 배치 후 0으로 슬라이드 인
+          next.classList.add("no-trans");
+          next.classList.remove("is-active", "is-out");
+          void next.offsetWidth;
+          next.classList.remove("no-trans");
+          next.classList.add("is-active");
+
+          // 이전 화면: 왼쪽(-100%)으로 슬라이드 아웃
+          prev.classList.remove("is-active");
+          prev.classList.add("is-out");
+        }, 2200);
+      }
+
       initTabs();
       initReveal();
+      initTracksyMock();
     })();
   </script>
 </body>
