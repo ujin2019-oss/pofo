@@ -318,7 +318,7 @@
      ----------------------------------------------------------- */
   /* -----------------------------------------------------------
      해시(#섹션)로 진입한 경우 처리
-     - 케이스 페이지에서 "포트폴리오로 돌아가기" 등으로 #design3 같은
+     - 케이스 페이지에서 "포트폴리오로 돌아가기" 등으로 #modoo 같은
        앵커로 들어오면, 슬로건 섹션 pin/이미지 로드로 레이아웃 길이가
        바뀌어 브라우저의 기본 점프가 빗나갑니다(최상단으로 밀림).
      - ScrollTrigger.refresh() 로 위치 계산이 끝난 뒤, 헤더 높이만큼
@@ -334,15 +334,28 @@
       return;
     }
     if (!target) return;
-    // 핀/이미지 로드 후 위치가 안정되도록 약간 지연한 뒤 측정
-    setTimeout(() => {
+
+    // 사용자가 직접 스크롤/조작하면 보정 중단 (사용자 의도 우선)
+    let interrupted = false;
+    const stop = () => {
+      interrupted = true;
+    };
+    ["wheel", "touchstart", "keydown"].forEach((ev) =>
+      window.addEventListener(ev, stop, { once: true, passive: true })
+    );
+
+    function doScroll() {
+      if (interrupted) return;
       if (window.ScrollTrigger) ScrollTrigger.refresh();
       const header = document.getElementById("header");
-      const offset = header ? header.offsetHeight : 0;
+      const offset = header && !header.classList.contains("is-hidden") ? header.offsetHeight : 0;
       const y =
         target.getBoundingClientRect().top + window.pageYOffset - offset - 8;
-      window.scrollTo({ top: Math.max(0, y), behavior: "smooth" });
-    }, 220);
+      window.scrollTo({ top: Math.max(0, y), behavior: "auto" });
+    }
+
+    // 이미지·핀 레이아웃이 늦게 잡혀도 정확히 안착하도록 여러 번 재보정
+    [120, 350, 700, 1300, 2200].forEach((t) => setTimeout(doScroll, t));
   }
 
   let started = false;
@@ -364,5 +377,12 @@
   document.addEventListener("components:loaded", startOnce);
   document.addEventListener("DOMContentLoaded", () => {
     setTimeout(startOnce, 600);
+  });
+
+  // 브라우저 기본 스크롤 복원과 충돌하지 않도록 수동 처리
+  if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+  // 뒤로/앞으로(bfcache 복원) 시에도 해시 위치로 보정
+  window.addEventListener("pageshow", (e) => {
+    if (e.persisted) scrollToHashTarget();
   });
 })();

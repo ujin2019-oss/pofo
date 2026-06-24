@@ -351,17 +351,17 @@ html {
   scroll-snap-type: y proximity; /* 스냅 지점 근처에서만 작동(다른 섹션 영향 최소화) */
 }
 /* 디자인 3개(JEJU STAY / LOTTE FESTIVAL / MOODIFY) 에만 적용 */
-#design,        /* JEJU STAY */
-#design3-lotte, /* LOTTE FESTIVAL */
-#design2 {      /* MOODIFY */
+#jejustay,        /* JEJU STAY */
+#lotte, /* LOTTE FESTIVAL */
+#moodify {      /* MOODIFY */
   height: 100vh;            /* 한 브라우저 높이에 딱 맞춤 */
   scroll-snap-align: start; /* 섹션 상단이 화면 상단에 정렬 */
   scroll-snap-stop: always; /* 빠르게 스크롤해도 각 섹션에서 멈춤 */
   overflow: hidden;         /* 100vh 안으로 내용 고정 */
 }
-#design .project__inner,
-#design3-lotte .project__inner,
-#design2 .project__inner {
+#jejustay .project__inner,
+#lotte .project__inner,
+#moodify .project__inner {
   min-height: 100vh;
   height: 100vh;
 }
@@ -687,6 +687,8 @@ html {
 .project-modoo__swatches li {
   width: 46px;
   height: 46px;
+  border: 1.5px solid rgba(255, 255, 255, 0.6);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.08);
 }
 .project-modoo__tools .tool {
   width: 38px;
@@ -1117,17 +1119,17 @@ html {
   html {
     scroll-snap-type: none;
   }
-  #design,
-  #design3-lotte,
-  #design2 {
+  #jejustay,
+  #lotte,
+  #moodify {
     height: auto;
     overflow: visible;
     scroll-snap-align: none;
     scroll-snap-stop: normal;
   }
-  #design .project__inner,
-  #design3-lotte .project__inner,
-  #design2 .project__inner {
+  #jejustay .project__inner,
+  #lotte .project__inner,
+  #moodify .project__inner {
     height: auto;
   }
 

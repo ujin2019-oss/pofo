@@ -194,11 +194,12 @@
     </section>
 
     <!-- =====================================================
-         SECTION  : DESIGN PROJECT (JEJU STAY)
-         - 왼쪽: 프로젝트 비주얼 / 오른쪽: 상세 정보
-         - 왼쪽 배경 이미지는 main.css 의 .project__visual 에서 교체하세요.
+         SECTION 4 : PROJECT — JEJU STAY   ※ id="jejustay"
+         - 레이아웃: 왼쪽 비주얼 / 오른쪽 정보
+         - 배경 이미지: 아래 .project__visual 의 style url(...) 수정
+         - 텍스트·색상·툴: 아래 HTML에서 바로 수정
          ===================================================== -->
-    <section class="project" id="design" aria-label="디자인 프로젝트 - JEJU STAY">
+    <section class="project" id="jejustay" aria-label="디자인 프로젝트 - JEJU STAY">
       <div class="project__inner">
         <!-- 왼쪽: 프로젝트 비주얼 (배경 이미지 교체: 아래 url(...) 부분 수정) -->
         <div
@@ -264,10 +265,11 @@
     </section>
 
     <!-- =====================================================
-         SECTION 4 : DESIGN PROJECT 02 (lotte)
-         - JEJU STAY 와 동일: 이미지 왼쪽 / 정보 오른쪽 배치
+         SECTION 5 : PROJECT — LOTTE FESTIVAL   ※ id="lotte"
+         - 레이아웃: 왼쪽 비주얼 / 오른쪽 정보 (JEJU STAY 와 동일)
+         - 배경 이미지: 아래 style url(...) 수정
          ===================================================== -->
-    <section class="project" id="design3-lotte" aria-label="lotte">
+    <section class="project" id="lotte" aria-label="lotte">
       <div class="project__inner">
         <!-- 비주얼 (배경 이미지 교체: 아래 url(...) 부분 수정) -->
         <div
@@ -307,10 +309,10 @@
               <dt>Tools Used</dt>
               <dd>
                 <ul class="tools tools--sm">
+                  <li class="tool"><img src="./images/pro_ico01.png" alt="Photoshop" /></li>
                   <li class="tool"><img src="./images/ico_fig.png" alt="Figma" /></li>
                   <li class="tool"><img src="./images/ico_vs.png" alt="VS Code" /></li>
                   <li class="tool"><img src="./images/ico_clau.png" alt="Claude" /></li>
-                  <li class="tool"><img src="./images/ico_fire.png" alt="Firebase" /></li>
                 </ul>
               </dd>
             </div>
@@ -332,10 +334,11 @@
     </section>
 
     <!-- =====================================================
-         SECTION 4 : DESIGN PROJECT 02 (moodify)
-         - JEJU STAY 와 동일: 이미지 왼쪽 / 정보 오른쪽 배치
+         SECTION 6 : PROJECT — MOODIFY   ※ id="moodify"
+         - 레이아웃: 왼쪽 비주얼 / 오른쪽 정보 (JEJU STAY 와 동일)
+         - 배경 이미지: 아래 style url(...) 수정
          ===================================================== -->
-    <section class="project" id="design2" aria-label="moodify">
+    <section class="project" id="moodify" aria-label="moodify">
       <div class="project__inner">
         <!-- 비주얼 (배경 이미지 교체: 아래 url(...) 부분 수정) -->
         <div
@@ -378,7 +381,6 @@
                   <li class="tool"><img src="./images/ico_fig.png" alt="Figma" /></li>
                   <li class="tool"><img src="./images/ico_vs.png" alt="VS Code" /></li>
                   <li class="tool"><img src="./images/ico_clau.png" alt="Claude" /></li>
-                  <li class="tool"><img src="./images/ico_fire.png" alt="Firebase" /></li>
                 </ul>
               </dd>
             </div>
@@ -400,11 +402,17 @@
     </section>
     
     <!-- =====================================================
-         SECTION 8 : WEB RENEWAL (시스템치과) — TRACKSY형 레이아웃
-         - 토글(Before/After) + hover 자동 스크롤 기능 그대로 사용
-         - 토글이 동작하려면 섹션에 class="project" 가 있어야 합니다(JS가 탐색).
+         SECTION 7 : PROJECT — 시스템치과 (웹 리뉴얼)   ※ id="dental"
+         ─────────────────────────────────────────────────────
+         여기서 바로 수정할 수 있는 항목 (아래 번호 주석 위치로 이동):
+         ① 화면 이미지   : .project-modoo__image 의 data-after-image / data-before-image (캡처 경로)
+         ② Before/After 토글 : .dental__toggle  (JS가 class="project" 를 찾아 자동 동작)
+         ③ 제목          : .dental__title  (line1 = 작은 제목 / line2 = 큰 제목)
+         ④ 설명          : .dental__desc
+         ⑤ 버튼 링크     : .dental__actions  (Overview = 케이스 페이지 / Live Site = 실제 사이트)
+         ⑥ 하단 정보 바  : .dental__meta  (기여도·색상·폰트·AI·툴·기간 → 각 <dd> 값만 변경)
          ===================================================== -->
-    <section class="project dental" id="design4" aria-label="디자인 프로젝트 04 - 시스템치과">
+    <section class="project dental" id="dental" aria-label="디자인 프로젝트 04 - 시스템치과">
       <div class="container dental__inner">
         <!-- 왼쪽: 스크롤 디바이스 + 토글 -->
         <div class="dental__visual" data-reveal>
@@ -414,6 +422,7 @@
             화면을 터치하면 자동으로 스크롤됩니다.
           </p>
 
+          <!-- ① 화면 이미지 — data-after-image(리뉴얼 후) / data-before-image(리뉴얼 전) 경로만 교체 -->
           <div class="project-modoo__device">
             <img
               class="project-modoo__image"
@@ -429,7 +438,7 @@
 
         <!-- 오른쪽: 프로젝트 소개 -->
         <div class="dental__info" data-reveal>
-          <!-- Before / After 토글 (h3 라벨 위, 정보 영역 맨 위) -->
+          <!-- ② Before / After 토글 — 이미지가 위 data-*-image 사이에서 전환됩니다 -->
           <div class="dental__toggle">
             <span>BEFORE</span>
             <button
@@ -443,10 +452,12 @@
             <span>AFTER</span>
           </div>
 
+          <!-- ③ 제목 (line1 = 작은 제목 / line2 = 큰 제목) -->
           <h2 class="dental__title">
             <span class="dental__title-line1">리뉴얼 프로젝트</span>
             <span class="dental__title-line2">시스템치과의원 UIUX 개선</span>
           </h2>
+          <!-- ④ 설명 -->
           <p class="dental__desc">
             진료 안내, 의료진 소개, 임플란트·디지털 진료 등 정보가 흩어져 있어
             환자가 원하는 내용을 빠르게 찾기 어려웠습니다. 정보 구조를 재정비하고
@@ -454,6 +465,7 @@
             반응형 웹사이트로 개선했습니다.
           </p>
 
+          <!-- ⑤ 버튼: Overview(케이스 페이지) / Live Site(실제 사이트) -->
           <div class="dental__actions">
             <a class="btn-outline" href="./system_dental_case.html">
               <span aria-hidden="true">→</span> Overview
@@ -470,7 +482,9 @@
         </div>
       </div>
 
-      <!-- 하단 프로젝트 정보 바 (모두매쓰 메타 구조 재사용) -->
+      <!-- ⑥ 하단 프로젝트 정보 바 — 각 <dd> 값만 바꾸면 됩니다
+           · Contribution(기여도) · Design Color(스와치 li 의 background HEX) · Font Style(폰트)
+           · Generative AI(사용 AI) · Tools Used(아이콘 li 의 img src) · Duration(기간) -->
       <div class="project-modoo__meta dental__meta" data-reveal>
         <div class="project-modoo__meta-inner">
           <dl class="project-modoo__details">
@@ -490,14 +504,14 @@
             </div>
             <div class="project-modoo__detail-row">
               <dt>Font Style</dt>
-              <dd></dd>
+              <dd>A2Z</dd>
             </div>
           </dl>
 
           <dl class="project-modoo__details">
             <div class="project-modoo__detail-row">
               <dt>Generative AI</dt>
-              <dd>Chat GPT 이미지 생성</dd>
+              <dd>Chat GPT 이미지, Midjourney 영상 생성</dd>
             </div>
             <div class="project-modoo__detail-row">
               <dt>Tools Used</dt>
@@ -506,7 +520,6 @@
                   <li class="tool"><img src="./images/ico_fig.png" alt="Figma" /></li>
                   <li class="tool"><img src="./images/ico_vs.png" alt="VS Code" /></li>
                   <li class="tool"><img src="./images/ico_clau.png" alt="Claude" /></li>
-                  <li class="tool"><img src="./images/ico_fire.png" alt="Firebase" /></li>
                 </ul>
               </dd>
             </div>
@@ -520,11 +533,12 @@
     </section>
 
     <!-- =====================================================
-         SECTION 7 : DESIGN PROJECT 03 (modoo)
-         - 토글 이미지 교체: data-after-image / data-before-image 수정
-         - 텍스트/아이콘/색상은 아래 HTML에서 바로 수정할 수 있습니다.
+         SECTION 8 : PROJECT — 모두매쓰 (MODOO)   ※ id="modoo"
+         - 레이아웃: 시스템치과(SECTION 7)와 동일 (디바이스 + Before/After 토글)
+         - 화면 이미지: 아래 data-after-image / data-before-image 경로 수정
+         - 텍스트·색상·툴: 아래 HTML에서 바로 수정
          ===================================================== -->
-    <section class="project project--modoo" id="design3" aria-label="modoo">
+    <section class="project project--modoo" id="modoo" aria-label="modoo">
       <div class="project-modoo__body">
         <!-- 왼쪽: 프로젝트 화면 이미지 -->
         <div class="project-modoo__visual" data-reveal>
@@ -582,7 +596,8 @@
         </div>
       </div>
 
-      <!-- 하단 프로젝트 정보 바 -->
+      <!-- 하단 프로젝트 정보 바 — 각 <dd> 값만 수정
+           (Contribution·Design Color[스와치 li background HEX]·Font Style·Generative AI·Tools Used[img src]·Duration) -->
       <div class="project-modoo__meta" data-reveal>
         <div class="project-modoo__meta-inner">
           <dl class="project-modoo__details">
@@ -594,9 +609,9 @@
               <dt>Design Color</dt>
               <dd>
                 <ul class="swatches project-modoo__swatches">
-                  <li style="background:#062B16"></li>
-                  <li style="background:#144B24"></li>
-                  <li style="background:#B9A160"></li>
+                  <li style="background:#4D65F9"></li>
+                  <li style="background:#61C1CC"></li>
+                  <li style="background:#CCEAF0"></li>
                 </ul>
               </dd>
             </div>
@@ -609,7 +624,7 @@
           <dl class="project-modoo__details">
             <div class="project-modoo__detail-row">
               <dt>Generative AI</dt>
-              <dd>Chat GPT 이미지 생성</dd>
+              <dd>Chat GPT 이미지, Midjourney 영상 생성</dd>
             </div>
             <div class="project-modoo__detail-row">
               <dt>Tools Used</dt>
@@ -618,7 +633,6 @@
                   <li class="tool"><img src="./images/ico_fig.png" alt="Figma" /></li>
                   <li class="tool"><img src="./images/ico_vs.png" alt="VS Code" /></li>
                   <li class="tool"><img src="./images/ico_clau.png" alt="Claude" /></li>
-                  <li class="tool"><img src="./images/ico_fire.png" alt="Firebase" /></li>
                 </ul>
               </dd>
             </div>
@@ -631,13 +645,13 @@
       </div>
     </section>
     <!-- =====================================================
-         SECTION 9 : APP PROJECT (TRACKSY) — 모두매쓰와 동일 레이아웃
-         - 왼쪽 이미지는 추후 교체용 빈 슬롯 / 토글 없음
-         - 색상은 TRACKSY 퍼플(#7C5CFF)
+         SECTION 9 : PROJECT — TRACKSY (앱)   ※ id="tracksy"
+         - 레이아웃: 모두매쓰와 동일 (단, Before/After 토글 없음)
+         - 왼쪽: 폰 목업 화면(tracksy1~6 자동 교차) / 색상: TRACKSY 퍼플(#7C5CFF)
          ===================================================== -->
     <section
       class="project project--modoo project--modoo-tracksy"
-      id="app"
+      id="tracksy"
       aria-label="앱 프로젝트 - TRACKSY"
     >
       <div class="project-modoo__body">
@@ -687,13 +701,14 @@
         </div>
       </div>
 
-      <!-- 하단 프로젝트 정보 바 -->
+      <!-- 하단 프로젝트 정보 바 — 각 <dd> 값만 수정
+           (Contribution·Design Color[스와치 li background HEX]·Font Style·Generative AI·Tools Used[img src]·Duration) -->
       <div class="project-modoo__meta" data-reveal>
         <div class="project-modoo__meta-inner">
           <dl class="project-modoo__details">
             <div class="project-modoo__detail-row">
               <dt>Contribution</dt>
-              <dd>기획30%, 디자인 20%, 퍼블리싱 100%</dd>
+              <dd>기획60%, 디자인 40%, 퍼블리싱 30%</dd>
             </div>
             <div class="project-modoo__detail-row">
               <dt>Design Color</dt>
@@ -723,7 +738,8 @@
                   <li class="tool"><img src="./images/ico_fig.png" alt="Figma" /></li>
                   <li class="tool"><img src="./images/ico_vs.png" alt="VS Code" /></li>
                   <li class="tool"><img src="./images/ico_clau.png" alt="Claude" /></li>
-                  <li class="tool"><img src="./images/ico_fire.png" alt="Firebase" /></li>
+                  <li class="tool"><img src="./images/Git.png" alt="Git" /></li>
+                  <li class="tool"><img src="./images/Supabase.png" alt="Supabase" /></li>
                 </ul>
               </dd>
             </div>
