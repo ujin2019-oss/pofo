@@ -570,16 +570,38 @@
             화면을 터치하면 자동으로 스크롤됩니다.
           </p>
 
-          <div class="project-modoo__device">
-            <img
-              class="project-modoo__image"
-              src="./images/modoo_After_scroll.png"
-              alt="모두매쓰 리뉴얼 후 화면"
-              data-after-image="./images/modoo_After_scroll.png"
-              data-before-image="./images/modoo_Before_scroll.png"
-              data-after-alt="모두매쓰 리뉴얼 후 화면"
-              data-before-alt="모두매쓰 리뉴얼 전 화면"
-            />
+          <!-- 데스크톱(큰 화면) + 모바일(폰)이 함께 표시됩니다.
+               · 데스크톱 캡처 : .project-modoo__device 안 img 의 data-*-image
+               · 모바일 캡처   : .project-modoo__phone 안 img 의 data-*-image (modoo_MBefore/MAfter_scroll)
+               Before/After 토글은 두 화면을 동시에 전환합니다. -->
+          <div class="project-modoo__stage">
+            <!-- 데스크톱 화면 -->
+            <div class="project-modoo__device">
+              <img
+                class="project-modoo__image"
+                src="./images/modoo_After_scroll.png"
+                alt="모두매쓰 리뉴얼 후 화면"
+                data-after-image="./images/modoo_After_scroll.png"
+                data-before-image="./images/modoo_Before_scroll.png"
+                data-after-alt="모두매쓰 리뉴얼 후 화면"
+                data-before-alt="모두매쓰 리뉴얼 전 화면"
+              />
+            </div>
+
+            <!-- 모바일 화면 (데스크톱 우측 앞에 겹쳐 세움) -->
+            <div class="project-modoo__phone">
+              <div class="project-modoo__phone-screen">
+                <img
+                  class="project-modoo__image project-modoo__image--mobile"
+                  src="./images/modoo_MAfter_scroll.png"
+                  alt="모두매쓰 모바일 리뉴얼 후 화면"
+                  data-after-image="./images/modoo_MAfter_scroll.png"
+                  data-before-image="./images/modoo_MBefore_scroll.png"
+                  data-after-alt="모두매쓰 모바일 리뉴얼 후 화면"
+                  data-before-alt="모두매쓰 모바일 리뉴얼 전 화면"
+                />
+              </div>
+            </div>
           </div>
         </div>
 
