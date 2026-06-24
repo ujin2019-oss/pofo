@@ -68,7 +68,7 @@
       --lh-tight: 1.12; --lh-normal: 1.6; --lh-loose: 1.85;
 
       /* 레이아웃 / 여백 (Apple 스타일: 넓게) */
-      --section-gap: clamp(42px, 6.5vw, 92px);
+      --section-gap: clamp(64px, 9vw, 140px);
       --block-gap: clamp(30px, 4.5vw, 60px);
       --pad-x: clamp(20px, 5vw, 64px);
       --container: 1280px;
@@ -221,13 +221,20 @@
     #why .label { color: var(--color-soft-red); }
     #why .title { color: #fff; }
     #why .lead { color: rgba(255,255,255,0.78); }
-    .why__grid { display: grid; grid-template-columns: 1fr; gap: var(--block-gap); align-items: center; }
+    .why__grid { display: grid; grid-template-columns: 1fr; gap: var(--block-gap); align-items: start; }
     .why__shot .img-slot { aspect-ratio: 4/3; box-shadow: var(--shadow-card); }
     .why__cards .stats { grid-template-columns: 1fr; margin-top: 0; gap: clamp(12px,1.6vw,18px); }
     /* 반투명 글래스 카드 (다크 배경 위) */
     #why .stat { background: rgba(0,0,0,0.40); border: 1px solid rgba(255,255,255,0.16); box-shadow: 0 10px 30px rgba(0,0,0,0.32); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); transition: background .3s var(--ease), transform .3s var(--ease); }
     #why .stat:hover { background: rgba(0,0,0,0.55); transform: translateY(-3px); }
-    #why .stat__num { color: #D33B3B; }
+    #why .stat__num { color: #D33B3B;
+      background-image: linear-gradient(115deg, transparent 36%, rgba(255,240,214,0.16) 44%, rgba(255,248,234,0.82) 50%, rgba(255,240,214,0.16) 56%, transparent 64%), linear-gradient(#D33B3B, #D33B3B);
+      background-size: 280% 100%, 100% 100%; background-position: 200% 0, 0 0; background-repeat: no-repeat;
+      -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+      animation: numShine 4s linear infinite; animation-play-state: paused; }
+    #why.is-inview .stat__num { animation-play-state: running; }
+    @keyframes numShine { 0% { background-position: 200% 0, 0 0; } 100% { background-position: -120% 0, 0 0; } }
+    @media (prefers-reduced-motion: reduce) { #why .stat__num { animation: none; } }
     #why .stat__label { color: rgba(255,255,255,0.78); }
     @media (max-width: 767px) { #why { background-image: linear-gradient(rgba(18,8,8,0.86), rgba(18,8,8,0.86)), url('./images/system_2_0.jpg'); } }
     .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(12px,2vw,24px); margin-top: var(--block-gap); }
@@ -371,15 +378,15 @@
     .case-hint svg { width: 16px; height: 16px; flex: none; }
     .restruct-head { max-width: 760px; margin: 0 auto; text-align: center; }
     /* STEP 지그재그 (이미지/텍스트 교차) */
-    .restruct-rows { display: flex; flex-direction: column; gap: clamp(48px,7vw,96px); margin-top: var(--block-gap); }
+    .restruct-rows { display: flex; flex-direction: column; gap: clamp(48px,7vw,96px); margin-top: clamp(48px,7vw,100px); }
     .rrow { display: grid; grid-template-columns: 1fr; gap: clamp(20px,4vw,48px); align-items: center; }
     .rslot { aspect-ratio: 4/3; border-radius: var(--radius-lg); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; text-align: center; padding: 20px; background: #E7E3DE; background-image: repeating-linear-gradient(45deg, transparent, transparent 16px, rgba(161,45,46,0.04) 16px, rgba(161,45,46,0.04) 32px); box-shadow: var(--shadow-soft); }
     .rslot__big { font-size: clamp(20px,2.4vw,30px); font-weight: var(--fw-black); color: #5A534E; letter-spacing: -0.01em; }
     .rslot__cap { font-size: var(--fs-small); font-weight: var(--fw-bold); letter-spacing: 0.04em; color: #A89E97; }
     .rvideo, .rimg { width: 100%; aspect-ratio: 4/3; object-fit: cover; border-radius: var(--radius-lg); box-shadow: var(--shadow-card); display: block; background: #000; }
-    .rstep { font-size: var(--fs-small); font-weight: var(--fw-bold); letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-soft-red); margin-bottom: 14px; }
-    .rtitle { font-size: clamp(22px,2.6vw,32px); font-weight: var(--fw-black); line-height: 1.32; color: var(--color-text); margin-bottom: 16px; word-break: keep-all; }
-    .rdesc { font-size: var(--fs-body); color: var(--color-text-muted); line-height: 1.8; word-break: keep-all; }
+    .rstep { font-size: clamp(14px,1vw,16px); font-weight: var(--fw-bold); letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-soft-red); margin-bottom: 16px; }
+    .rtitle { font-size: clamp(26px,3vw,40px); font-weight: var(--fw-black); line-height: 1.3; color: var(--color-text); margin-bottom: 18px; word-break: keep-all; }
+    .rdesc { font-size: clamp(16px,1.35vw,20px); color: var(--color-text-muted); line-height: 1.8; word-break: keep-all; }
     @media (min-width: 768px) {
       .rrow { grid-template-columns: 1fr 1fr; gap: clamp(40px,5vw,80px); }
       .rrow--rev .rrow__media { order: 2; }
@@ -394,7 +401,7 @@
        08) BEFORE & AFTER (slider, 가장 크게)
        ================================================================= */
     /* Before/After 캐러셀 (케이스 3개 슬라이드) */
-    .bacarousel { position: relative; max-width: 700px; margin: var(--block-gap) auto 0; }
+    .bacarousel { position: relative; max-width: 700px; margin: clamp(48px,7vw,100px) auto 0; }
     .bacarousel__viewport { overflow: hidden; }
     .bablock { display: flex; flex-wrap: nowrap; transition: transform .55s var(--ease); will-change: transform; }
     .bacase { flex: 0 0 100%; max-width: 100%; }
@@ -407,21 +414,17 @@
     .bacarousel__dot { width: 9px; height: 9px; border-radius: 50%; background: var(--color-line); border: none; padding: 0; cursor: pointer; transition: background .2s, width .2s; }
     .bacarousel__dot.is-active { background: var(--color-burgundy); width: 24px; border-radius: 5px; }
     /* AI 활용 — 캐러셀 우측 원형 로고 배지 */
-    .ba-wrap { display: flex; align-items: center; justify-content: center; gap: clamp(28px,4vw,72px); margin-top: var(--block-gap); }
-    .ba-wrap .bacarousel { margin: 0; }
-    .ba-logos { display: flex; flex-direction: column; align-items: center; gap: 20px; flex: none; }
+    .ba-top { display: flex; align-items: center; justify-content: space-between; gap: clamp(24px,4vw,56px); flex-wrap: wrap; }
+    .ba-top .head { margin-bottom: 0; flex: 1 1 380px; }
+    .ba-logos { display: flex; flex-direction: row; align-items: center; gap: clamp(16px,2vw,24px); flex: none; }
     .ba-logos__label { font-size: var(--fs-small); font-weight: var(--fw-bold); letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-text-muted); }
     .ai-badge { display: flex; flex-direction: column; align-items: center; gap: 8px; }
-    .ai-badge__circle { width: clamp(62px,6vw,88px); height: clamp(62px,6vw,88px); border-radius: 50%; display: grid; place-items: center; box-shadow: var(--shadow-card); transition: transform .3s var(--ease); }
+    .ai-badge__circle { width: clamp(62px,6vw,88px); height: clamp(62px,6vw,88px); border-radius: 50%; display: grid; place-items: center; background: #fff; border: 1px solid var(--color-line); box-shadow: var(--shadow-card); transition: transform .3s var(--ease); }
     .ai-badge:hover .ai-badge__circle { transform: translateY(-3px) scale(1.05); }
-    .ai-badge__circle svg { width: 54%; height: 54%; color: #fff; }
-    .ai-badge--mj .ai-badge__circle { background: #0F0F0F; }
-    .ai-badge--gpt .ai-badge__circle { background: #10A37F; }
+    .ai-badge__circle img { width: 62%; height: 62%; object-fit: contain; }
+    .ai-badge--mj .ai-badge__circle img { width: 72%; height: 72%; }
+    .ai-badge--gpt .ai-badge__circle img { width: 46%; height: 46%; }
     .ai-badge__name { font-size: 13px; font-weight: var(--fw-bold); color: var(--color-text); }
-    @media (max-width: 900px) {
-      .ba-wrap { flex-direction: column; gap: clamp(28px,5vw,44px); }
-      .ba-logos { flex-direction: row; }
-    }
     .bacase__no { font-size: var(--fs-small); font-weight: var(--fw-bold); letter-spacing: 0.12em; color: var(--color-soft-red); }
     .bacase__title { margin-top: 6px; font-size: clamp(22px,3vw,34px); font-weight: var(--fw-black); }
     .ba { position: relative; width: 100%; border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-card); user-select: none; touch-action: pan-y; aspect-ratio: 16/9; background: #000; }
@@ -851,41 +854,41 @@
 
     <!-- ============ PAGE RESTRUCTURING (BEFORE/AFTER 자동 스크롤) ============ -->
     <section class="section section--soft" id="restructuring">
-      <div class="container container--wide">
+      <div class="container">
         <div class="head restruct-head" data-reveal>
           <span class="label">Page Restructuring</span>
           <h2 class="title">자극적인 콘텐츠를<br />안정적이고 신뢰감 있게</h2>
         </div>
         <div class="restruct-rows">
-          <!-- STEP 02 : 이미지 좌 / 텍스트 우 -->
+          <!-- STEP 01 : 이미지 좌 / 텍스트 우 -->
           <div class="rrow" data-reveal>
             <div class="rrow__media">
               <img class="rimg" src="./images/system_p_1-1.jpg" alt="사용자 중심으로 다시 짠 정보 구조" />
             </div>
             <div class="rrow__text">
-              <p class="rstep">STEP 02 — Information Architecture</p>
+              <p class="rstep">STEP 01 — Information Architecture</p>
               <h3 class="rtitle">사용자 중심으로<br />다시 짠 정보 구조</h3>
               <p class="rdesc">전문 분야 위주의 메뉴를 사용자 언어로 바꾸고, 흩어져 있던 장비 콘텐츠를 ‘디지털 진료 시스템’으로 통합했습니다. ‘임플란트 → 심미보철’처럼 기능적 가치와 전문성이 함께 전달되도록 메뉴를 재구성했습니다.</p>
             </div>
           </div>
-          <!-- STEP 03 : 텍스트 좌 / 이미지 우 -->
+          <!-- STEP 02 : 텍스트 좌 / 이미지 우 -->
           <div class="rrow rrow--rev" data-reveal>
             <div class="rrow__media">
               <video class="rvideo" src="./videos/system_hero_01.mp4" muted loop playsinline preload="metadata" data-autoplay-inview aria-label="히어로 영상"></video>
             </div>
             <div class="rrow__text">
-              <p class="rstep">STEP 03 — Content Strategy</p>
+              <p class="rstep">STEP 02 — Content Strategy</p>
               <h3 class="rtitle">결과 사진에서<br />과정의 신뢰로</h3>
               <p class="rdesc">전후 사진·할인 중심의 콘텐츠를, 서울대 출신 의료진·디지털 장비·진료 프로세스 중심으로 전환했습니다. AI로 수술 모션 영상과 장비 이미지를 제작해 더 전문적이고 신뢰감 있는 콘텐츠를 구성했습니다.</p>
             </div>
           </div>
-          <!-- STEP 04 : 이미지 좌 / 텍스트 우 -->
+          <!-- STEP 03 : 이미지 좌 / 텍스트 우 -->
           <div class="rrow" data-reveal>
             <div class="rrow__media">
               <img class="rimg" src="./images/system_p_3.jpg" alt="신뢰 형성에서 예약 전환까지 하나의 여정" />
             </div>
             <div class="rrow__text">
-              <p class="rstep">STEP 04 — User Flow &amp; CTA</p>
+              <p class="rstep">STEP 03 — User Flow &amp; CTA</p>
               <h3 class="rtitle">신뢰 형성에서<br />예약 전환까지 하나의 여정</h3>
               <p class="rdesc">병원 소개 → 의료진 신뢰 → 진료 강점 → 디지털 장비 → 환자 안심 콘텐츠 순으로 배치하고, 마지막에 상담 예약 CTA를 연결했습니다. 단순한 정보 나열이 아닌 ‘신뢰 → 전환’의 사용자 여정으로 설계했습니다.</p>
             </div>
@@ -897,13 +900,24 @@
     <!-- ============ BEFORE & AFTER (slider, 가장 크게) ============ -->
     <section class="section" id="beforeafter">
       <div class="container">
-        <div class="head">
-          <span class="label" data-reveal>Before &amp; After</span>
-          <h2 class="title" data-reveal>전략에 생성형 AI를 더하다.</h2>
-          <p class="lead" data-reveal>생성형 AI(Midjourney, ChatGPT 등) 이미지·영상을 통해 고급스러운 디자인을 보완했습니다.</p>
+        <div class="ba-top" data-reveal>
+          <div class="head">
+            <span class="label">Before &amp; After</span>
+            <h2 class="title">전략에 생성형 AI를 더하다.</h2>
+            <p class="lead">생성형 AI(Midjourney, ChatGPT 등) 이미지·영상을 통해 고급스러운 디자인을 보완했습니다.</p>
+          </div>
+          <div class="ba-logos">
+            <div class="ai-badge ai-badge--mj">
+              <span class="ai-badge__circle"><img src="./images/Midjourney_Emblem.png" alt="Midjourney" /></span>
+              <span class="ai-badge__name">Midjourney</span>
+            </div>
+            <div class="ai-badge ai-badge--gpt">
+              <span class="ai-badge__circle"><img src="./images/ChatGPT_Logo.png" alt="ChatGPT" /></span>
+              <span class="ai-badge__name">ChatGPT</span>
+            </div>
+          </div>
         </div>
-        <div class="ba-wrap" data-reveal>
-        <div class="bacarousel">
+        <div class="bacarousel" data-reveal>
           <button class="bacarousel__arrow bacarousel__arrow--prev" type="button" aria-label="이전 케이스">&#8249;</button>
           <button class="bacarousel__arrow bacarousel__arrow--next" type="button" aria-label="다음 케이스">&#8250;</button>
           <div class="bacarousel__viewport">
@@ -954,18 +968,6 @@
             <button class="bacarousel__dot" type="button" aria-label="CASE 02 의료진 소개"></button>
             <button class="bacarousel__dot" type="button" aria-label="CASE 03 진료 상세"></button>
           </div>
-        </div>
-        <div class="ba-logos">
-          <span class="ba-logos__label">AI 활용</span>
-          <div class="ai-badge ai-badge--mj">
-            <span class="ai-badge__circle"><svg viewBox="0 0 32 32" fill="currentColor" aria-hidden="true"><path d="M17.2 3.5c3.9 3.4 6.2 8 6.6 13.1H10.6C11 11.5 13.3 6.9 17.2 3.5z"/><path d="M2.8 19.2h26.4l-3.7 5.6a3 3 0 0 1-2.5 1.3H9a3 3 0 0 1-2.5-1.3l-3.7-5.6z"/></svg></span>
-            <span class="ai-badge__name">Midjourney</span>
-          </div>
-          <div class="ai-badge ai-badge--gpt">
-            <span class="ai-badge__circle"><svg viewBox="0 0 32 32" fill="currentColor" aria-hidden="true"><ellipse cx="16" cy="8.4" rx="3" ry="4.4"/><ellipse cx="16" cy="23.6" rx="3" ry="4.4"/><ellipse cx="9.2" cy="12.2" rx="3" ry="4.4" transform="rotate(60 9.2 12.2)"/><ellipse cx="22.8" cy="12.2" rx="3" ry="4.4" transform="rotate(-60 22.8 12.2)"/><ellipse cx="9.2" cy="19.8" rx="3" ry="4.4" transform="rotate(-60 9.2 19.8)"/><ellipse cx="22.8" cy="19.8" rx="3" ry="4.4" transform="rotate(60 22.8 19.8)"/></svg></span>
-            <span class="ai-badge__name">ChatGPT</span>
-          </div>
-        </div>
         </div>
       </div>
     </section>
@@ -1059,7 +1061,9 @@
           <span class="pstep">디자인</span><span class="parrow">→</span>
           <span class="pstep">퍼블리싱</span><span class="parrow">→</span>
           <span class="pstep">배포</span><span class="parrow">→</span>
-          <span class="pstep pstep--last">제안</span>
+          <span class="pstep pstep--last">제안
+
+          </span>
         </div>
       </div>
     </section>
@@ -1253,10 +1257,24 @@
         vids.forEach(function (v) { io.observe(v); });
       }
 
+      /* ---- Why 섹션이 화면에 들어오면 숫자 라이트 스윕 시작 ---- */
+      function initWhyShine() {
+        var why = document.getElementById("why");
+        if (!why) return;
+        if (!("IntersectionObserver" in window)) { why.classList.add("is-inview"); return; }
+        var io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (e) {
+            why.classList.toggle("is-inview", e.isIntersecting);
+          });
+        }, { threshold: 0.3 });
+        io.observe(why);
+      }
+
       initBA();
       initBACarousel();
       initAutoScroll();
       initInViewVideos();
+      initWhyShine();
       initReveal();
     })();
   </script>
