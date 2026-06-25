@@ -169,11 +169,12 @@
     .hstat__desc { font-size: 13px; color: var(--color-text-muted); margin-top: 5px; line-height: 1.4; word-break: keep-all; }
     @media (max-width: 480px) { .hero__stats { grid-template-columns: 1fr; } }
     /* 폰 목업(손+폰)을 쓰는 히어로 슬롯: 320px 제한 해제 */
-    .hero__mock--device { max-width: 520px; }
-    /* TRACKSY 폰 목업: phone.png(배경 투명, 손+폰) + 뒤에 tracksy 화면이 비쳐 보임 */
-    .tracksy-mock { position: relative; width: 100%; aspect-ratio: 1070 / 846; margin: 0 auto; }
-    .tracksy-mock__frame { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; z-index: 10; pointer-events: none; filter: drop-shadow(0 22px 40px rgba(60, 30, 160, 0.28)); }
-    .tracksy-mock__viewport { position: absolute; left: 59.1%; top: 4.4%; width: 28.9%; height: 79.8%; overflow: hidden; z-index: 1; border-radius: 16px; background: #B89CFF; }
+    .hero__mock--device { max-width: 360px; }
+    /* TRACKSY 폰 목업: main_tracksy_img.png(폰 2대 + 마스코트, 왼쪽 폰 화면부 투명) + 왼쪽 폰 화면에 tracksy 슬라이드가 비쳐 보임
+       (슬라이드 위치는 .tracksy-mock__viewport 의 left·top·width·height 로 조정) */
+    .tracksy-mock { position: relative; width: 100%; aspect-ratio: 1095 / 1546; margin: 0 auto; }
+    .tracksy-mock__frame { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; z-index: 10; pointer-events: none; filter: drop-shadow(0 18px 34px rgba(60, 30, 160, 0.2)); }
+    .tracksy-mock__viewport { position: absolute; left: 5%; top: 19%; width: 49.5%; height: 74%; overflow: hidden; z-index: 1; border-radius: 20px; background: #B89CFF; }
     .tracksy-mock__screen { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center top; background: #B89CFF; transform: translateX(100%); transition: transform 0.7s cubic-bezier(0.65, 0, 0.35, 1); }
     .tracksy-mock__screen.is-active { transform: translateX(0); }
     .tracksy-mock__screen.is-out { transform: translateX(-100%); }
@@ -446,7 +447,7 @@
       .hero__grid { grid-template-columns: 1.14fr 0.86fr; align-items: end; }
       .hero__mock { order: 0; margin: 0; }
       /* 폰 목업 크게+왼쪽으로: 컬럼보다 넓게(왼쪽으로 확장) + 하단 정렬(팔이 섹션 바닥에서 올라오는 형태) */
-      .hero__mock--device { max-width: none; align-self: end; width: 115%; margin-left: -15%; }
+      .hero__mock--device { max-width: 440px; align-self: end; width: 100%; margin: 0 auto; }
       /* 텍스트는 세로 가운데 정렬 + 하단 여백으로 목업과 균형 */
       .hero__intro { align-self: center; padding-bottom: clamp(48px, 7vw, 110px); }
       .problem__top { grid-template-columns: 1.7fr 0.8fr; }
@@ -469,7 +470,7 @@
       .hero { padding-bottom: var(--section-gap); }
       .hero__grid { grid-template-columns: 1fr; align-items: center; }
       .hero__mock { order: -1; }
-      .hero__mock--device { width: 100%; max-width: 560px; margin: 0 auto; align-self: center; }
+      .hero__mock--device { width: 100%; max-width: 380px; margin: 0 auto; align-self: center; }
       .hero__intro { align-self: auto; padding-bottom: 0; }
     }
   </style>
@@ -519,7 +520,7 @@
                 <img class="tracksy-mock__screen" src="./images/tracksy5.png" alt="" aria-hidden="true" />
                 <img class="tracksy-mock__screen" src="./images/tracksy6.png" alt="" aria-hidden="true" />
               </div>
-              <img class="tracksy-mock__frame" src="./images/phone.png" alt="" aria-hidden="true" />
+              <img class="tracksy-mock__frame" src="./tracksy_img/main_tracksy_img.png" alt="" aria-hidden="true" />
             </div>
           </div>
           <div class="hero__intro">
@@ -783,27 +784,25 @@
       </div>
     </section>
 
-    <!-- ============ 04.7 CORE FEATURES (가로 스크롤 / Vanilla JS 직접 고정) =========
+    <!-- ============ 04.7 CORE FEATURES (세로 스택 / 스크롤 시 위로 올라오며 등장) =========
          ▣ 수정 가이드
-           · 패널 추가/삭제 : 아래 <article class="cf__panel"> 블록을 복제/삭제 (JS가 개수 자동 계산)
+           · 패널 추가/삭제 : 아래 <article class="cf__panel" data-reveal> 블록을 복제/삭제
            · 내용 변경      : 각 패널의 이미지(src)·FEATURE 번호·라벨·제목·설명만 고치면 됨
-           · 효과 속도/스냅 : 하단 <script> 의 initCoreFeatures() 안 scrub / snap 값 수정
-           · 폴백          : JS 미동작·감속모션·모바일(<768px)에서는 세로로 자연스럽게 쌓임
+           · 등장 효과      : data-reveal (IntersectionObserver) — 화면에 들어오면 아래→위로 슬라이드+페이드
          ============================================================================ -->
     <section class="cf" id="core-features" aria-label="핵심 기능">
-      <!-- 핀 고정 영역: 대제목 + 패널 가로 스크롤이 한 화면에 함께 고정 (JS가 .cf__sticky 를 화면 고정) -->
+      <!-- 세로 스택: 대제목 아래로 패널들이 위로 올라오며(reveal) 등장 -->
       <div class="cf__pin">
         <div class="cf__sticky">
-          <!-- 대제목 (고정 화면 상단 · 원래 크기 유지) -->
+          <!-- 대제목 (섹션 상단) -->
           <div class="cf__head">
             <span class="eyebrow" data-reveal>Core Features</span>
             <h2 class="section-title" data-reveal>AI로 완성하는 <em>러닝 기록</em></h2>
             <p class="lead" data-reveal>기록 입력부터 감성 일지, 공유 카드까지 — 러닝의 전 과정을 AI로 더 쉽고 즐겁게 만들었습니다.</p>
           </div>
-          <span class="cf__hint" aria-hidden="true">옆으로 스크롤 →</span>
           <div class="cf__track">
         <!-- ===== PANEL 1 : 캡쳐 사진 스캔 (OCR) ===== -->
-        <article class="cf__panel">
+        <article class="cf__panel" data-reveal>
           <div class="cf__inner">
             <div class="fshow__media">
               <div class="fshow__panel fshow__panel--duo">
@@ -825,7 +824,7 @@
         </article>
 
         <!-- ===== PANEL 2 : AI 오늘의 러닝일지 ===== -->
-        <article class="cf__panel">
+        <article class="cf__panel" data-reveal>
           <div class="cf__inner">
             <div class="fshow__media">
               <div class="fshow__panel">
@@ -846,7 +845,7 @@
         </article>
 
         <!-- ===== PANEL 3 : 러닝 카드 디자인 ===== -->
-        <article class="cf__panel">
+        <article class="cf__panel" data-reveal>
           <div class="cf__inner">
             <div class="fshow__media">
               <div class="fshow__panel">
@@ -1197,59 +1196,9 @@
         }, 2200);
       }
 
-      /* ---- Core Features : 가로 스크롤 (Vanilla JS 직접 고정 · 외부 라이브러리 미사용) ----
-         · .cf__pin 높이를 (패널 수 × PANEL_VH vh)로 늘려 가로 전환에 쓸 세로 스크롤 거리를 확보
-         · .cf__sticky(뷰포트)를 진입 전 absolute(상단) → 통과 중 fixed(화면 고정) → 통과 후 absolute(하단) 로 전환
-         · 고정돼 있는 동안 스크롤 진행도(0~1)에 맞춰 .cf__track 을 가로 이동 + 진행 막대 채움
-         · 패널 추가/삭제는 HTML .cf__panel 블록만 늘리면 자동 반영(개수 자동 계산)
-         · 속도감 조절 : 아래 PANEL_VH 값을 키우면 한 패널을 더 천천히 넘어감
-         · 폴백 : 감속모션·모바일(<768px) → 세로 스택(그대로 읽힘) */
-      function initCoreFeatures() {
-        var PANEL_VH = 100; // 패널당 세로 스크롤 양(vh). 값 ↑ = 더 천천히
-
-        var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-        var section = document.querySelector(".cf");
-        var pin = section && section.querySelector(".cf__pin");
-        var viewport = section && section.querySelector(".cf__sticky");
-        var track = section && section.querySelector(".cf__track");
-        var bar = section && section.querySelector(".cf__progress-bar");
-        var panels = section ? section.querySelectorAll(".cf__panel") : [];
-        if (!section || !pin || !viewport || !track || panels.length < 2) return;
-        if (reduce || window.innerWidth < 768) { section.classList.remove("cf--horizontal"); return; } // 폴백
-
-        section.classList.add("cf--horizontal");          // 가로 모드 CSS 켜기
-        function setHeight() { pin.style.height = (panels.length * PANEL_VH) + "vh"; }
-        setHeight();                                       // 스크롤 거리 = 패널 수에 비례
-
-        var ticking = false;
-        function update() {
-          ticking = false;
-          var max = pin.offsetHeight - window.innerHeight;                 // 진행 가능한 세로 거리
-          var top = pin.getBoundingClientRect().top;
-          if (top >= 0) {                                                  // 진입 전: 핀 상단에 정렬
-            viewport.style.position = "absolute"; viewport.style.top = "0"; viewport.style.bottom = "auto";
-          } else if (top <= -max) {                                        // 통과 후: 핀 하단에 정렬
-            viewport.style.position = "absolute"; viewport.style.top = "auto"; viewport.style.bottom = "0";
-          } else {                                                         // 통과 중: 화면에 고정
-            viewport.style.position = "fixed"; viewport.style.top = "0"; viewport.style.bottom = "auto";
-          }
-          var scrolled = Math.min(Math.max(-top, 0), max);
-          var progress = max > 0 ? scrolled / max : 0;                    // 0~1
-          var distance = track.scrollWidth - window.innerWidth;            // 가로 이동 거리(px)
-          track.style.transform = "translate3d(" + (-(progress * distance)).toFixed(2) + "px,0,0)";
-          if (bar) bar.style.transform = "scaleX(" + progress.toFixed(4) + ")";
-        }
-        function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(update); } }
-
-        window.addEventListener("scroll", onScroll, { passive: true });
-        window.addEventListener("resize", function () { setHeight(); update(); });
-        update(); // 초기 위치 반영
-      }
-
       initTabs();
       initReveal();
       initTracksyMock();
-      initCoreFeatures();
     })();
   </script>
 </body>

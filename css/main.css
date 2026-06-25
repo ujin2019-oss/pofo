@@ -757,12 +757,12 @@ html {
   margin-bottom: 0;            /* 하단 정보 바와 간격 없이 맞닿게 */
   transform: translateX(clamp(-72px, -5vw, -24px)); /* 살짝 왼쪽으로 이동 */
 }
-/* TRACKSY 메인 비주얼: 단일 이미지(tracksymain.png)로 교체 */
-.tracksy-mock-img {
-  width: min(100%, 540px);     /* 더 작게 */
+/* TRACKSY 메인 비주얼: 단일 이미지(main_tracksy_img.png) */
+.tracksy-main-img {
+  width: min(100%, 520px);
   height: auto;
   margin-bottom: clamp(20px, 3.5vh, 48px); /* 하단 정보 바와 간격 */
-  transform: translateX(clamp(32px, 5vw, 88px)); /* 오른쪽으로 이동 */
+  transform: translateX(clamp(24px, 4vw, 72px)); /* 오른쪽으로 이동 */
 }
 /* 폰 프레임(손+폰) : 위 레이어 + 손 모양을 따라가는 그림자로 입체감 */
 .tracksy-mock__frame {
@@ -1278,7 +1278,7 @@ html {
     border-radius: 12px 12px 0 0;
   }
   /* TRACKSY 메인 비주얼: 모바일은 오른쪽 이동 해제(우측 잘림 방지) + 가운데 정렬 */
-  .tracksy-mock-img {
+  .tracksy-main-img {
     transform: none;
     margin-inline: auto;
   }
