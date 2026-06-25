@@ -484,7 +484,11 @@
   .pslider-arrow:hover{ background:var(--brand); color:#fff; border-color:var(--brand); }
   .pslider-arrow--prev{ left:0; }
   .pslider-arrow--next{ right:0; }
-  @media (max-width:560px){ .pslider-arrow{ display:none; } }
+  /* 모바일: 좌우 화살표 숨김 + 디바이스를 화면 가장자리(좌우 12px 여백)까지 풀블리드로 최대화 (베젤 축소) */
+  @media (max-width:760px){
+    .pslider-arrow{ display:none; }
+    .pslide-device{ max-width:none; margin-inline:calc(12px - var(--pad-x)); padding:8px; }
+  }
 
   /* side-by-side compare */
   .compare{ display:grid; grid-template-columns:1fr auto 1fr; gap:var(--s5); align-items:center; }
@@ -705,7 +709,13 @@
     .hero-stats{ grid-template-columns:repeat(3,1fr); gap:10px; }
     .stat-card{ padding:14px; }
     .stat-card__desc{ font-size:12px; }
-    .pin{ display:none; }
+    /* 핀: 모바일에서도 보이게(작게). 라벨(툴팁)은 화면 밖으로 넘쳐서 숨김 — 내용은 아래 P1~P4 카드로 전달 */
+    .pin{ display:block; width:32px; height:32px; }
+    .pin__dot{ width:28px; height:28px; font-size:14px; border-width:2px; }
+    .pin::before{ width:28px; height:28px; border-width:2px; }
+    .pin__label{ display:none; }
+    /* 모바일은 hover가 없으므로 "핀에 마우스를 올려 보세요" 안내 숨김 */
+    .frame-cap__hint{ display:none; }
     #insight{ min-height:auto; display:block; padding-block:var(--section-y); }
     .insight-row{ grid-template-columns:1fr; gap:var(--s4); padding-block:var(--s7); }
     .insight-num{ font-size:clamp(56px,18vw,96px); }
@@ -862,7 +872,7 @@
               </button>
             </div>
           </div>
-          <figcaption class="frame-cap">기존 메인 — 핵심 동선 없이 모든 기능이 동시에 노출된 상태 · <span style="color:var(--danger)">●</span> 핀에 마우스를 올려 보세요</figcaption>
+          <figcaption class="frame-cap">기존 메인 — 핵심 동선 없이 모든 기능이 동시에 노출된 상태<span class="frame-cap__hint"> · <span style="color:var(--danger)">●</span> 핀에 마우스를 올려 보세요</span></figcaption>
         </figure>
 
         <div class="prob-cards">

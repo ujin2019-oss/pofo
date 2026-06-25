@@ -3,7 +3,7 @@
   =====================================================================
   TRACKSY — AI 기반 러닝 다이어리 서비스 / UX·UI Case Study (서브페이지)
   - 순수 HTML + Vanilla CSS + Vanilla JS (CSS 라이브러리 미사용)
-  - 스크롤 인터랙션: GSAP + ScrollTrigger (CDN)
+  - 스크롤 인터랙션: Vanilla JS (IntersectionObserver 등장 + 가로 스크롤 직접 고정) — 외부 라이브러리 미사용
   - 모든 이미지는 플레이스홀더(.img-slot) — 각 슬롯 주석의 위치에 넣으세요.
   - 수정: <style> 최상단 :root 변수 / 각 .img-slot 을 <img> 로 교체
   =====================================================================
@@ -17,6 +17,10 @@
 
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <!-- 아이콘: Google Material Symbols (Rounded) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=block" />
 
   <style>
     /* =================================================================
@@ -34,6 +38,7 @@
       --color-line: rgba(17, 17, 17, 0.08);
       --color-ink: #15121F;         /* 다크 섹션 */
       --gradient-brand: linear-gradient(135deg, #C4B5FD 0%, #8B5CF6 100%);
+      --cf-bg: linear-gradient(155deg, #F4EFFF 0%, #EBE3FB 55%, #F2EAFF 100%); /* Core Features 섹션 배경(구 슬롯 배경) */
 
       --font-base: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui,
         "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
@@ -51,7 +56,7 @@
       --section-gap: clamp(80px, 12vw, 168px);
       --block-gap: clamp(28px, 4vw, 56px);
       --pad-x: clamp(20px, 5vw, 88px);
-      --container: 1200px;
+      --container: 1280px;
       --container-wide: 1440px;
 
       --radius-sm: 12px; --radius-md: 20px; --radius-lg: 30px; --radius-pill: 999px;
@@ -66,7 +71,8 @@
        ================================================================= */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
-    body { font-family: var(--font-base); font-size: var(--fs-body); line-height: var(--lh-normal); color: var(--color-text); background: var(--color-bg); -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; overflow-x: hidden; }
+    /* overflow-x: clip — 가로 넘침은 자르되 스크롤 컨테이너를 만들지 않아 .cf__sticky(position:sticky)가 정상 동작 */
+    body { font-family: var(--font-base); font-size: var(--fs-body); line-height: var(--lh-normal); color: var(--color-text); background: var(--color-bg); -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; overflow-x: clip; }
     img { display: block; max-width: 100%; height: auto; }
     ul { list-style: none; }
     a { color: inherit; text-decoration: none; }
@@ -187,6 +193,31 @@
     .pcard__title { margin-top: 10px; font-size: var(--fs-h3); font-weight: var(--fw-bold); word-break: keep-all; }
 
     /* =================================================================
+       02.5) UX RESEARCH (기회 요인 + 차트)
+       ================================================================= */
+    .section-title em { font-style: normal; background: var(--gradient-brand); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .rstats { display: grid; grid-template-columns: 1fr; gap: clamp(14px,2vw,20px); margin-bottom: var(--block-gap); }
+    .rstat { padding: clamp(20px,2.6vw,30px); border-radius: var(--radius-md); background: var(--color-light); border: 1px solid var(--color-line); }
+    .rstat__label { font-size: var(--fs-small); font-weight: var(--fw-bold); color: var(--color-text-muted); }
+    .rstat__num { margin-top: 12px; font-size: clamp(28px,3.6vw,42px); font-weight: var(--fw-black); color: var(--color-primary); letter-spacing: -0.02em; line-height: 1; }
+    .rstat__sub { margin-top: 12px; font-size: var(--fs-small); color: var(--color-text-muted); }
+    .rcharts { display: grid; grid-template-columns: 1fr; gap: clamp(18px,2.5vw,28px); }
+    .rchart { padding: clamp(20px,2.8vw,32px); border-radius: var(--radius-lg); background: var(--color-white); border: 1px solid var(--color-line); box-shadow: var(--shadow-soft); }
+    .rchart__title { font-size: var(--fs-h3); font-weight: var(--fw-bold); word-break: keep-all; }
+    .rchart__meta { margin-top: 4px; font-size: var(--fs-small); color: var(--color-text-muted); }
+    .rchart__svg { width: 100%; height: auto; display: block; margin-top: 20px; overflow: visible; }
+    .rchart__svg text { font-family: var(--font-base); }
+    .rchart .grid { stroke: #ECE8F6; }
+    .rchart .axis { stroke: #DCD4F0; }
+    .rchart .bar { fill: #DDD3F5; }
+    .rchart .bar--hi { fill: url(#barGrad); }
+    .rchart__legend { display: flex; flex-wrap: wrap; gap: 18px; margin-top: 18px; font-size: var(--fs-small); color: var(--color-text-muted); }
+    .rchart__legend span { display: inline-flex; align-items: center; gap: 8px; }
+    .rchart__legend i { width: 13px; height: 13px; border-radius: 3px; }
+    @media (min-width: 680px) { .rstats { grid-template-columns: repeat(3, 1fr); } }
+    @media (min-width: 920px) { .rcharts { grid-template-columns: 1fr 1fr; } }
+
+    /* =================================================================
        03) GOAL (아이콘 카드)
        ================================================================= */
     .goals { display: grid; grid-template-columns: 1fr; gap: clamp(16px,2vw,26px); }
@@ -209,14 +240,17 @@
     /* =================================================================
        05) SOLUTION (Flow diagram)
        ================================================================= */
-    .flow { display: grid; grid-template-columns: 1fr; gap: 0; margin-top: var(--block-gap); }
-    .flow__step { display: grid; grid-template-columns: 1fr; gap: 16px; align-items: center; }
-    .flow__media .img-slot { aspect-ratio: 16/10; }
-    .flow__body { display: flex; align-items: center; gap: 18px; }
-    .flow__num { flex: 0 0 auto; width: 52px; height: 52px; border-radius: var(--radius-pill); background: var(--gradient-brand); color: #fff; display: grid; place-items: center; font-weight: var(--fw-black); }
-    .flow__label { font-size: var(--fs-h3); font-weight: var(--fw-bold); }
-    .flow__arrow { display: grid; place-items: center; color: var(--color-secondary); padding: 14px 0; }
-    .flow__arrow svg { width: 22px; height: 30px; }
+    /* Solution Flow — 아이콘 노드 4개 가로 배열 + 화살표 커넥터 */
+    .flow { display: flex; flex-direction: column; gap: 6px; margin-top: var(--block-gap); }
+    .flow__node { flex: 1; display: flex; align-items: center; gap: 18px; padding: clamp(20px, 2.4vw, 28px); border-radius: var(--radius-lg); background: var(--color-white); border: 1px solid var(--color-line); box-shadow: var(--shadow-soft); transition: transform var(--ease) .4s, box-shadow .3s; }
+    .flow__node:hover { transform: translateY(-4px); box-shadow: var(--shadow-card); }
+    .flow__ico { flex: none; position: relative; width: 60px; height: 60px; border-radius: var(--radius-md); background: var(--color-light); color: var(--color-primary); display: grid; place-items: center; }
+    .flow__ico svg { width: 28px; height: 28px; }
+    .flow__num { position: absolute; top: -9px; left: -9px; width: 26px; height: 26px; border-radius: 50%; background: var(--gradient-brand); color: #fff; font-size: 13px; font-weight: var(--fw-black); display: grid; place-items: center; box-shadow: var(--shadow-soft); }
+    .flow__label { font-size: var(--fs-h3); font-weight: var(--fw-bold); word-break: keep-all; }
+    .flow__desc { margin-top: 5px; font-size: var(--fs-small); color: var(--color-text-muted); word-break: keep-all; }
+    .flow__conn { display: grid; place-items: center; color: var(--color-secondary); padding: 2px 0; }
+    .flow__conn svg { width: 22px; height: 26px; }
 
     /* =================================================================
        06) KEY FEATURES (3열, 상단 모바일 화면)
@@ -230,6 +264,75 @@
     .feature__no { font-size: var(--fs-small); font-weight: var(--fw-bold); letter-spacing: 0.12em; color: var(--color-primary); }
     .feature__title { margin: 8px 0 10px; font-size: var(--fs-h3); font-weight: var(--fw-black); }
     .feature__desc { font-size: var(--fs-small); color: var(--color-text-muted); word-break: keep-all; }
+
+    /* =================================================================
+       CORE FEATURES (가로 스크롤 / Vanilla JS 직접 고정)
+       · 기본(JS 미동작·감속모션·모바일): 세로 스택으로 자연스럽게 읽힘
+       · .cf--horizontal (JS가 부여): 100vh 핀 + 패널 가로 슬라이드
+       · 효과 속도/스냅은 하단 <script> 의 initCoreFeatures() 에서 조절
+       ================================================================= */
+    .cf { position: relative; background: var(--cf-bg); padding-block: var(--section-gap); }
+    .cf__head { max-width: var(--container); margin: 0 auto var(--block-gap); padding-inline: var(--pad-x); } /* 대제목: 섹션 상단(원래 자리) */
+    .cf__hint, .cf__progress { display: none; }
+    .cf__pin { position: relative; }
+    .cf__track { display: flex; flex-direction: column; gap: clamp(48px, 9vw, 110px); }
+    .cf__panel { width: 100%; }
+    .cf__inner { width: 100%; max-width: var(--container); margin: 0 auto; padding-inline: var(--pad-x); display: grid; grid-template-columns: 1fr; gap: clamp(28px, 4vw, 56px); align-items: center; }
+    /* ── 가로 모드: 헤더는 상단에 그대로, 아래 .cf__pin 안의 .cf__sticky(뷰포트)를 JS가
+          absolute(상단) → fixed(화면 고정) → absolute(하단) 으로 전환하며 .cf__track 을 가로 이동 ── */
+    .cf--horizontal { padding: 0; } /* 고정 화면 안에 헤더가 있으므로 섹션 상/하 패딩 제거(빈 띠 방지) */
+    .cf--horizontal .cf__pin { position: relative; } /* height(=패널수×100vh)는 JS가 설정 */
+    .cf--horizontal .cf__sticky { position: absolute; top: 0; left: 0; width: 100%; height: 100vh; overflow: hidden; display: flex; flex-direction: column; background: var(--cf-bg); } /* JS가 통과 중 position:fixed 로 전환 (배경 고정용으로 동일 그라데이션) */
+    .cf--horizontal .cf__head { flex: none; width: 100%; max-width: var(--container); margin: 0 auto; padding: clamp(22px, 3.4vh, 42px) var(--pad-x) clamp(10px, 1.6vh, 18px); } /* 대제목: 고정 화면 상단 */
+    .cf--horizontal .cf__track { flex: 1 1 auto; min-height: 0; flex-direction: row; gap: 0; width: max-content; will-change: transform; } /* 남은 높이를 채우는 패널 트랙 */
+    .cf--horizontal .cf__panel { flex: 0 0 100vw; width: 100vw; height: 100%; display: flex; align-items: center; }
+    .cf--horizontal .cf__inner { padding-block: clamp(8px, 2.5vh, 32px); }
+    /* 슬라이드 폰 이미지 크게: 미디어 컬럼 넓힘 + 화면 높이에 맞춰 비율 유지하며 확대(object-fit) */
+    .cf--horizontal .cf__inner { grid-template-columns: 1.32fr 0.68fr; }
+    .cf--horizontal .fshow__panel { min-height: 0; padding: clamp(8px, 1.6vh, 22px); }
+    .cf--horizontal .fshow__phone--single { width: 100%; height: 66vh; object-fit: contain; object-position: center; }
+    .cf--horizontal .fshow__phone--back { width: 54%; height: 56vh; object-fit: contain; }
+    .cf--horizontal .fshow__phone--front { width: 60%; height: 62vh; object-fit: contain; }
+    .cf--horizontal .cf__hint { display: inline-flex; position: absolute; top: clamp(16px, 2.6vh, 30px); right: var(--pad-x); z-index: 5; font-size: var(--fs-small); color: var(--color-text-muted); animation: cfHint 1.6s ease-in-out infinite; }
+    .cf--horizontal .cf__progress { display: block; position: absolute; left: var(--pad-x); right: var(--pad-x); bottom: clamp(22px, 3.6vh, 42px); height: 4px; border-radius: 4px; background: rgba(139, 92, 246, 0.16); overflow: hidden; z-index: 5; }
+    .cf__progress-bar { display: block; height: 100%; width: 100%; border-radius: 4px; background: var(--gradient-brand); transform: scaleX(0); transform-origin: left; }
+    @keyframes cfHint { 0%, 100% { transform: translateX(0); opacity: .6; } 50% { transform: translateX(6px); opacity: 1; } }
+
+    /* ── 패널 내부 콘텐츠 (미디어 패널 + 텍스트) — 가로/세로 공통 ── */
+    /* 슬롯 배경은 투명 — 폰이 섹션 배경(그라데이션) 위에 바로 떠 있음 (그림자 안 잘리게 overflow visible) */
+    .fshow__panel { position: relative; overflow: visible; background: transparent; padding: clamp(24px, 4vw, 50px); display: flex; align-items: center; justify-content: center; min-height: clamp(280px, 34vw, 400px); }
+    .fshow__phone { position: relative; z-index: 1; display: block; filter: drop-shadow(0 22px 40px rgba(76, 40, 130, 0.26)); }
+    .fshow__phone--single { width: min(100%, 460px); }
+    .fshow__phone--back { width: 46%; transform: translate(14%, -5%); z-index: 1; }
+    .fshow__phone--front { width: 50%; transform: translate(-14%, 7%); z-index: 2; }
+    .fshow__media { min-width: 0; } /* 그리드 자식이 폭을 넘지 않도록 */
+    .fshow__panel--duo { padding-inline: clamp(10px, 2.5vw, 28px); } /* 두 폰이 들어갈 가로 여유 */
+    .fshow__text { min-width: 0; }
+    .fshow__no { font-size: var(--fs-small); font-weight: var(--fw-bold); letter-spacing: 0.14em; color: var(--color-secondary); }
+    .fshow__kicker { margin-top: 10px; font-size: var(--fs-body); font-weight: var(--fw-bold); color: var(--color-primary); }
+    .fshow__title { margin-top: 6px; font-size: clamp(24px, 3vw, 36px); font-weight: var(--fw-black); letter-spacing: -0.02em; line-height: 1.25; word-break: keep-all; }
+    .fshow__desc { margin-top: 14px; font-size: var(--fs-body); color: var(--color-text-muted); line-height: 1.7; word-break: keep-all; max-width: 46ch; }
+    .fshow__callout { display: flex; gap: 14px; align-items: flex-start; margin-top: 24px; padding: clamp(16px, 1.8vw, 22px); border-radius: var(--radius-md); background: var(--color-light); border: 1px solid var(--color-line); }
+    .fshow__callout-ico, .fshow__pt-ico { flex: none; width: 42px; height: 42px; border-radius: 12px; background: #fff; display: grid; place-items: center; color: var(--color-primary); box-shadow: var(--shadow-soft); }
+    /* Core Features 아이콘: Google Material Symbols (솔리드 글리프 · 색은 박스의 --color-primary 상속) */
+    .material-symbols-rounded { font-family: 'Material Symbols Rounded'; font-weight: normal; font-style: normal; line-height: 1; letter-spacing: normal; text-transform: none; display: inline-block; white-space: nowrap; direction: ltr; -webkit-font-smoothing: antialiased; font-variation-settings: 'FILL' 0, 'wght' 600, 'GRAD' 0, 'opsz' 24; }
+    .fshow__callout-ico .material-symbols-rounded, .fshow__pt-ico .material-symbols-rounded { font-size: 24px; }
+    .fshow__callout p { font-size: var(--fs-small); color: var(--color-text); line-height: 1.65; word-break: keep-all; overflow-wrap: anywhere; }
+    .fshow__callout b, .fshow__points b { color: var(--color-primary); font-weight: var(--fw-bold); }
+    .fshow__points { display: grid; gap: 12px; margin-top: 24px; }
+    .fshow__points li { display: flex; gap: 14px; align-items: flex-start; padding: clamp(14px, 1.6vw, 18px); border-radius: var(--radius-md); background: var(--color-light); border: 1px solid var(--color-line); }
+    /* 포인트 아이콘은 다른 슬라이드의 콜아웃 아이콘과 동일(42px/22px·퍼플) */
+    .fshow__points b { display: block; font-size: var(--fs-body); }
+    .fshow__points span { display: block; margin-top: 2px; font-size: var(--fs-small); color: var(--color-text-muted); word-break: keep-all; }
+    @media (min-width: 768px) {
+      .cf__inner { grid-template-columns: 1.04fr 0.96fr; gap: clamp(40px, 5vw, 84px); }
+    }
+    /* 모바일: 듀오 폰이 패널 밖으로 넘치지 않게 축소 + 패널 높이 컴팩트 */
+    @media (max-width: 767px) {
+      .fshow__panel { min-height: clamp(220px, 52vw, 340px); }
+      .fshow__phone--back { width: 42%; transform: translate(10%, -4%); }
+      .fshow__phone--front { width: 46%; transform: translate(-10%, 5%); }
+    }
 
     /* =================================================================
        07) UX DESIGN (탭 UI)
@@ -271,6 +374,9 @@
     .devcard { padding: clamp(22px,3vw,32px); border-radius: var(--radius-md); background: var(--color-white); border: 1px solid var(--color-line); box-shadow: var(--shadow-soft); }
     .devcard__no { font-size: var(--fs-small); font-weight: var(--fw-bold); color: var(--color-secondary); letter-spacing: 0.12em; }
     .devcard__title { margin-top: 8px; font-size: var(--fs-h3); font-weight: var(--fw-bold); word-break: keep-all; }
+    .devcard__ico { display: flex; align-items: center; gap: 10px; min-height: 42px; margin-bottom: 16px; }
+    .devcard__ico img { height: 42px; width: auto; object-fit: contain; }
+    .devcard__arrow { color: var(--color-text-muted); font-weight: var(--fw-bold); font-size: 18px; }
     .timeline { display: grid; grid-template-columns: 1fr; gap: 0; margin-top: clamp(40px,6vw,72px); position: relative; }
     .tl-label { font-size: var(--fs-small); font-weight: var(--fw-bold); letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-primary); margin-bottom: 24px; }
     .tl-step { display: grid; grid-template-columns: auto 1fr; gap: 18px; padding-bottom: 26px; position: relative; }
@@ -323,8 +429,10 @@
     /* =================================================================
        REVEAL
        ================================================================= */
-    .js [data-reveal] { opacity: 0; transform: translateY(42px); will-change: transform, opacity; }
-    .js [data-reveal-scale] { opacity: 0; transform: scale(0.94); will-change: transform, opacity; }
+    .js [data-reveal] { opacity: 0; transform: translateY(42px); transition: opacity .9s ease, transform .9s cubic-bezier(0.16, 1, 0.3, 1); will-change: transform, opacity; }
+    .js [data-reveal-scale] { opacity: 0; transform: scale(0.94); transition: opacity .9s ease, transform .9s cubic-bezier(0.16, 1, 0.3, 1); will-change: transform, opacity; }
+    /* IntersectionObserver 가 화면에 들어오면 .is-inview 부여 → 등장 */
+    .js [data-reveal].is-inview, .js [data-reveal-scale].is-inview { opacity: 1; transform: none; }
     .no-anim [data-reveal], .no-anim [data-reveal-scale] { opacity: 1 !important; transform: none !important; }
     @media (prefers-reduced-motion: reduce) { .js [data-reveal], .js [data-reveal-scale] { opacity: 1 !important; transform: none !important; } }
 
@@ -344,8 +452,10 @@
       .problem__top { grid-template-columns: 1.7fr 0.8fr; }
       .pcards { grid-template-columns: repeat(3, 1fr); } /* 카드 가로 3열 */
       .goals { grid-template-columns: repeat(3, 1fr); }
-      .flow__step { grid-template-columns: 1fr 1.1fr; }
-      .flow__step--reverse .flow__media { order: 2; }
+      .flow { flex-direction: row; align-items: stretch; gap: 0; }
+      .flow__node { flex-direction: column; text-align: center; align-items: center; gap: 16px; }
+      .flow__conn { padding: 0 clamp(6px, 1vw, 16px); }
+      .flow__conn svg { transform: rotate(-90deg); } /* 세로(↓) 화살표를 가로(→)로 */
       .features { grid-template-columns: repeat(3, 1fr); }
       .tabpanel.is-active { grid-template-columns: 0.8fr 1.2fr; }
       .ds { grid-template-columns: repeat(3, 1fr); }
@@ -441,7 +551,143 @@
       </div>
     </section>
 
-    <!-- ============ 02 PROBLEM ============ -->
+    <!-- ============ 02 UX RESEARCH (기회 요인 + 차트) ============ -->
+    <section class="section section--light" id="research">
+      <div class="container">
+        <div class="head">
+          <span class="eyebrow" data-reveal>UX Research</span>
+          <h2 class="section-title" data-reveal>2025년 러닝 인구 <em>1,000만</em> 돌파</h2>
+          <p class="lead" data-reveal>글로벌 앱 접근성 변화로 국내 감성 특화 러닝 서비스 수요가 빠르게 늘고 있습니다. 시장 성장세와 기존 앱 사용자의 불편사항을 함께 분석해 서비스 기회를 정의했습니다.</p>
+        </div>
+
+        <!-- 기회 요인 스탯 3개 -->
+        <div class="rstats">
+          <div class="rstat" data-reveal>
+            <p class="rstat__label">조깅·달리기 경험률</p>
+            <p class="rstat__num">23% → 32%</p>
+            <p class="rstat__sub">2021년 → 2023년</p>
+          </div>
+          <div class="rstat" data-reveal>
+            <p class="rstat__label">전국 러닝 크루</p>
+            <p class="rstat__num">2,000개+</p>
+            <p class="rstat__sub">2023년 기준</p>
+          </div>
+          <div class="rstat" data-reveal>
+            <p class="rstat__label">러닝화 시장 규모</p>
+            <p class="rstat__num">4조원+</p>
+            <p class="rstat__sub">2024년 추산</p>
+          </div>
+        </div>
+
+        <!-- 차트 2개: 러닝 인구 추이(라인) + 불편사항 조사(바) -->
+        <div class="rcharts">
+          <!-- 라인 차트 -->
+          <figure class="rchart" data-reveal-scale>
+            <figcaption>
+              <p class="rchart__title">국내 러닝 인구 추이</p>
+              <p class="rchart__meta">단위: 만 명 · 2019–2025 (글로벌 앱 접근성 변화 → 국내 수요 급증)</p>
+            </figcaption>
+            <svg class="rchart__svg" viewBox="0 0 640 300" role="img" aria-label="국내 러닝 인구는 2019년 약 250만 명에서 2025년 1,000만 명 이상으로 꾸준히 증가했습니다.">
+              <defs>
+                <linearGradient id="lineArea" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#8B5CF6" stop-opacity="0.26"/>
+                  <stop offset="100%" stop-color="#8B5CF6" stop-opacity="0"/>
+                </linearGradient>
+              </defs>
+              <!-- 가로 그리드 + Y축 라벨 -->
+              <line class="grid" x1="46" y1="20" x2="620" y2="20"/>
+              <line class="grid" x1="46" y1="97" x2="620" y2="97"/>
+              <line class="grid" x1="46" y1="173" x2="620" y2="173"/>
+              <line class="axis" x1="46" y1="250" x2="620" y2="250"/>
+              <g font-size="12.5" fill="#9A93B5" text-anchor="end">
+                <text x="38" y="24">1200</text>
+                <text x="38" y="101">800</text>
+                <text x="38" y="177">400</text>
+                <text x="38" y="254">0</text>
+              </g>
+              <!-- 면적 + 라인 -->
+              <path d="M46,202 L142,173 L237,145 L333,116 L429,93 L524,74 L620,58 L620,250 L46,250 Z" fill="url(#lineArea)"/>
+              <path d="M46,202 L142,173 L237,145 L333,116 L429,93 L524,74 L620,58" fill="none" stroke="#8B5CF6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+              <!-- 데이터 포인트 -->
+              <g fill="#fff" stroke="#8B5CF6" stroke-width="3">
+                <circle cx="46" cy="202" r="4.5"/>
+                <circle cx="142" cy="173" r="4.5"/>
+                <circle cx="237" cy="145" r="4.5"/>
+                <circle cx="333" cy="116" r="4.5"/>
+                <circle cx="429" cy="93" r="4.5"/>
+                <circle cx="524" cy="74" r="4.5"/>
+                <circle cx="620" cy="58" r="6" fill="#8B5CF6"/>
+              </g>
+              <text x="620" y="44" text-anchor="end" font-size="13.5" font-weight="700" fill="#7C3AED">1,000만+</text>
+              <!-- X축 연도 -->
+              <g font-size="12.5" fill="#6B7280" text-anchor="middle">
+                <text x="46" y="272">2019</text>
+                <text x="142" y="272">2020</text>
+                <text x="237" y="272">2021</text>
+                <text x="333" y="272">2022</text>
+                <text x="429" y="272">2023</text>
+                <text x="524" y="272">2024</text>
+                <text x="616" y="272">2025</text>
+              </g>
+            </svg>
+          </figure>
+
+          <!-- 바 차트 -->
+          <figure class="rchart" data-reveal-scale>
+            <figcaption>
+              <p class="rchart__title">기존 러닝 앱 불편사항 조사</p>
+              <p class="rchart__meta">러닝 및 사진 공유앱 사용자 대상 설문 (복수응답)</p>
+            </figcaption>
+            <svg class="rchart__svg" viewBox="0 0 640 300" role="img" aria-label="불편사항 응답률: GPS 정확도 18%, 사용성 12%, 기록 관리 어려움 32%, 공유 기능 부족 6%, 재미 요소 부족 42%, 디자인 요소 부족 32%. 재미·기록·디자인이 핵심 개선 포인트입니다.">
+              <defs>
+                <linearGradient id="barGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#A78BFA"/>
+                  <stop offset="100%" stop-color="#8B5CF6"/>
+                </linearGradient>
+              </defs>
+              <line class="axis" x1="34" y1="250" x2="624" y2="250"/>
+              <!-- 막대 -->
+              <rect class="bar" x="66" y="171" width="46" height="79" rx="6"/>
+              <rect class="bar" x="163" y="197" width="46" height="53" rx="6"/>
+              <rect class="bar bar--hi" x="260" y="109" width="46" height="141" rx="6"/>
+              <rect class="bar" x="358" y="224" width="46" height="26" rx="6"/>
+              <rect class="bar bar--hi" x="455" y="65" width="46" height="185" rx="6"/>
+              <rect class="bar bar--hi" x="552" y="109" width="46" height="141" rx="6"/>
+              <!-- 값 라벨 -->
+              <g font-size="14" font-weight="700" text-anchor="middle" fill="#6B7280">
+                <text x="89" y="160">18%</text>
+                <text x="186" y="186">12%</text>
+                <text x="283" y="98" fill="#7C3AED">32%</text>
+                <text x="381" y="213">6%</text>
+                <text x="478" y="54" fill="#7C3AED">42%</text>
+                <text x="575" y="98" fill="#7C3AED">32%</text>
+              </g>
+              <!-- 핵심 포인트 별 -->
+              <g font-size="16" text-anchor="middle" fill="#8B5CF6">
+                <text x="283" y="80">★</text>
+                <text x="478" y="36">★</text>
+                <text x="575" y="80">★</text>
+              </g>
+              <!-- X축 항목 -->
+              <g font-size="12" fill="#6B7280" text-anchor="middle">
+                <text x="89" y="272">GPS 정확도</text>
+                <text x="186" y="272">사용성</text>
+                <text x="283" y="272">기록 관리</text>
+                <text x="381" y="272">공유 기능</text>
+                <text x="478" y="272">재미 요소</text>
+                <text x="575" y="272">디자인</text>
+              </g>
+            </svg>
+            <div class="rchart__legend">
+              <span><i style="background:var(--color-primary)"></i>핵심 개선 포인트 (★)</span>
+              <span><i style="background:#DDD3F5"></i>기타 불편사항</span>
+            </div>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 02.5 PROBLEM DEFINITION ============ -->
     <section class="section section--light" id="problem">
       <div class="container">
         <div class="problem__top">
@@ -506,7 +752,7 @@
       </div>
     </section>
 
-    <!-- ============ 05 SOLUTION (Flow) ============ -->
+    <!-- ============ 04.5 SOLUTION (Flow) ============ -->
     <section class="section section--light" id="solution">
       <div class="container">
         <div class="head">
@@ -514,25 +760,121 @@
           <h2 class="section-title" data-reveal>기록을 콘텐츠로 만드는<br />새로운 러닝 경험</h2>
         </div>
         <div class="flow">
-          <div class="flow__step" data-reveal>
-            <div class="flow__media"><div class="img-slot" data-label="OCR 자동 기록 화면"></div></div>
-            <div class="flow__body"><div class="flow__num">1</div><div class="flow__label">OCR 자동 기록</div></div>
+          <div class="flow__node" data-reveal>
+            <span class="flow__ico"><span class="flow__num">1</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"/><rect x="7" y="9" width="10" height="6" rx="1"/></svg></span>
+            <div class="flow__txt"><p class="flow__label">OCR 자동 기록</p><p class="flow__desc">캡처 이미지에서 거리·시간·페이스 자동 추출</p></div>
           </div>
-          <div class="flow__arrow" data-reveal><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v16M6 14l6 6 6-6"/></svg></div>
-          <div class="flow__step flow__step--reverse" data-reveal>
-            <div class="flow__media"><div class="img-slot" data-label="러닝 카드 제작 화면"></div></div>
-            <div class="flow__body"><div class="flow__num">2</div><div class="flow__label">러닝 카드 제작</div></div>
+          <div class="flow__conn" data-reveal aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v14M6 13l6 6 6-6"/></svg></div>
+          <div class="flow__node" data-reveal>
+            <span class="flow__ico"><span class="flow__num">2</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 15l4-4 3 3 4-4 7 7"/><circle cx="8.5" cy="9" r="1.5"/></svg></span>
+            <div class="flow__txt"><p class="flow__label">러닝 카드 제작</p><p class="flow__desc">기록을 감성 카드로 디자인</p></div>
           </div>
-          <div class="flow__arrow" data-reveal><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v16M6 14l6 6 6-6"/></svg></div>
-          <div class="flow__step" data-reveal>
-            <div class="flow__media"><div class="img-slot" data-label="AI 러닝일지 생성 화면"></div></div>
-            <div class="flow__body"><div class="flow__num">3</div><div class="flow__label">AI 러닝일지 생성</div></div>
+          <div class="flow__conn" data-reveal aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v14M6 13l6 6 6-6"/></svg></div>
+          <div class="flow__node" data-reveal>
+            <span class="flow__ico"><span class="flow__num">3</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></span>
+            <div class="flow__txt"><p class="flow__label">AI 러닝일지 생성</p><p class="flow__desc">AI 대화로 오늘의 러닝 한 줄 요약</p></div>
           </div>
-          <div class="flow__arrow" data-reveal><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v16M6 14l6 6 6-6"/></svg></div>
-          <div class="flow__step flow__step--reverse" data-reveal>
-            <div class="flow__media"><div class="img-slot" data-label="SNS 공유 화면"></div></div>
-            <div class="flow__body"><div class="flow__num">4</div><div class="flow__label">SNS 공유</div></div>
+          <div class="flow__conn" data-reveal aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v14M6 13l6 6 6-6"/></svg></div>
+          <div class="flow__node" data-reveal>
+            <span class="flow__ico"><span class="flow__num">4</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 3.9M15.4 6.5l-6.8 3.9"/></svg></span>
+            <div class="flow__txt"><p class="flow__label">SNS 공유</p><p class="flow__desc">완성한 카드를 SNS로 공유</p></div>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 04.7 CORE FEATURES (가로 스크롤 / Vanilla JS 직접 고정) =========
+         ▣ 수정 가이드
+           · 패널 추가/삭제 : 아래 <article class="cf__panel"> 블록을 복제/삭제 (JS가 개수 자동 계산)
+           · 내용 변경      : 각 패널의 이미지(src)·FEATURE 번호·라벨·제목·설명만 고치면 됨
+           · 효과 속도/스냅 : 하단 <script> 의 initCoreFeatures() 안 scrub / snap 값 수정
+           · 폴백          : JS 미동작·감속모션·모바일(<768px)에서는 세로로 자연스럽게 쌓임
+         ============================================================================ -->
+    <section class="cf" id="core-features" aria-label="핵심 기능">
+      <!-- 핀 고정 영역: 대제목 + 패널 가로 스크롤이 한 화면에 함께 고정 (JS가 .cf__sticky 를 화면 고정) -->
+      <div class="cf__pin">
+        <div class="cf__sticky">
+          <!-- 대제목 (고정 화면 상단 · 원래 크기 유지) -->
+          <div class="cf__head">
+            <span class="eyebrow" data-reveal>Core Features</span>
+            <h2 class="section-title" data-reveal>AI로 완성하는 <em>러닝 기록</em></h2>
+            <p class="lead" data-reveal>기록 입력부터 감성 일지, 공유 카드까지 — 러닝의 전 과정을 AI로 더 쉽고 즐겁게 만들었습니다.</p>
+          </div>
+          <span class="cf__hint" aria-hidden="true">옆으로 스크롤 →</span>
+          <div class="cf__track">
+        <!-- ===== PANEL 1 : 캡쳐 사진 스캔 (OCR) ===== -->
+        <article class="cf__panel">
+          <div class="cf__inner">
+            <div class="fshow__media">
+              <div class="fshow__panel fshow__panel--duo">
+                <img class="fshow__phone fshow__phone--back" src="./tracksy_img/mockup_phone1.png" alt="캡쳐 사진 스캔 화면" />
+                <img class="fshow__phone fshow__phone--front" src="./tracksy_img/mockup_phone2.png" alt="러닝 데이터 자동 입력 화면" />
+              </div>
+            </div>
+            <div class="fshow__text">
+              <p class="fshow__no">FEATURE 01</p>
+              <p class="fshow__kicker">AI 활용 러닝 기록 ①</p>
+              <h3 class="fshow__title">캡쳐 사진 스캔하기</h3>
+              <p class="fshow__desc">캡쳐된 러닝 기록을 OCR 기능으로 불러와 자동으로 기록할 수 있습니다.</p>
+              <div class="fshow__callout">
+                <span class="fshow__callout-ico" aria-hidden="true"><span class="material-symbols-rounded">document_scanner</span></span>
+                <p>나이키런·가민·스트라바 등 다른 앱 캡처 이미지를 올리면 <b>→ AI가 거리·시간·페이스 데이터를 읽어 자동 기록</b>합니다.</p>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- ===== PANEL 2 : AI 오늘의 러닝일지 ===== -->
+        <article class="cf__panel">
+          <div class="cf__inner">
+            <div class="fshow__media">
+              <div class="fshow__panel">
+                <img class="fshow__phone fshow__phone--single" src="./tracksy_img/mockup_phone3.png" alt="AI 오늘의 러닝일지 대화 화면" />
+              </div>
+            </div>
+            <div class="fshow__text">
+              <p class="fshow__no">FEATURE 02</p>
+              <p class="fshow__kicker">AI 활용 러닝 기록 ②</p>
+              <h3 class="fshow__title">AI 오늘의 러닝일지</h3>
+              <p class="fshow__desc">AI 챗봇과의 짧은 대화를 통해 오늘의 러닝을 한 줄로 요약할 수 있습니다.</p>
+              <div class="fshow__callout">
+                <span class="fshow__callout-ico" aria-hidden="true"><span class="material-symbols-rounded">forum</span></span>
+                <p>AI 챗봇이 던지는 몇 가지 질문에 답하면 <b>→ 오늘의 러닝을 감성 문구로 만들어 사용자 경험을 높입니다.</b></p>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- ===== PANEL 3 : 러닝 카드 디자인 ===== -->
+        <article class="cf__panel">
+          <div class="cf__inner">
+            <div class="fshow__media">
+              <div class="fshow__panel">
+                <img class="fshow__phone fshow__phone--single" src="./tracksy_img/mockup_phone4.png" alt="러닝 카드 갤러리와 커스텀 디자인 화면" />
+              </div>
+            </div>
+            <div class="fshow__text">
+              <p class="fshow__no">FEATURE 03</p>
+              <p class="fshow__kicker">러닝 카드 디자인</p>
+              <h3 class="fshow__title">러닝 기록을 감성 카드로</h3>
+              <p class="fshow__desc">러닝 기록을 불러와 나만의 카드로 디자인하고, 다른 사용자와 공유할 수 있습니다.</p>
+              <ul class="fshow__points">
+                <li>
+                  <span class="fshow__pt-ico" aria-hidden="true"><span class="material-symbols-rounded">tune</span></span>
+                  <div><b>나만의 커스텀 디자인</b><span>러닝 기록을 불러와 직접 커스텀</span></div>
+                </li>
+                <li>
+                  <span class="fshow__pt-ico" aria-hidden="true"><span class="material-symbols-rounded">share</span></span>
+                  <div><b>스타일 불러오기</b><span>유저 간 저장한 스타일 공유 가능</span></div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </article>
+          </div>
+
+          <!-- 진행 막대 (가로 모드에서만 표시) -->
+          <span class="cf__progress" aria-hidden="true"><span class="cf__progress-bar"></span></span>
         </div>
       </div>
     </section>
@@ -657,17 +999,29 @@
           <h2 class="section-title" data-reveal>디자인을 넘어 개발·협업까지</h2>
         </div>
         <div class="devcards">
-          <div class="devcard" data-reveal><p class="devcard__no">01</p><h3 class="devcard__title">GitHub Branch 협업</h3></div>
-          <div class="devcard" data-reveal><p class="devcard__no">02</p><h3 class="devcard__title">Claude Code 활용</h3></div>
-          <div class="devcard" data-reveal><p class="devcard__no">03</p><h3 class="devcard__title">Groq OCR 연동</h3></div>
-          <div class="devcard" data-reveal><p class="devcard__no">04</p><h3 class="devcard__title">Flutter → Next.js 전환</h3></div>
+          <div class="devcard" data-reveal>
+            <span class="devcard__ico"><img src="./tracksy_img/ico_Git.png" alt="GitHub" /></span>
+            <p class="devcard__no">01</p><h3 class="devcard__title">GitHub Branch 협업</h3>
+          </div>
+          <div class="devcard" data-reveal>
+            <span class="devcard__ico"><img src="./tracksy_img/ico_claude.png" alt="Claude" /></span>
+            <p class="devcard__no">02</p><h3 class="devcard__title">Claude Code 바이브 코딩 활용</h3>
+          </div>
+          <div class="devcard" data-reveal>
+            <span class="devcard__ico"><img src="./tracksy_img/ico_groq.png" alt="Groq" /></span>
+            <p class="devcard__no">03</p><h3 class="devcard__title">Groq AI 연동 (OCR/AI챗봇)</h3>
+          </div>
+          <div class="devcard" data-reveal>
+            <span class="devcard__ico"><img src="./tracksy_img/ico_flutter.png" alt="Flutter" /><span class="devcard__arrow" aria-hidden="true">→</span><img src="./tracksy_img/ico_nextjs.png" alt="Next.js" /></span>
+            <p class="devcard__no">04</p><h3 class="devcard__title">Flutter에서 Next.js 개발</h3>
+          </div>
         </div>
 
         <div class="timeline" data-reveal>
           <p class="tl-label">Collaboration Process</p>
           <div class="tl-step"><div class="tl-dot"></div><div><h4>기획 · 리서치</h4><p>문제 정의와 서비스 방향 합의</p></div></div>
           <div class="tl-step"><div class="tl-dot"></div><div><h4>디자인 시스템 구축</h4><p>컬러·컴포넌트·마스코트 정립</p></div></div>
-          <div class="tl-step"><div class="tl-dot"></div><div><h4>개발 · 연동</h4><p>Next.js 전환, Groq OCR 연동</p></div></div>
+          <div class="tl-step"><div class="tl-dot"></div><div><h4>개발 · 연동</h4><p>Next.js 전환, Groq OCR/AI챗봇 연동</p></div></div>
           <div class="tl-step"><div class="tl-dot"></div><div><h4>통합 · 배포</h4><p>브랜치 규칙 정립 후 안정 배포</p></div></div>
         </div>
       </div>
@@ -761,9 +1115,7 @@
     </div>
   </footer>
 
-  <!-- ===== GSAP (CDN) ===== -->
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+  <!-- ===== 스크립트 (순수 Vanilla JS · 외부 라이브러리 미사용) ===== -->
   <script>
     (function () {
       /* ---- 탭 UI ---- */
@@ -783,18 +1135,23 @@
         });
       }
 
-      /* ---- 스크롤 리빌 ---- */
+      /* ---- 스크롤 리빌 (IntersectionObserver · 라이브러리 미사용) ---- */
       function initReveal() {
         var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-        if (typeof gsap === "undefined" || reduce) { document.documentElement.classList.add("no-anim"); return; }
-        gsap.registerPlugin(ScrollTrigger);
-        gsap.utils.toArray("[data-reveal]").forEach(function (el) {
-          gsap.to(el, { opacity: 1, y: 0, duration: 1.1, ease: "power3.out", scrollTrigger: { trigger: el, start: "top 88%", toggleActions: "play none none none" } });
-        });
-        gsap.utils.toArray("[data-reveal-scale]").forEach(function (el) {
-          gsap.to(el, { opacity: 1, scale: 1, duration: 1.1, ease: "power3.out", scrollTrigger: { trigger: el, start: "top 90%", toggleActions: "play none none none" } });
-        });
-        gsap.to(".hero [data-reveal], .hero [data-reveal-scale]", { opacity: 1, y: 0, scale: 1, duration: 1, ease: "power3.out", stagger: 0.1 });
+        var els = document.querySelectorAll("[data-reveal], [data-reveal-scale]");
+        if (reduce || !("IntersectionObserver" in window)) {
+          document.documentElement.classList.add("no-anim"); // 전부 즉시 표시(폴백)
+          return;
+        }
+        var io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (e) {
+            if (e.isIntersecting) {
+              e.target.classList.add("is-inview"); // 등장
+              io.unobserve(e.target);              // 한 번만
+            }
+          });
+        }, { threshold: 0.12, rootMargin: "0px 0px -8% 0px" });
+        els.forEach(function (el) { io.observe(el); });
       }
 
       /* ---- TRACKSY 폰 화면 슬라이드 (오른쪽→왼쪽, 호버 시 일시정지) ---- */
@@ -840,9 +1197,59 @@
         }, 2200);
       }
 
+      /* ---- Core Features : 가로 스크롤 (Vanilla JS 직접 고정 · 외부 라이브러리 미사용) ----
+         · .cf__pin 높이를 (패널 수 × PANEL_VH vh)로 늘려 가로 전환에 쓸 세로 스크롤 거리를 확보
+         · .cf__sticky(뷰포트)를 진입 전 absolute(상단) → 통과 중 fixed(화면 고정) → 통과 후 absolute(하단) 로 전환
+         · 고정돼 있는 동안 스크롤 진행도(0~1)에 맞춰 .cf__track 을 가로 이동 + 진행 막대 채움
+         · 패널 추가/삭제는 HTML .cf__panel 블록만 늘리면 자동 반영(개수 자동 계산)
+         · 속도감 조절 : 아래 PANEL_VH 값을 키우면 한 패널을 더 천천히 넘어감
+         · 폴백 : 감속모션·모바일(<768px) → 세로 스택(그대로 읽힘) */
+      function initCoreFeatures() {
+        var PANEL_VH = 100; // 패널당 세로 스크롤 양(vh). 값 ↑ = 더 천천히
+
+        var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        var section = document.querySelector(".cf");
+        var pin = section && section.querySelector(".cf__pin");
+        var viewport = section && section.querySelector(".cf__sticky");
+        var track = section && section.querySelector(".cf__track");
+        var bar = section && section.querySelector(".cf__progress-bar");
+        var panels = section ? section.querySelectorAll(".cf__panel") : [];
+        if (!section || !pin || !viewport || !track || panels.length < 2) return;
+        if (reduce || window.innerWidth < 768) { section.classList.remove("cf--horizontal"); return; } // 폴백
+
+        section.classList.add("cf--horizontal");          // 가로 모드 CSS 켜기
+        function setHeight() { pin.style.height = (panels.length * PANEL_VH) + "vh"; }
+        setHeight();                                       // 스크롤 거리 = 패널 수에 비례
+
+        var ticking = false;
+        function update() {
+          ticking = false;
+          var max = pin.offsetHeight - window.innerHeight;                 // 진행 가능한 세로 거리
+          var top = pin.getBoundingClientRect().top;
+          if (top >= 0) {                                                  // 진입 전: 핀 상단에 정렬
+            viewport.style.position = "absolute"; viewport.style.top = "0"; viewport.style.bottom = "auto";
+          } else if (top <= -max) {                                        // 통과 후: 핀 하단에 정렬
+            viewport.style.position = "absolute"; viewport.style.top = "auto"; viewport.style.bottom = "0";
+          } else {                                                         // 통과 중: 화면에 고정
+            viewport.style.position = "fixed"; viewport.style.top = "0"; viewport.style.bottom = "auto";
+          }
+          var scrolled = Math.min(Math.max(-top, 0), max);
+          var progress = max > 0 ? scrolled / max : 0;                    // 0~1
+          var distance = track.scrollWidth - window.innerWidth;            // 가로 이동 거리(px)
+          track.style.transform = "translate3d(" + (-(progress * distance)).toFixed(2) + "px,0,0)";
+          if (bar) bar.style.transform = "scaleX(" + progress.toFixed(4) + ")";
+        }
+        function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(update); } }
+
+        window.addEventListener("scroll", onScroll, { passive: true });
+        window.addEventListener("resize", function () { setHeight(); update(); });
+        update(); // 초기 위치 반영
+      }
+
       initTabs();
       initReveal();
       initTracksyMock();
+      initCoreFeatures();
     })();
   </script>
 </body>

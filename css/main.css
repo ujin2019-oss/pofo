@@ -1277,6 +1277,11 @@ html {
   .project-modoo__image {
     border-radius: 12px 12px 0 0;
   }
+  /* TRACKSY 메인 비주얼: 모바일은 오른쪽 이동 해제(우측 잘림 방지) + 가운데 정렬 */
+  .tracksy-mock-img {
+    transform: none;
+    margin-inline: auto;
+  }
   /* 스택 레이아웃: CTA 버튼과 하단 바가 붙지 않도록 위 여백 (치과와 동일) */
   .project-modoo__meta {
     margin-top: clamp(40px, 8vw, 72px);
