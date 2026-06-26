@@ -169,13 +169,19 @@
     .hstat__desc { font-size: 13px; color: var(--color-text-muted); margin-top: 5px; line-height: 1.4; word-break: keep-all; }
     @media (max-width: 480px) { .hero__stats { grid-template-columns: 1fr; } }
     /* 폰 목업(손+폰)을 쓰는 히어로 슬롯: 320px 제한 해제 */
-    .hero__mock--device { max-width: 360px; }
-    /* TRACKSY 폰 목업: main_tracksy_img.png(폰 2대 + 마스코트, 왼쪽 폰 화면부 투명) + 왼쪽 폰 화면에 tracksy 슬라이드가 비쳐 보임
-       (슬라이드 위치는 .tracksy-mock__viewport 의 left·top·width·height 로 조정) */
-    .tracksy-mock { position: relative; width: 100%; aspect-ratio: 1095 / 1546; margin: 0 auto; }
-    .tracksy-mock__frame { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; z-index: 10; pointer-events: none; filter: drop-shadow(0 18px 34px rgba(60, 30, 160, 0.2)); }
-    .tracksy-mock__viewport { position: absolute; left: 5%; top: 19%; width: 49.5%; height: 74%; overflow: hidden; z-index: 1; border-radius: 20px; background: #B89CFF; }
-    .tracksy-mock__screen { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center top; background: #B89CFF; transform: translateX(100%); transition: transform 0.7s cubic-bezier(0.65, 0, 0.35, 1); }
+    .hero__mock--device { max-width: 320px; }
+    /* 폰 목업: blackphone.png (세로형 프레임) */
+    .tracksy-mock { position: relative; width: 100%; aspect-ratio: 664 / 1377; margin: 0 auto; transform: translateX(40%); }
+    .tracksy-mock__frame { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; z-index: 10; pointer-events: none; filter: drop-shadow(0 22px 40px rgba(60, 30, 160, 0.28)); }
+    /* 뒤쪽 폰: 왼쪽 대각선 위로 오프셋, 메인 폰보다 뒤(z-index 1) — 위치는 top·left 로 조정 */
+    .tracksy-mock__back { position: absolute; z-index: 1; top: -14%; left: -80%; width: 100%; height: auto; filter: drop-shadow(0 20px 38px rgba(60, 30, 160, 0.22)); }
+    /* 마스코트: 뒤쪽 폰 왼쪽 하단에 살짝 겹침 (위치/크기: left·top·width) */
+    .tracksy-mock__cha { position: absolute; z-index: 12; width: 64%; left: -92%; top: 70%; height: auto; filter: drop-shadow(0 16px 28px rgba(60, 30, 160, 0.32)); }
+    /* 카메라 펀치홀: 앞 폰 슬라이드 위에 (뒤쪽 폰과 동일 위치/크기) */
+    .tracksy-mock__cam { position: absolute; z-index: 13; left: 49.55%; top: 3.96%; width: 4.5%; aspect-ratio: 1; border-radius: 50%; transform: translate(-50%, -50%); background: radial-gradient(circle at 38% 32%, #353a4a, #090a12 66%); box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.35); }
+    /* 검은 화면 안에서 tracksy1~6 슬라이드 (오른쪽→왼쪽) — 위치/크기 조정: left·top·width·height */
+    .tracksy-mock__viewport { position: absolute; left: 2.2%; top: 1.4%; width: 95.6%; height: 97%; overflow: hidden; border-radius: 8% / 4%; z-index: 11; background: #0B0D14; }
+    .tracksy-mock__screen { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center top; transform: translateX(100%); transition: transform 0.7s cubic-bezier(0.65, 0, 0.35, 1); }
     .tracksy-mock__screen.is-active { transform: translateX(0); }
     .tracksy-mock__screen.is-out { transform: translateX(-100%); }
     .tracksy-mock__screen.no-trans { transition: none; }
@@ -442,14 +448,9 @@
        ================================================================= */
     @media (min-width: 768px) {
       .site-nav { display: flex; }
-      /* 히어로 하단 패딩 제거 → 폰 목업(손+팔) 하단이 섹션 최하단과 맞닿음 */
-      .hero { padding-bottom: 0; }
-      .hero__grid { grid-template-columns: 1.14fr 0.86fr; align-items: end; }
+      .hero__grid { grid-template-columns: 1fr 1fr; align-items: center; }
       .hero__mock { order: 0; margin: 0; }
-      /* 폰 목업 크게+왼쪽으로: 컬럼보다 넓게(왼쪽으로 확장) + 하단 정렬(팔이 섹션 바닥에서 올라오는 형태) */
-      .hero__mock--device { max-width: 440px; align-self: end; width: 100%; margin: 0 auto; }
-      /* 텍스트는 세로 가운데 정렬 + 하단 여백으로 목업과 균형 */
-      .hero__intro { align-self: center; padding-bottom: clamp(48px, 7vw, 110px); }
+      .hero__mock--device { max-width: 250px; margin: 0 auto; align-self: center; }
       .problem__top { grid-template-columns: 1.7fr 0.8fr; }
       .pcards { grid-template-columns: repeat(3, 1fr); } /* 카드 가로 3열 */
       .goals { grid-template-columns: repeat(3, 1fr); }
@@ -470,7 +471,7 @@
       .hero { padding-bottom: var(--section-gap); }
       .hero__grid { grid-template-columns: 1fr; align-items: center; }
       .hero__mock { order: -1; }
-      .hero__mock--device { width: 100%; max-width: 380px; margin: 0 auto; align-self: center; }
+      .hero__mock--device { width: 100%; max-width: 340px; margin: 0 auto; align-self: center; }
       .hero__intro { align-self: auto; padding-bottom: 0; }
     }
   </style>
@@ -508,19 +509,24 @@
     <section class="hero">
       <div class="container">
         <div class="hero__grid">
-          <!-- 모바일 목업 (좌측): 손+폰(phone.png) 뒤로 tracksy 화면이 오른쪽→왼쪽 슬라이드 -->
+          <!-- 좌측 비주얼: 폰 목업 (blackphone.png) -->
           <div class="hero__mock hero__mock--device" data-reveal-scale>
             <div class="tracksy-mock">
-              <!-- 폰 화면: tracksy1~6 가 슬라이드 (뷰포트로 클립) -->
+              <!-- 뒤쪽 폰(스플래시): 왼쪽 대각선 위, 메인 폰보다 뒤 -->
+              <img class="tracksy-mock__back" src="./tracksy_img/backphone.png" alt="" aria-hidden="true" />
+              <!-- 마스코트: 뒤쪽 폰 왼쪽 하단에 살짝 겹치게, 뒤쪽 폰보다 앞 -->
+              <img class="tracksy-mock__cha" src="./tracksy_img/tracksy_cha.png" alt="" aria-hidden="true" />
+              <img class="tracksy-mock__frame" src="./tracksy_img/blackphone.png" alt="" aria-hidden="true" />
+              <!-- 검은 화면: tracksy1~6 가 오른쪽→왼쪽 슬라이드 -->
               <div class="tracksy-mock__viewport">
-                <img class="tracksy-mock__screen is-active" src="./images/tracksy1.png" alt="TRACKSY 앱 화면" />
-                <img class="tracksy-mock__screen" src="./images/tracksy2.png" alt="" aria-hidden="true" />
-                <img class="tracksy-mock__screen" src="./images/tracksy3.png" alt="" aria-hidden="true" />
-                <img class="tracksy-mock__screen" src="./images/tracksy4.png" alt="" aria-hidden="true" />
-                <img class="tracksy-mock__screen" src="./images/tracksy5.png" alt="" aria-hidden="true" />
-                <img class="tracksy-mock__screen" src="./images/tracksy6.png" alt="" aria-hidden="true" />
+                <img class="tracksy-mock__screen is-active" src="./tracksy_img/tracksy2.png" alt="TRACKSY 앱 화면" />
+                <img class="tracksy-mock__screen" src="./tracksy_img/tracksy3.png" alt="" aria-hidden="true" />
+                <img class="tracksy-mock__screen" src="./tracksy_img/tracksy4.png" alt="" aria-hidden="true" />
+                <img class="tracksy-mock__screen" src="./tracksy_img/tracksy5.png" alt="" aria-hidden="true" />
+                <img class="tracksy-mock__screen" src="./tracksy_img/tracksy6.png" alt="" aria-hidden="true" />
               </div>
-              <img class="tracksy-mock__frame" src="./tracksy_img/main_tracksy_img.png" alt="" aria-hidden="true" />
+              <!-- 카메라 펀치홀: 슬라이드 위에 표시 (뒤쪽 폰과 동일 위치) -->
+              <span class="tracksy-mock__cam" aria-hidden="true"></span>
             </div>
           </div>
           <div class="hero__intro">
