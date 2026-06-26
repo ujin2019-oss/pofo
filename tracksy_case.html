@@ -149,7 +149,9 @@
     /* =================================================================
        01) HERO  (split, Apple 미니멀)
        ================================================================= */
-    .hero { padding-top: calc(var(--header-h) + clamp(44px, 8vw, 110px)); padding-bottom: var(--section-gap); }
+    /* 히어로를 길게: 배경 이미지(폭 비례 ≈77vw)가 안 잘리는 높이와 화면 높이 중 큰 값.
+       아래로 내용을 더 넣으면 그만큼 자동으로 더 길어짐(min-height는 최소값) */
+    .hero { min-height: max(80vw, 140vh); padding-top: calc(var(--header-h) + clamp(44px, 8vw, 110px)); padding-bottom: var(--section-gap); background: url("./tracksy_img/sub_tracky_bg.png") top center / 100% auto no-repeat; }
     .hero .container { max-width: var(--container-wide); } /* 다른 서브 히어로와 동일한 와이드 폭 */
     .hero__grid { display: grid; grid-template-columns: 1fr; gap: var(--block-gap); align-items: center; }
     .hero__mock { order: -1; max-width: 320px; margin: 0 auto; width: 100%; }
@@ -179,6 +181,58 @@
     .tracksy-mock__cha { position: absolute; z-index: 12; width: 64%; left: -92%; top: 70%; height: auto; filter: drop-shadow(0 16px 28px rgba(60, 30, 160, 0.32)); }
     /* 카메라 펀치홀: 앞 폰 슬라이드 위에 (뒤쪽 폰과 동일 위치/크기) */
     .tracksy-mock__cam { position: absolute; z-index: 13; left: 49.55%; top: 3.96%; width: 4.5%; aspect-ratio: 1; border-radius: 50%; transform: translate(-50%, -50%); background: radial-gradient(circle at 38% 32%, #353a4a, #090a12 66%); box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.35); }
+
+    /* ── 히어로 하단: 핵심 기능 폰 목업 쇼케이스 (겹친 대각선 + 라벨/설명)
+         · 폰 위치/크기 : .feat-phone--* 의 left·top·width·z-index
+         · 라벨 위치    : .feat-note--* 의 left·top ── */
+    /* 그룹 전체 위치 이동은 래퍼에 적용 (data-reveal 의 transform:none 덮어쓰기 회피) */
+    .hero__features-wrap { transform: translate(4%, -14%); }
+    /* 히어로 하단 섹션 타이틀 (왼쪽 정렬) */
+    .feat-intro { max-width: var(--container); margin: clamp(180px, 30vw, 460px) auto 0; padding: 0 clamp(20px, 4vw, 48px); }
+    .feat-intro__title { font-size: clamp(30px, 4.2vw, 56px); font-weight: var(--fw-black); line-height: 1.1; letter-spacing: -0.01em; color: var(--color-text); }
+    .feat-intro__title em { font-style: normal; background: var(--gradient-brand); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .feat-intro__desc { margin-top: clamp(14px, 1.8vw, 22px); font-size: clamp(15px, 1.25vw, 18px); line-height: 1.75; color: var(--color-text-muted); word-break: keep-all; }
+    .hero__features { position: relative; width: 100%; max-width: var(--container); margin: clamp(0px, 2vw, 30px) auto 0; height: clamp(540px, 60vw, 840px); }
+    .feat-phone { position: absolute; height: auto; filter: drop-shadow(0 22px 42px rgba(60, 30, 130, 0.2)); }
+    .feat-phone--studio    { left: 1%;  top: 28%; width: 31%; z-index: 2; }
+    .feat-phone--archive   { left: 16%; top: 64%; width: 30%; z-index: 3; }
+    .feat-phone--diary1    { left: 56%; top: 40%; width: 27%; z-index: 7; }
+    .feat-phone--diary2    { left: 61%; top: 56%; width: 31%; z-index: 5; }
+    .feat-phone--community { left: 28%; top: 31%; width: 33%; z-index: 6; }
+    /* 라벨→폰 꺾쇠 연결선 (SVG 오버레이, 0~100 좌표 = left/top % 와 동일) */
+    .feat-lines { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 8; pointer-events: none; overflow: visible; }
+    .feat-lines polyline { fill: none; stroke: var(--color-primary); stroke-width: 1.6; vector-effect: non-scaling-stroke; stroke-linecap: round; stroke-linejoin: round; opacity: 0.55; }
+    /* 연결선 끝점 (원형 유지 위해 HTML 점 사용) */
+    .feat-dot { position: absolute; width: 9px; height: 9px; border-radius: 50%; background: var(--color-primary); transform: translate(-50%, -50%); z-index: 8; opacity: 0.85; }
+    .feat-note { position: absolute; width: clamp(178px, 17vw, 230px); z-index: 9; }
+    .feat-note__title { display: inline-flex; align-items: center; gap: 10px; font-size: clamp(18px, 1.7vw, 23px); font-weight: var(--fw-black); color: var(--color-primary); letter-spacing: 0.02em; }
+    .feat-note__sub { margin-top: 8px; font-size: var(--fs-small); font-weight: var(--fw-bold); color: var(--color-text); }
+    .feat-note__desc { margin-top: 8px; font-size: var(--fs-small); color: var(--color-text-muted); line-height: 1.55; word-break: keep-all; }
+    .feat-note--studio    { left: -15%; top: 42%; }
+    .feat-note--archive   { left: 48%;  top: 23%; width: clamp(270px, 24vw, 320px); }
+    .feat-note--diary     { left: 83%;  top: 46%; }
+    .feat-note--community { left: -3%;  top: 85%; width: clamp(300px, 26vw, 350px); }
+    /* 등장 효과 순차(스태거): 요소별 transition-delay = var(--rd) */
+    .js .hero__features [data-reveal] { transition: opacity .8s ease, transform .8s cubic-bezier(0.16, 1, 0.3, 1); transition-delay: var(--rd, 0s); }
+    .hero__features > *:nth-child(1)  { --rd: 0s; }    /* 폰 STUDIO */
+    .hero__features > *:nth-child(2)  { --rd: .08s; }  /* 폰 ARCHIVE */
+    .hero__features > *:nth-child(3)  { --rd: .16s; }  /* 폰 DIARY1 */
+    .hero__features > *:nth-child(4)  { --rd: .24s; }  /* 폰 DIARY2 */
+    .hero__features > *:nth-child(5)  { --rd: .32s; }  /* 폰 COMMUNITY */
+    .hero__features > *:nth-child(6)  { --rd: .55s; }  /* 연결선(SVG) */
+    .hero__features > *:nth-child(11) { --rd: .14s; }  /* 라벨 STUDIO */
+    .hero__features > *:nth-child(12) { --rd: .22s; }  /* 라벨 ARCHIVE */
+    .hero__features > *:nth-child(13) { --rd: .3s; }   /* 라벨 DIARY */
+    .hero__features > *:nth-child(14) { --rd: .38s; }  /* 라벨 COMMUNITY */
+    /* 모바일: 복잡한 겹침 해제 → 세로 스택 */
+    @media (max-width: 900px) {
+      .hero__features-wrap { transform: none; }
+      .feat-lines, .feat-dot { display: none; }
+      .hero__features { height: auto; display: flex; flex-direction: column; align-items: center; gap: clamp(20px, 5vw, 36px); margin-top: clamp(40px, 8vw, 64px); }
+      .feat-phone, .feat-note { position: static; width: 100%; max-width: 340px; }
+      .feat-note { text-align: center; }
+      .feat-note__title { justify-content: center; }
+    }
     /* 검은 화면 안에서 tracksy1~6 슬라이드 (오른쪽→왼쪽) — 위치/크기 조정: left·top·width·height */
     .tracksy-mock__viewport { position: absolute; left: 2.2%; top: 1.4%; width: 95.6%; height: 97%; overflow: hidden; border-radius: 8% / 4%; z-index: 11; background: #0B0D14; }
     .tracksy-mock__screen { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center top; transform: translateX(100%); transition: transform 0.7s cubic-bezier(0.65, 0, 0.35, 1); }
@@ -555,6 +609,56 @@
             </div>
           </div>
         </div>
+
+        <!-- 히어로 하단 섹션 타이틀 (왼쪽) -->
+        <div class="feat-intro" data-reveal>
+          <h2 class="feat-intro__title">RUN SMART,<br /><em>SHARE BETTER</em></h2>
+          <p class="feat-intro__desc">러닝 기록부터 AI 콘텐츠 제작, 커뮤니티까지.<br />트랙시는 러닝의 모든 경험을 하나의 서비스에서<br />자연스럽게 연결합니다.</p>
+        </div>
+
+        <!-- 히어로 하단: 핵심 기능 폰 목업 (STUDIO·ARCHIVE·AI DIARY·COMMUNITY) -->
+        <div class="hero__features-wrap">
+        <div class="hero__features">
+          <img class="feat-phone feat-phone--studio" data-reveal src="./tracksy_img/feature_1.png" alt="러닝 카드 스튜디오 화면" />
+          <img class="feat-phone feat-phone--archive" data-reveal src="./tracksy_img/feature_4.png" alt="아카이브 화면" />
+          <img class="feat-phone feat-phone--diary1" data-reveal src="./tracksy_img/feature_3.1.png" alt="AI 러닝일지 대화 화면" />
+          <img class="feat-phone feat-phone--diary2" data-reveal src="./tracksy_img/feature_3.2.png" alt="AI 러닝일지 요약 화면" />
+          <img class="feat-phone feat-phone--community" data-reveal src="./tracksy_img/feature_2.png" alt="러닝 카드 커뮤니티 화면" />
+
+          <!-- 라벨→폰 꺾쇠 연결선 (좌표 = 0~100, 폰 left/top % 와 동일) -->
+          <svg class="feat-lines" data-reveal viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+            <polyline points="-6,44 3,44" />           <!-- 1 STUDIO -->
+            <polyline points="46,25 39,25 39,37" />    <!-- 2 ARCHIVE -->
+            <polyline points="80,48 76,48 76,54" />    <!-- 3 AI DIARY -->
+            <polyline points="11,87 19,87 19,84" />    <!-- 4 COMMUNITY -->
+          </svg>
+          <span class="feat-dot" style="left:-6%; top:44%;" aria-hidden="true"></span>   <!-- 1 STUDIO -->
+          <span class="feat-dot" style="left:46%; top:25%;" aria-hidden="true"></span>   <!-- 2 ARCHIVE -->
+          <span class="feat-dot" style="left:80%; top:48%;" aria-hidden="true"></span>   <!-- 3 AI DIARY -->
+          <span class="feat-dot" style="left:11%; top:87%;" aria-hidden="true"></span>   <!-- 4 COMMUNITY -->
+
+          <div class="feat-note feat-note--studio" data-reveal>
+            <h3 class="feat-note__title">STUDIO</h3>
+            <p class="feat-note__sub">기록을 콘텐츠로 만드는 공간</p>
+            <p class="feat-note__desc">러닝 데이터를 등록하고 AI 디자인을 활용해 나만의 러닝카드를 제작합니다.</p>
+          </div>
+          <div class="feat-note feat-note--archive" data-reveal>
+            <h3 class="feat-note__title">ARCHIVE</h3>
+            <p class="feat-note__sub">성장을 기록하는 아카이브</p>
+            <p class="feat-note__desc">러닝 이력을 체계적으로 저장하고<br>누적 데이터를 통해 변화와 성장을 확인합니다.</p>
+          </div>
+          <div class="feat-note feat-note--diary" data-reveal>
+            <h3 class="feat-note__title">AI DIARY</h3>
+            <p class="feat-note__sub">기억에 남는 러닝 다이어리</p>
+            <p class="feat-note__desc">AI가 러닝 데이터를 분석하여 스토리가 담긴 러닝 일기를 자동으로 생성합니다.</p>
+          </div>
+          <div class="feat-note feat-note--community" data-reveal>
+            <h3 class="feat-note__title">COMMUNITY</h3>
+            <p class="feat-note__sub">함께 만드는 러닝 경험</p>
+            <p class="feat-note__desc">러너들과 기록을 공유하고 챌린지와<br>피드백을 통해 지속적인 동기부여를 제공합니다.</p>
+          </div>
+        </div>
+        </div>
       </div>
     </section>
 
@@ -786,100 +890,6 @@
             <span class="flow__ico"><span class="flow__num">4</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 3.9M15.4 6.5l-6.8 3.9"/></svg></span>
             <div class="flow__txt"><p class="flow__label">SNS 공유</p><p class="flow__desc">완성한 카드를 SNS로 공유</p></div>
           </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ============ 04.7 CORE FEATURES (세로 스택 / 스크롤 시 위로 올라오며 등장) =========
-         ▣ 수정 가이드
-           · 패널 추가/삭제 : 아래 <article class="cf__panel" data-reveal> 블록을 복제/삭제
-           · 내용 변경      : 각 패널의 이미지(src)·FEATURE 번호·라벨·제목·설명만 고치면 됨
-           · 등장 효과      : data-reveal (IntersectionObserver) — 화면에 들어오면 아래→위로 슬라이드+페이드
-         ============================================================================ -->
-    <section class="cf" id="core-features" aria-label="핵심 기능">
-      <!-- 세로 스택: 대제목 아래로 패널들이 위로 올라오며(reveal) 등장 -->
-      <div class="cf__pin">
-        <div class="cf__sticky">
-          <!-- 대제목 (섹션 상단) -->
-          <div class="cf__head">
-            <span class="eyebrow" data-reveal>Core Features</span>
-            <h2 class="section-title" data-reveal>AI로 완성하는 <em>러닝 기록</em></h2>
-            <p class="lead" data-reveal>기록 입력부터 감성 일지, 공유 카드까지 — 러닝의 전 과정을 AI로 더 쉽고 즐겁게 만들었습니다.</p>
-          </div>
-          <div class="cf__track">
-        <!-- ===== PANEL 1 : 캡쳐 사진 스캔 (OCR) ===== -->
-        <article class="cf__panel" data-reveal>
-          <div class="cf__inner">
-            <div class="fshow__media">
-              <div class="fshow__panel fshow__panel--duo">
-                <img class="fshow__phone fshow__phone--back" src="./tracksy_img/mockup_phone1.png" alt="캡쳐 사진 스캔 화면" />
-                <img class="fshow__phone fshow__phone--front" src="./tracksy_img/mockup_phone2.png" alt="러닝 데이터 자동 입력 화면" />
-              </div>
-            </div>
-            <div class="fshow__text">
-              <p class="fshow__no">FEATURE 01</p>
-              <p class="fshow__kicker">AI 활용 러닝 기록 ①</p>
-              <h3 class="fshow__title">캡쳐 사진 스캔하기</h3>
-              <p class="fshow__desc">캡쳐된 러닝 기록을 OCR 기능으로 불러와 자동으로 기록할 수 있습니다.</p>
-              <div class="fshow__callout">
-                <span class="fshow__callout-ico" aria-hidden="true"><span class="material-symbols-rounded">document_scanner</span></span>
-                <p>나이키런·가민·스트라바 등 다른 앱 캡처 이미지를 올리면 <b>→ AI가 거리·시간·페이스 데이터를 읽어 자동 기록</b>합니다.</p>
-              </div>
-            </div>
-          </div>
-        </article>
-
-        <!-- ===== PANEL 2 : AI 오늘의 러닝일지 ===== -->
-        <article class="cf__panel" data-reveal>
-          <div class="cf__inner">
-            <div class="fshow__media">
-              <div class="fshow__panel">
-                <img class="fshow__phone fshow__phone--single" src="./tracksy_img/mockup_phone3.png" alt="AI 오늘의 러닝일지 대화 화면" />
-              </div>
-            </div>
-            <div class="fshow__text">
-              <p class="fshow__no">FEATURE 02</p>
-              <p class="fshow__kicker">AI 활용 러닝 기록 ②</p>
-              <h3 class="fshow__title">AI 오늘의 러닝일지</h3>
-              <p class="fshow__desc">AI 챗봇과의 짧은 대화를 통해 오늘의 러닝을 한 줄로 요약할 수 있습니다.</p>
-              <div class="fshow__callout">
-                <span class="fshow__callout-ico" aria-hidden="true"><span class="material-symbols-rounded">forum</span></span>
-                <p>AI 챗봇이 던지는 몇 가지 질문에 답하면 <b>→ 오늘의 러닝을 감성 문구로 만들어 사용자 경험을 높입니다.</b></p>
-              </div>
-            </div>
-          </div>
-        </article>
-
-        <!-- ===== PANEL 3 : 러닝 카드 디자인 ===== -->
-        <article class="cf__panel" data-reveal>
-          <div class="cf__inner">
-            <div class="fshow__media">
-              <div class="fshow__panel">
-                <img class="fshow__phone fshow__phone--single" src="./tracksy_img/mockup_phone4.png" alt="러닝 카드 갤러리와 커스텀 디자인 화면" />
-              </div>
-            </div>
-            <div class="fshow__text">
-              <p class="fshow__no">FEATURE 03</p>
-              <p class="fshow__kicker">러닝 카드 디자인</p>
-              <h3 class="fshow__title">러닝 기록을 감성 카드로</h3>
-              <p class="fshow__desc">러닝 기록을 불러와 나만의 카드로 디자인하고, 다른 사용자와 공유할 수 있습니다.</p>
-              <ul class="fshow__points">
-                <li>
-                  <span class="fshow__pt-ico" aria-hidden="true"><span class="material-symbols-rounded">tune</span></span>
-                  <div><b>나만의 커스텀 디자인</b><span>러닝 기록을 불러와 직접 커스텀</span></div>
-                </li>
-                <li>
-                  <span class="fshow__pt-ico" aria-hidden="true"><span class="material-symbols-rounded">share</span></span>
-                  <div><b>스타일 불러오기</b><span>유저 간 저장한 스타일 공유 가능</span></div>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </article>
-          </div>
-
-          <!-- 진행 막대 (가로 모드에서만 표시) -->
-          <span class="cf__progress" aria-hidden="true"><span class="cf__progress-bar"></span></span>
         </div>
       </div>
     </section>
