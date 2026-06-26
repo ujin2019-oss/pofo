@@ -59,7 +59,7 @@
       --container: 1280px;
       --container-wide: 1440px;
 
-      --radius-sm: 12px; --radius-md: 20px; --radius-lg: 30px; --radius-pill: 999px;
+      --radius-sm: 5px; --radius-md: 7px; --radius-lg: 9px; --radius-pill: 999px;
       --shadow-card: 0 20px 50px rgba(80, 50, 160, 0.10);
       --shadow-soft: 0 10px 30px rgba(80, 50, 160, 0.07);
       --ease: cubic-bezier(0.16, 1, 0.3, 1);
@@ -87,10 +87,8 @@
     .section--light { background: var(--color-light); }
     .section--ink { background: var(--color-ink); color: #fff; }
 
-    .eyebrow { display: inline-flex; align-items: center; gap: 10px; font-size: var(--fs-small); font-weight: var(--fw-bold); letter-spacing: 0.16em; text-transform: uppercase; color: var(--color-primary); margin-bottom: 18px; }
-    .eyebrow::before { content: ""; width: 26px; height: 2px; background: var(--color-primary); border-radius: 2px; }
+    .eyebrow { display: inline-flex; align-items: center; font-size: var(--fs-small); font-weight: var(--fw-bold); letter-spacing: 0.16em; text-transform: uppercase; color: var(--color-primary); margin-bottom: 18px; }
     .section--ink .eyebrow { color: var(--color-secondary); }
-    .section--ink .eyebrow::before { background: var(--color-secondary); }
     .section-title { font-size: var(--fs-h1); font-weight: var(--fw-black); line-height: var(--lh-tight); letter-spacing: -0.025em; word-break: keep-all; }
     .lead { max-width: 62ch; margin-top: 18px; line-height: var(--lh-loose); color: var(--color-text-muted); word-break: keep-all; }
     .section--ink .lead { color: rgba(255,255,255,0.7); }
@@ -248,6 +246,9 @@
     .problem__shot .img-slot { aspect-ratio: auto; max-width: 260px; margin-inline: auto; box-shadow: var(--shadow-card); }
     .problem__shot .img-slot img { width: 100%; height: auto; }
     .img-slot:has(img)::after { display: none; } /* 이미지가 들어간 슬롯은 플레이스홀더 라벨 숨김 */
+    /* 이미지가 들어간 슬롯: 비율 고정 해제 → 원본 비율 전체 표시(잘림 방지) */
+    .img-slot:has(img) { aspect-ratio: auto !important; background: none; }
+    .img-slot > img { display: block; width: 100%; height: auto; }
     .pcards { display: grid; grid-template-columns: 1fr; gap: clamp(14px,2vw,22px); margin-top: var(--block-gap); }
     .pcard { padding: clamp(22px,3vw,34px); border-radius: var(--radius-md); background: var(--color-white); border: 1px solid var(--color-line); box-shadow: var(--shadow-soft); }
     .pcard__tag { font-size: var(--fs-small); font-weight: var(--fw-bold); letter-spacing: 0.1em; color: var(--color-primary); }
@@ -427,6 +428,16 @@
     .ds-nav { display: flex; gap: 18px; padding: 12px 22px; border-radius: var(--radius-pill); background: var(--color-ink); color: #fff; font-size: 12px; }
     .ds-fab { width: 52px; height: 52px; border-radius: var(--radius-pill); background: var(--gradient-brand); color: #fff; display: grid; place-items: center; font-size: 24px; box-shadow: 0 10px 24px rgba(139,92,246,0.4); }
     .ds__mascot .img-slot { aspect-ratio: 1/1; max-width: 200px; }
+    /* Mascot 패널: 메인 캐릭터(좌) + 12 아이콘 그리드(우) */
+    .ds-mascot { display: grid; grid-template-columns: auto 1fr; gap: clamp(20px, 3vw, 48px); align-items: center; }
+    .ds-mascot__hero { display: flex; align-items: flex-end; justify-content: center; gap: clamp(6px, 1vw, 14px); }
+    .ds-mascot__hero img { height: clamp(100px, 12vw, 160px); width: auto; filter: drop-shadow(0 16px 28px rgba(60, 30, 130, 0.22)); }
+    .ds-mascot__grid { display: grid; grid-template-columns: repeat(6, clamp(42px, 4.5vw, 62px)); gap: clamp(8px, 1vw, 14px); justify-content: start; align-content: center; }
+    .ds-mascot__grid img { display: block; width: 100%; height: auto; }
+    @media (max-width: 640px) {
+      .ds-mascot { grid-template-columns: 1fr; justify-items: center; gap: clamp(18px, 5vw, 28px); }
+      .ds-mascot__grid { grid-template-columns: repeat(4, 1fr); max-width: 320px; }
+    }
 
     /* =================================================================
        09) DEVELOPMENT (4카드 + 타임라인)
@@ -469,7 +480,6 @@
        ================================================================= */
     .outcome { background: var(--gradient-brand); color: #fff; }
     .outcome .eyebrow { color: rgba(255,255,255,0.85); }
-    .outcome .eyebrow::before { background: rgba(255,255,255,0.85); }
     .outcome .section-title { color: #fff; }
     .kpis { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(16px,2.4vw,28px); margin-top: var(--block-gap); }
     .kpi { padding: clamp(24px,3vw,40px); border-radius: var(--radius-lg); background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2); backdrop-filter: blur(4px); }
@@ -903,15 +913,15 @@
         </div>
         <div class="features">
           <article class="feature" data-reveal>
-            <div class="feature__media"><div class="img-slot" data-label="OCR 화면"></div></div>
+            <div class="feature__media"><div class="img-slot" data-label="OCR 화면"><img src="tracksy_img/ocr.png" alt=""></div></div>
             <div class="feature__body"><p class="feature__no">FEATURE 01</p><h3 class="feature__title">OCR 자동 기록</h3><p class="feature__desc">캡처 이미지에서 거리·시간·페이스를 자동 추출</p></div>
           </article>
           <article class="feature" data-reveal>
-            <div class="feature__media"><div class="img-slot" data-label="AI 러닝일지 화면"></div></div>
+            <div class="feature__media"><div class="img-slot" data-label="AI 러닝일지 화면"><img src="tracksy_img/ai.png" alt=""></div></div>
             <div class="feature__body"><p class="feature__no">FEATURE 02</p><h3 class="feature__title">AI 러닝일지</h3><p class="feature__desc">대화를 통해 오늘의 러닝을 한 줄로 기록</p></div>
           </article>
           <article class="feature" data-reveal>
-            <div class="feature__media"><div class="img-slot" data-label="러닝 카드 스튜디오 화면"></div></div>
+            <div class="feature__media"><div class="img-slot" data-label="러닝 카드 스튜디오 화면"><img src="tracksy_img/studio.png" alt=""></div></div>
             <div class="feature__body"><p class="feature__no">FEATURE 03</p><h3 class="feature__title">러닝 카드 스튜디오</h3><p class="feature__desc">SNS 공유를 위한 감성 카드 제작 기능</p></div>
           </article>
         </div>
@@ -933,7 +943,7 @@
         </div>
 
         <div class="tabpanel is-active" data-panel="home" data-reveal>
-          <div class="tabpanel__media"><div class="img-slot" data-label="Home 화면"></div></div>
+          <div class="tabpanel__media"><div class="img-slot" data-label="Home 화면"><img src="tracksy_img/home.png" alt=""></div></div>
           <div class="tabpanel__text">
             <h3 class="tabpanel__title">Home</h3>
             <p class="tabpanel__desc">오늘의 러닝과 추천 카드를 한눈에. 사용자가 가장 먼저 ‘무엇을 할지’ 알 수 있도록 핵심 액션을 상단에 배치했습니다.</p>
@@ -941,7 +951,7 @@
           </div>
         </div>
         <div class="tabpanel" data-panel="studio" data-reveal>
-          <div class="tabpanel__media"><div class="img-slot" data-label="Studio 화면"></div></div>
+          <div class="tabpanel__media"><div class="img-slot" data-label="Studio 화면"><img src="tracksy_img/studio.png" alt=""></div></div>
           <div class="tabpanel__text">
             <h3 class="tabpanel__title">Studio</h3>
             <p class="tabpanel__desc">러닝 카드를 만드는 공간. 템플릿과 감성 요소를 조합해 몇 번의 탭만으로 공유용 콘텐츠를 완성합니다.</p>
@@ -949,7 +959,7 @@
           </div>
         </div>
         <div class="tabpanel" data-panel="community" data-reveal>
-          <div class="tabpanel__media"><div class="img-slot" data-label="Community 화면"></div></div>
+          <div class="tabpanel__media"><div class="img-slot" data-label="Community 화면"><img src="tracksy_img/community.png" alt=""></div></div>
           <div class="tabpanel__text">
             <h3 class="tabpanel__title">Community</h3>
             <p class="tabpanel__desc">러너들의 카드를 둘러보고 영감을 얻는 공간. 경험을 나누며 동기부여로 이어지도록 설계했습니다.</p>
@@ -957,7 +967,7 @@
           </div>
         </div>
         <div class="tabpanel" data-panel="archive" data-reveal>
-          <div class="tabpanel__media"><div class="img-slot" data-label="Archive 화면"></div></div>
+          <div class="tabpanel__media"><div class="img-slot" data-label="Archive 화면"><img src="tracksy_img/archive.png" alt=""></div></div>
           <div class="tabpanel__text">
             <h3 class="tabpanel__title">Archive</h3>
             <p class="tabpanel__desc">나의 러닝 기록과 카드를 모아보는 공간. 성장의 흐름을 한눈에 확인할 수 있습니다.</p>
@@ -1000,7 +1010,27 @@
           </div>
           <div class="ds__panel ds__panel--wide ds__mascot" data-reveal>
             <p class="ds__label">Mascot · TRACKSY Character</p>
-            <div class="img-slot" data-label="TRACKSY 마스코트"></div>
+            <div class="ds-mascot">
+              <div class="ds-mascot__hero">
+                <img src="./tracksy_img/think_cha.png" alt="" aria-hidden="true" style="height: clamp(120px, 14.5vw, 188px);" />
+                <img src="./tracksy_img/tracksy_cha.png" alt="TRACKSY 메인 마스코트 캐릭터" />
+                <img src="./tracksy_img/cheer_cha.png" alt="" aria-hidden="true" />
+              </div>
+              <div class="ds-mascot__grid">
+                <img src="./tracksy_img/ds_ico1.png" alt="" aria-hidden="true" />
+                <img src="./tracksy_img/ds_ico2.png" alt="" aria-hidden="true" />
+                <img src="./tracksy_img/ds_ico3.png" alt="" aria-hidden="true" />
+                <img src="./tracksy_img/ds_ico4.png" alt="" aria-hidden="true" />
+                <img src="./tracksy_img/ds_ico5.png" alt="" aria-hidden="true" />
+                <img src="./tracksy_img/ds_ico6.png" alt="" aria-hidden="true" />
+                <img src="./tracksy_img/ds_ico7.png" alt="" aria-hidden="true" />
+                <img src="./tracksy_img/ds_ico8.png" alt="" aria-hidden="true" />
+                <img src="./tracksy_img/ds_ico9.png" alt="" aria-hidden="true" />
+                <img src="./tracksy_img/ds_ico10.png" alt="" aria-hidden="true" />
+                <img src="./tracksy_img/ds_ico11.png" alt="" aria-hidden="true" />
+                <img src="./tracksy_img/ds_ico12.png" alt="" aria-hidden="true" />
+              </div>
+            </div>
           </div>
         </div>
       </div>
