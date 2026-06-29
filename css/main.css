@@ -1613,20 +1613,48 @@ html {
   justify-content: center;
   margin-top: clamp(28px, 4vw, 60px);
 }
-/* 배경 타이포(구슬 뒤) — BEYOND BEAUTY / TO THE ESSENCE */
+/* 배경 타이포(구슬 뒤) — BEYOND BEAUTY(왼쪽 위) / TO THE ESSENCE(오른쪽 아래)
+   · 구체를 기준으로 대각선(좌상 → 우하)에 한 번씩만 배치, 안쪽 끝이 구슬 뒤로 들어감
+   · 제자리에서 은은하게 좌우로 떠다니듯 반복 (drift)
+   · 위치 조정: .mkt-word--tl / --br 의 top/bottom/left/right 값 */
 .marketing__type {
-  flex: none;
-  z-index: 0;
-  font-size: clamp(20px, 3.2vw, 42px);
-  font-weight: var(--fw-bold);
-  letter-spacing: 0.05em;
-  /* 채움(연퍼플) 타이포 */
-  color: var(--color-sub);
-  opacity: 0.55;
-  white-space: nowrap;
+  position: absolute;
+  inset: 0;     /* 무대(구체) 영역 기준 */
+  z-index: 0;   /* 구체(z-index:1)보다 뒤 → 구슬 뒤로 깔림 */
+  opacity: 0.4; /* 연하게 */
   pointer-events: none;
   user-select: none;
-  will-change: transform, opacity;
+}
+.mkt-word {
+  position: absolute;
+  white-space: nowrap;
+  /* 채움(연퍼플) 타이포 */
+  color: var(--color-sub);
+  font-size: clamp(28px, 3.8vw, 62px);
+  font-weight: var(--fw-bold);
+  letter-spacing: 0.05em;
+  line-height: 1;
+  will-change: transform;
+}
+/* 구체 왼쪽 위 — 오른쪽 끝(BEAUTY)이 구슬 뒤로. 왼쪽으로 끊김 없이 흐름 */
+.mkt-word--tl { right: calc(50% + clamp(60px, 9vw, 140px)); top: 22%; animation: mkt-flow-tl 9s linear infinite; }
+/* 구체 오른쪽 아래 — 왼쪽 끝(TO)이 구슬 뒤로. 오른쪽으로 끊김 없이 흐름 */
+.mkt-word--br { left: calc(50% + clamp(60px, 9vw, 140px)); bottom: 23%; animation: mkt-flow-br 11s linear infinite; }
+/* 한 방향으로 계속 흐르다가 양 끝에서 살짝 페이드 → 다시 흐름 (흐르는 느낌, 속도: 위 animation 시간) */
+@keyframes mkt-flow-tl {
+  0%   { opacity: 0; transform: translateX(12%); }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { opacity: 0; transform: translateX(-26%); }
+}
+@keyframes mkt-flow-br {
+  0%   { opacity: 0; transform: translateX(-12%); }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { opacity: 0; transform: translateX(26%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mkt-word { animation: none; }
 }
 .marketing__orb {
   position: relative;
@@ -1637,7 +1665,10 @@ html {
   transition: transform var(--duration-normal) var(--ease-out);
 }
 @media (max-width: 767px) {
-  .marketing__type { display: none; } /* 모바일: 폭 부족 → 배경 타이포 숨김 */
+  /* 모바일: 글자 작게 + 구체 가까이 당겨 단어가 최대한 보이도록 */
+  .mkt-word { font-size: clamp(19px, 6.2vw, 36px); }
+  .mkt-word--tl { right: calc(50% + 6px); top: 24%; }
+  .mkt-word--br { left: calc(50% + 6px); bottom: 18%; }
 }
 .marketing__orb img {
   width: 100%;
