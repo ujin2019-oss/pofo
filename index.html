@@ -788,6 +788,249 @@
         </div>
       </div>
     </section>
+
+    <!-- =========================================================
+         SECTION 10 : ALL PROJECT (탭 필터 + 3×3 이미지 그리드)
+         ▣ 수정 가이드
+           · 탭 전환 : .ap-tab[data-tab]  ↔  .ap-panel[data-panel]  (JS 자동)
+           · 링크    : 각 <a class="ap-card" href="..."> 의 href 만 수정
+           · 이미지  : <span class="ap-card__img"></span> 안에 <img src="..." alt=""> 를 넣으면 슬롯이 채워짐
+         ========================================================= -->
+    <section class="all-project" id="allproject" aria-label="전체 프로젝트">
+      <div class="all-project__inner">
+        <header class="ap-head" data-reveal>
+          <p class="ap-eyebrow">ALL PROJECT</p>
+          <div class="ap-tabs" role="tablist" aria-label="프로젝트 분류">
+            <button type="button" class="ap-tab is-active" data-tab="uiux" role="tab" aria-selected="true">UIUX</button>
+            <button type="button" class="ap-tab" data-tab="marketing" role="tab" aria-selected="false">MARKETING</button>
+            <button type="button" class="ap-tab" data-tab="print" role="tab" aria-selected="false">PRINT DESIGN</button>
+          </div>
+        </header>
+
+        <!-- ===== UIUX (첫 화면) — href 를 순서대로 채우세요 ===== -->
+        <div class="ap-panel is-active" data-panel="uiux" role="tabpanel">
+          <div class="ap-grid">
+            <a class="ap-card ap-card--browser" href="https://ujin2019-oss.github.io/jejustay/" target="_blank" rel="noopener"><!-- 1 -->
+              <span class="ap-card__media">
+                <span class="ap-browser">
+                  <span class="ap-browser__bar">
+                    <span class="ap-browser__dots" aria-hidden="true"><i></i><i></i><i></i></span>
+                    <span class="ap-browser__url" aria-hidden="true"></span>
+                  </span>
+                  <span class="ap-browser__screen"><img src="./images/all_pc01.jpg" alt="제주스테이 예약 사이트 데스크톱 화면" /></span>
+                </span>
+                <span class="ap-mobile">
+                  <span class="ap-mobile__bar" aria-hidden="true"><span class="ap-mobile__url"></span></span>
+                  <span class="ap-mobile__screen"><img src="./images/all_mo01.jpg" alt="제주스테이 예약 사이트 모바일 화면" /></span>
+                </span>
+              </span>
+              <span class="ap-card__info">
+                <span class="ap-card__title">제주스테이 예약 사이트</span>
+                <span class="ap-card__cat">반응형 웹사이트</span>
+              </span>
+            </a>
+            <a class="ap-card ap-card--browser" href="https://ujin2019-oss.github.io/blossomwide_lotte/" target="_blank" rel="noopener"><!-- 2 -->
+              <span class="ap-card__media">
+                <span class="ap-browser">
+                  <span class="ap-browser__bar">
+                    <span class="ap-browser__dots" aria-hidden="true"><i></i><i></i><i></i></span>
+                    <span class="ap-browser__url" aria-hidden="true"></span>
+                  </span>
+                  <span class="ap-browser__screen"><img src="./images/all_pc02.jpg" alt="프로젝트 02 데스크톱 화면" /></span>
+                </span>
+                <span class="ap-mobile">
+                  <span class="ap-mobile__bar" aria-hidden="true"><span class="ap-mobile__url"></span></span>
+                  <span class="ap-mobile__screen"><img src="./images/all_mo02.jpg" alt="롯데 봄맞이 쇼핑 페스티벌 모바일 화면" /></span>
+                </span>
+              </span>
+              <span class="ap-card__info">
+                <span class="ap-card__title">롯데 봄맞이 쇼핑 페스티벌</span>
+                <span class="ap-card__cat">반응형 랜딩 페이지</span>
+              </span>
+            </a>
+            <a class="ap-card ap-card--browser" href="https://ujin2019-oss.github.io/moodify_music/" target="_blank" rel="noopener"><!-- 3 -->
+              <span class="ap-card__media">
+                <span class="ap-browser">
+                  <span class="ap-browser__bar">
+                    <span class="ap-browser__dots" aria-hidden="true"><i></i><i></i><i></i></span>
+                    <span class="ap-browser__url" aria-hidden="true"></span>
+                  </span>
+                  <span class="ap-browser__screen"><img src="./images/all_pc03.jpg" alt="프로젝트 03 데스크톱 화면" /></span>
+                </span>
+                <span class="ap-mobile">
+                  <span class="ap-mobile__bar" aria-hidden="true"><span class="ap-mobile__url"></span></span>
+                  <span class="ap-mobile__screen"><img src="./images/all_mo03.jpg" alt="무디파이 뮤직 웹앱 모바일 화면" /></span>
+                </span>
+              </span>
+              <span class="ap-card__info">
+                <span class="ap-card__title">무디파이 뮤직</span>
+                <span class="ap-card__cat">반응형 웹사이트</span>
+              </span>
+            </a>
+            <a class="ap-card ap-card--browser" href="https://kkm15921598.github.io/system_dental/index.html" target="_blank" rel="noopener"><!-- 4 -->
+              <span class="ap-card__media">
+                <span class="ap-browser">
+                  <span class="ap-browser__bar">
+                    <span class="ap-browser__dots" aria-hidden="true"><i></i><i></i><i></i></span>
+                    <span class="ap-browser__url" aria-hidden="true"></span>
+                  </span>
+                  <span class="ap-browser__screen"><img src="./images/all_pc04.jpg" alt="프로젝트 04 데스크톱 화면" /></span>
+                </span>
+                <span class="ap-mobile">
+                  <span class="ap-mobile__bar" aria-hidden="true"><span class="ap-mobile__url"></span></span>
+                  <span class="ap-mobile__screen"><img src="./images/all_mo04.jpg" alt="시스템치과의원 모바일 화면" /></span>
+                </span>
+              </span>
+              <span class="ap-card__info">
+                <span class="ap-card__title">시스템치과의원</span>
+                <span class="ap-card__cat">반응형 웹사이트 리뉴얼</span>
+              </span>
+            </a>
+            <a class="ap-card ap-card--browser" href="https://ujin2019-oss.github.io/modoomath/" target="_blank" rel="noopener"><!-- 5 -->
+              <span class="ap-card__media">
+                <span class="ap-browser">
+                  <span class="ap-browser__bar">
+                    <span class="ap-browser__dots" aria-hidden="true"><i></i><i></i><i></i></span>
+                    <span class="ap-browser__url" aria-hidden="true"></span>
+                  </span>
+                  <span class="ap-browser__screen"><img src="./images/all_pc05.jpg" alt="프로젝트 05 데스크톱 화면" /></span>
+                </span>
+                <span class="ap-mobile">
+                  <span class="ap-mobile__bar" aria-hidden="true"><span class="ap-mobile__url"></span></span>
+                  <span class="ap-mobile__screen"><img src="./images/all_mo05.jpg" alt="모두매쓰 AI 수학 학습 모바일 화면" /></span>
+                </span>
+              </span>
+              <span class="ap-card__info">
+                <span class="ap-card__title">AI 생성형 수학 학습, 모두매쓰</span>
+                <span class="ap-card__cat">반응형 웹사이트 리뉴얼</span>
+              </span>
+            </a>
+            <a class="ap-card ap-card--browser" href="https://tracksy-rouge.vercel.app" target="_blank" rel="noopener"><!-- 6 (모바일 없음) -->
+              <span class="ap-card__media">
+                <span class="ap-browser">
+                  <span class="ap-browser__bar">
+                    <span class="ap-browser__dots" aria-hidden="true"><i></i><i></i><i></i></span>
+                    <span class="ap-browser__url" aria-hidden="true"></span>
+                  </span>
+                  <span class="ap-browser__screen"><img src="./images/all_pc06.jpg" alt="러닝 기록 앱 화면" /></span>
+                </span>
+              </span>
+              <span class="ap-card__info">
+                <span class="ap-card__title">러닝 기록 앱</span>
+                <span class="ap-card__cat">웹·앱 개발</span>
+              </span>
+            </a>
+            <a class="ap-card ap-card--browser" href="https://ujin2019-oss.github.io/lifedrop/" target="_blank" rel="noopener"><!-- 7 -->
+              <span class="ap-card__media">
+                <span class="ap-browser">
+                  <span class="ap-browser__bar">
+                    <span class="ap-browser__dots" aria-hidden="true"><i></i><i></i><i></i></span>
+                    <span class="ap-browser__url" aria-hidden="true"></span>
+                  </span>
+                  <span class="ap-browser__screen"><img src="./images/all_pc07.jpg" alt="프로젝트 07 데스크톱 화면" /></span>
+                </span>
+                <span class="ap-mobile">
+                  <span class="ap-mobile__bar" aria-hidden="true"><span class="ap-mobile__url"></span></span>
+                  <span class="ap-mobile__screen"><img src="./images/all_mo07.jpg" alt="LIFE DROP 혈액나눔센터 모바일 화면" /></span>
+                </span>
+              </span>
+              <span class="ap-card__info">
+                <span class="ap-card__title">LIFE DROP 혈액나눔센터</span>
+                <span class="ap-card__cat">반응형 웹사이트</span>
+              </span>
+            </a>
+            <a class="ap-card ap-card--browser" href="https://ujin2019-oss.github.io/tangtang/" target="_blank" rel="noopener"><!-- 8 -->
+              <span class="ap-card__media">
+                <span class="ap-browser">
+                  <span class="ap-browser__bar">
+                    <span class="ap-browser__dots" aria-hidden="true"><i></i><i></i><i></i></span>
+                    <span class="ap-browser__url" aria-hidden="true"></span>
+                  </span>
+                  <span class="ap-browser__screen"><img src="./images/all_pc08.jpg" alt="프로젝트 08 데스크톱 화면" /></span>
+                </span>
+                <span class="ap-mobile">
+                  <span class="ap-mobile__bar" aria-hidden="true"><span class="ap-mobile__url"></span></span>
+                  <span class="ap-mobile__screen"><img src="./images/all_mo08.jpg" alt="탕탕특공대 게임소개 모바일 화면" /></span>
+                </span>
+              </span>
+              <span class="ap-card__info">
+                <span class="ap-card__title">탕탕특공대</span>
+                <span class="ap-card__cat">반응형 웹사이트 리뉴얼</span>
+              </span>
+            </a>
+            <a class="ap-card ap-card--browser" href="https://ujin2019-oss.github.io/jejuaqua/" target="_blank" rel="noopener"><!-- 9 (모바일 없음) -->
+              <span class="ap-card__media">
+                <span class="ap-browser">
+                  <span class="ap-browser__bar">
+                    <span class="ap-browser__dots" aria-hidden="true"><i></i><i></i><i></i></span>
+                    <span class="ap-browser__url" aria-hidden="true"></span>
+                  </span>
+                  <span class="ap-browser__screen"><img src="./images/all_pc09.jpg" alt="아쿠리아움 웹사이트 화면" /></span>
+                </span>
+              </span>
+              <span class="ap-card__info">
+                <span class="ap-card__title">아쿠리아움</span>
+                <span class="ap-card__cat">웹사이트</span>
+              </span>
+            </a>
+          </div>
+        </div>
+
+        <!-- ===== MARKETING ===== -->
+        <div class="ap-panel" data-panel="marketing" role="tabpanel">
+          <div class="ap-grid">
+            <a class="ap-card" href="#"><span class="ap-card__img"></span></a>
+            <a class="ap-card" href="#"><span class="ap-card__img"></span></a>
+            <a class="ap-card" href="#"><span class="ap-card__img"></span></a>
+            <a class="ap-card" href="#"><span class="ap-card__img"></span></a>
+            <a class="ap-card" href="#"><span class="ap-card__img"></span></a>
+            <a class="ap-card" href="#"><span class="ap-card__img"></span></a>
+            <a class="ap-card" href="#"><span class="ap-card__img"></span></a>
+            <a class="ap-card" href="#"><span class="ap-card__img"></span></a>
+            <a class="ap-card" href="#"><span class="ap-card__img"></span></a>
+          </div>
+        </div>
+
+        <!-- ===== PRINT DESIGN ===== -->
+        <div class="ap-panel" data-panel="print" role="tabpanel">
+          <div class="ap-grid">
+            <a class="ap-card" href="#"><span class="ap-card__img"></span></a>
+            <a class="ap-card" href="#"><span class="ap-card__img"></span></a>
+            <a class="ap-card" href="#"><span class="ap-card__img"></span></a>
+            <a class="ap-card" href="#"><span class="ap-card__img"></span></a>
+            <a class="ap-card" href="#"><span class="ap-card__img"></span></a>
+            <a class="ap-card" href="#"><span class="ap-card__img"></span></a>
+            <a class="ap-card" href="#"><span class="ap-card__img"></span></a>
+            <a class="ap-card" href="#"><span class="ap-card__img"></span></a>
+            <a class="ap-card" href="#"><span class="ap-card__img"></span></a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         SECTION 11 : MARKETING (마케팅 디자이너 — 구체 CTA / 클로징)
+         · 구체 안 CTA 링크 : .marketing__orb 의 href 수정
+         ========================================================= -->
+    <section class="marketing" id="marketing" aria-label="마케팅 디자이너">
+      <div class="marketing__inner">
+        <p class="marketing__eyebrow" data-reveal>Marketing &amp; Designer</p>
+        <h2 class="marketing__title" data-reveal>마케팅 디자이너</h2>
+        <p class="marketing__sub" data-reveal>보기보다 본질을 먼저 생각합니다</p>
+        <div class="marketing__stage" data-reveal>
+          <a class="marketing__orb" href="./marketing_case.html">
+            <img src="./images/closing.png" alt="" aria-hidden="true" />
+            <span class="marketing__cta">
+              <span class="marketing__cta-main">마케팅 프로젝트</span>
+              <span class="marketing__cta-go">
+                <svg class="marketing__cta-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6" /></svg>
+                보러가기
+              </span>
+            </span>
+          </a>
+        </div>
+      </div>
+    </section>
   </main>
 
   <!-- =========================================================

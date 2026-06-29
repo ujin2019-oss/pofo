@@ -119,6 +119,38 @@
   }
 
   /* -----------------------------------------------------------
+     1.5) MARKETING 배경 타이포 : 스크롤하면 좌우로 슬라이드되어 사라짐
+        - BEYOND BEAUTY → 왼쪽 / TO THE ESSENCE → 오른쪽 으로 빠지며 페이드
+        - 스크롤에 맞춰(scrub) 진행 → 구슬을 드러내는 리빌
+     ----------------------------------------------------------- */
+  function initMarketingType() {
+    const section = document.querySelector(".marketing");
+    const left = document.querySelector(".marketing__type--l");
+    const right = document.querySelector(".marketing__type--r");
+    if (!section || (!left && !right)) return;
+
+    const st = { trigger: section, start: "top center", end: "bottom center", scrub: 2 };
+    // 처음엔 구슬 옆에 붙어 있다가 스크롤하면 양옆으로 멀어짐(스프레드, 보이는 채로)
+    if (left) {
+      gsap.to(left, { xPercent: -70, ease: "none", scrollTrigger: st });
+    }
+    if (right) {
+      gsap.to(right, { xPercent: 70, ease: "none", scrollTrigger: st });
+    }
+
+    // 푸터가 올라오면 양옆 타이포가 사라짐(페이드아웃)
+    const footer = document.querySelector(".footer");
+    const types = [left, right].filter(Boolean);
+    if (footer && types.length) {
+      gsap.to(types, {
+        opacity: 0,
+        ease: "none",
+        scrollTrigger: { trigger: footer, start: "top 95%", end: "top 55%", scrub: 1 },
+      });
+    }
+  }
+
+  /* -----------------------------------------------------------
      2) SLOGAN SCENE : 구체가 커지고 그 안에서 텍스트가 등장
         - 섹션을 고정(pin)하고 스크롤에 맞춰(scrub) 진행
         - (1) 작은 구체가 나타나며 점점 커짐
@@ -405,5 +437,28 @@
   // 뒤로/앞으로(bfcache 복원) 시에도 해시 위치로 보정
   window.addEventListener("pageshow", (e) => {
     if (e.persisted) scrollToHashTarget();
+  });
+})();
+
+/* =====================================================
+   ALL PROJECT — 탭 전환 (UIUX / MARKETING / PRINT DESIGN)
+   - .ap-tab[data-tab] 클릭 → 같은 data-panel 패널만 활성화
+   ===================================================== */
+(() => {
+  const tabs = document.querySelectorAll(".ap-tab");
+  const panels = document.querySelectorAll(".ap-panel");
+  if (!tabs.length) return;
+  tabs.forEach((tab) => {
+    tab.addEventListener("click", () => {
+      const target = tab.dataset.tab;
+      tabs.forEach((t) => {
+        const on = t === tab;
+        t.classList.toggle("is-active", on);
+        t.setAttribute("aria-selected", on ? "true" : "false");
+      });
+      panels.forEach((p) => {
+        p.classList.toggle("is-active", p.dataset.panel === target);
+      });
+    });
   });
 })();

@@ -136,13 +136,18 @@
     .site-header__back { display: inline-flex; align-items: center; gap: 6px; padding: 9px 17px; border-radius: var(--radius-pill); background: var(--color-primary); color: #fff; font-size: var(--fs-small); font-weight: var(--fw-bold); transition: transform .25s; }
     .site-header__back:hover { transform: translateY(-1px); }
 
-    .site-footer { background: var(--color-ink); color: rgba(255,255,255,0.7); padding: clamp(48px,7vw,80px) 0 40px; }
-    .site-footer__inner { display: flex; flex-wrap: wrap; gap: var(--block-gap); justify-content: space-between; align-items: flex-end; }
-    .site-footer__brand { font-size: var(--fs-h2); font-weight: var(--fw-black); color: #fff; letter-spacing: -0.02em; }
+    .site-footer { background: var(--color-ink); color: rgba(255,255,255,0.7); padding: clamp(72px,9vw,104px) 0 48px; }
+    .site-footer .container { max-width: var(--container-wide); }
+    .site-footer__inner { display: flex; flex-wrap: wrap; gap: var(--block-gap); justify-content: space-between; align-items: flex-start; }
+    .site-footer__brand { font-size: 20px; font-weight: var(--fw-black); color: #fff; }
     .site-footer__brand b { color: var(--color-secondary); }
-    .site-footer__contact { display: flex; flex-direction: column; gap: 8px; font-size: var(--fs-small); }
+    .site-footer__tag { margin-top: 12px; font-size: 18px; color: rgba(255,255,255,0.55); max-width: 40ch; line-height: 1.5; }
+    .site-footer__label { font-size: 15px; font-weight: var(--fw-bold); letter-spacing: 0.08em; color: rgba(255,255,255,0.4); margin-bottom: 4px; }
+    .site-footer__contact { display: flex; flex-direction: column; gap: 8px; font-size: 18px; }
     .site-footer__contact a:hover { color: #fff; }
-    .site-footer__copy { width: 100%; margin-top: 36px; padding-top: 22px; border-top: 1px solid rgba(255,255,255,0.14); font-size: var(--fs-small); color: rgba(255,255,255,0.45); }
+    .site-footer__copy { width: 100%; margin-top: 48px; padding-top: 32px; border-top: 1px solid rgba(255,255,255,0.12); font-size: 15px; color: rgba(255,255,255,0.45); display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
+    .site-footer__copy .to-top { display: inline-flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.7); font-weight: var(--fw-bold); border: 1px solid rgba(255,255,255,0.12); border-radius: var(--radius-pill); padding: 9px 16px; white-space: nowrap; transition: all .25s; }
+    .site-footer__copy .to-top:hover { color: #fff; border-color: rgba(255,255,255,0.3); }
 
     /* =================================================================
        01) HERO  (split, Apple 미니멀)
@@ -1150,13 +1155,17 @@
   <!-- ============ FOOTER (공통) ============ -->
   <footer class="site-footer">
     <div class="container site-footer__inner">
-      <p class="site-footer__brand">PORT<b>FOLIO</b></p>
+      <div class="site-footer__brand-box">
+        <p class="site-footer__brand">PORT<b>FOLIO</b></p>
+        <p class="site-footer__tag">TRACKSY 러닝 다이어리 UX Case Study.</p>
+      </div>
       <address class="site-footer__contact">
+        <span class="site-footer__label">CONTACT</span>
         <a href="mailto:ujin2019@gmail.com">ujin2019@gmail.com</a>
         <a href="tel:01020774869">010.2077.4869</a>
         <span>Seoul, Korea</span>
       </address>
-      <p class="site-footer__copy">© 2026 PORTFOLIO. TRACKSY UX Case Study.</p>
+      <p class="site-footer__copy"><span>© 2026 PORTFOLIO. TRACKSY UX Case Study.</span><a class="to-top" href="#" onclick="window.scrollTo({ top: 0, behavior: 'smooth' }); return false;">맨 위로 ↑</a></p>
     </div>
   </footer>
 

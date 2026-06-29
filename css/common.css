@@ -289,6 +289,8 @@ section {
    FOOTER (공통 푸터)
    ============================================================= */
 .footer {
+  position: relative;
+  z-index: 1; /* 마케팅 구체가 푸터 뒤로 들어가도록 푸터를 앞에 둠 */
   background-color: var(--color-text);
   color: var(--color-white);
   padding-top: 80px;
@@ -326,6 +328,27 @@ section {
   border-top: 1px solid var(--color-on-dark-line);
   font-size: var(--fs-caption);
   color: var(--color-on-dark-copy);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.footer__to-top {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 16px;
+  border: 1px solid var(--color-on-dark-line);
+  border-radius: var(--radius-full);
+  color: var(--color-on-dark);
+  font-weight: var(--fw-bold);
+  white-space: nowrap;
+  transition: color 0.25s, border-color 0.25s;
+}
+.footer__to-top:hover {
+  color: var(--color-white);
+  border-color: rgba(255, 255, 255, 0.4);
 }
 
 /* =============================================================
