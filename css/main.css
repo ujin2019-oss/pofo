@@ -1458,6 +1458,67 @@ html {
 }
 .ap-card:hover .ap-card__img img { transform: scale(1.04); }
 
+/* ===== MARKETING 탭 : Meta(페이스북) 피드형 광고 카드 (5열) ===== */
+.ap-grid--sns {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: clamp(10px, 1vw, 16px);
+  align-items: start;
+}
+/* 페이스북 게시물 카드 (헤더 + 이미지) */
+.fb-card {
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+  transition: box-shadow var(--duration-base) var(--ease-out),
+    transform var(--duration-base) var(--ease-out);
+}
+.fb-card:hover {
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.12);
+  transform: translateY(-3px);
+}
+.fb-card__top { display: flex; align-items: center; gap: 7px; padding: 9px 9px 7px; }
+.fb-card__avatar { width: 34px; height: 34px; flex: none; border-radius: 50%; overflow: hidden; }
+.fb-card__avatar img { width: 100%; height: 100%; display: block; }
+.fb-card__id { display: flex; flex-direction: column; flex: 1 1 auto; min-width: 0; line-height: 1.2; }
+.fb-card__name { font-size: 13.5px; font-weight: 700; color: #8E9298; letter-spacing: -0.01em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.fb-card__meta { display: flex; align-items: center; gap: 3px; font-size: 11px; color: #B0B3B8; }
+.fb-card__globe { width: 10px; height: 10px; flex: none; background: url("../images/marketing/sns_1/_globe.svg") center / contain no-repeat; }
+.fb-card__more { width: 18px; height: 18px; flex: none; margin-left: auto; opacity: 0.6; background: url("../images/marketing/sns_1/_more.svg") center / 15px no-repeat; }
+.fb-card__media { display: block; aspect-ratio: 1 / 1; overflow: hidden; background: var(--color-bg-gray); }
+.fb-card__media img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform var(--duration-slow) var(--ease-out); }
+.fb-card:hover .fb-card__media img { transform: scale(1.03); }
+/* 하단 : 반응 수 */
+.fb-card__stats { display: flex; align-items: center; justify-content: space-between; gap: 6px; padding: 8px 10px 6px; font-size: 11.5px; color: #B0B3B8; }
+.fb-card__react { display: inline-flex; align-items: center; flex: none; }
+.fb-react { width: 16px; height: 16px; border-radius: 50%; background-position: center; background-size: contain; background-repeat: no-repeat; box-shadow: 0 0 0 1.5px #fff; }
+.fb-react--like { background-image: url("../images/marketing/sns_1/_r_like.svg"); }
+.fb-react--love { background-image: url("../images/marketing/sns_1/_r_love.svg"); margin-left: -4px; }
+.fb-card__rcount { margin-left: 5px; }
+.fb-card__cc { min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+/* 하단 : 좋아요 / 댓글 / 공유 액션바 */
+.fb-card__actions { display: flex; align-items: stretch; border-top: 1px solid #e4e6eb; padding: 2px 4px; }
+.fb-act { flex: 1 1 0; display: inline-flex; align-items: center; justify-content: center; gap: 4px; padding: 7px 2px; border-radius: 6px; font-size: 11.5px; font-weight: 600; color: #B0B3B8; white-space: nowrap; cursor: pointer; user-select: none; transition: background var(--duration-fast) ease; }
+.fb-act:hover { background: #f2f2f2; }
+.fb-act i { width: 15px; height: 15px; flex: none; background-position: center; background-size: contain; background-repeat: no-repeat; }
+.fb-act--like i { background-image: url("../images/marketing/sns_1/_like.svg"); }
+.fb-act--cmt i { background-image: url("../images/marketing/sns_1/_comment.svg"); }
+.fb-act--share i { background-image: url("../images/marketing/sns_1/_share.svg"); }
+/* 엇갈림(지그재그) : 2·4번째 열을 아래로 — transform(hover) 충돌 피하려 margin 사용 */
+.fb-card:nth-child(5n+2), .fb-card:nth-child(5n+4) { margin-top: clamp(26px, 3vw, 54px); }
+@media (max-width: 900px) {
+  .ap-grid--sns { grid-template-columns: repeat(3, 1fr); }
+  .fb-card:nth-child(5n+2), .fb-card:nth-child(5n+4) { margin-top: 0; }
+  .fb-card:nth-child(3n+2) { margin-top: clamp(20px, 4vw, 40px); }
+}
+@media (max-width: 560px) {
+  .ap-grid--sns { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .fb-card:nth-child(5n+2), .fb-card:nth-child(5n+4), .fb-card:nth-child(3n+2) { margin-top: 0; }
+  .fb-card:nth-child(2n) { margin-top: 22px; }
+}
+
 /* 애플(Safari) 브라우저 창 목업 — 첫 슬롯 등 강조용 */
 .ap-card--browser { display: flex; flex-direction: column; }
 .ap-card__media { position: relative; aspect-ratio: 4 / 3; border-radius: 2px; overflow: hidden; }

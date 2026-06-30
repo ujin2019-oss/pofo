@@ -656,13 +656,18 @@
   /* =====================================================================
      13 — RETROSPECTIVE (dark)
      ===================================================================== */
-  .retro-wrap{ max-width:var(--measure); margin-inline:auto; }
+  .retro-wrap{ max-width:56rem; margin-inline:auto; } /* 제목 2줄 확보용으로 넓힘 (문단은 .retro-wrap p 에서 measure로 제한) */
   .retro-rule{ width:60px; height:3px; background:linear-gradient(90deg,var(--brand),var(--teal)); border-radius:3px; margin-bottom:var(--s6); }
   .retro-quote{ font-size:var(--fs-h1); font-weight:var(--wx); letter-spacing:-0.02em; line-height:1.28; color:#fff; word-break:keep-all; margin-bottom:var(--s7); }
   .retro-quote b{ color:var(--brand); }
-  .retro-wrap p{ color:rgba(255,255,255,.68); line-height:var(--lh-body); margin-bottom:var(--s5); font-size:var(--fs-lead); }
+  .retro-wrap p{ color:rgba(255,255,255,.68); line-height:var(--lh-body); margin-bottom:var(--s5); font-size:var(--fs-lead); word-break:keep-all; max-width:var(--measure); }
   .retro-wrap p em{ color:#fff; font-style:italic; }
   .retro-cta{ margin-top:var(--s7); }
+  /* 모바일: 수동 줄바꿈(br) 해제 + 폭 축소 → 자연 reflow */
+  @media (max-width:768px){
+    .retro-wrap{ max-width:var(--measure); }
+    .retro-quote br, .retro-wrap p br{ display:none; }
+  }
 
   /* =====================================================================
      FOOTER
@@ -1299,9 +1304,9 @@
         <div class="retro-wrap" data-reveal>
           <span class="eyebrow"><span class="no">12</span> RETROSPECTIVE</span>
           <div class="retro-rule" aria-hidden="true"></div>
-          <blockquote class="retro-quote">"더하는 것보다 <b>무엇을 덜어낼지</b> 정하는 일이 더 어렵고, 더 중요했다."</blockquote>
-          <p>좋은 UX는 기능을 나열하는 게 아니라, 사용자가 <em>목표에 가장 빨리 닿도록 돕는 것</em>이었습니다. 모두매쓰의 메인은 모든 걸 보여주려다, 정작 아무것도 안내하지 못하고 있었습니다.</p>
-          <p>이번 리뉴얼에서 가장 큰 결정은 '추가'가 아니라 '제거'였습니다 — 중복 버튼을 지우고, 핵심 행동 하나를 가장 앞에 두는 것. 사용자를 위한 디자인은 결국 선택과 절제의 문제임을 배웠습니다.</p>
+          <blockquote class="retro-quote">"더하는 것보다 <b>무엇을 덜어낼지</b><br>정하는 일이 더 어렵고, 더 중요했다."</blockquote>
+          <p>좋은 UX는 기능을 나열하는 게 아니라, 사용자가<br><em>목표에 가장 빨리 닿도록 돕는 것</em>이었습니다. 모두매쓰의 메인은<br>모든 걸 보여주려다, 정작 아무것도 안내하지 못하고 있었습니다.</p>
+          <p>이번 리뉴얼에서 가장 큰 결정은 '추가'가 아니라 '제거'였습니다.<br>중복 버튼을 지우고, 핵심 행동 하나를 가장 앞에 두는 것.<br>사용자를 위한디자인은 결국 선택과 절제의 문제임을 배웠습니다.</p>
           <div class="cta-row retro-cta">
             <a class="btn btn--ghost" href="./index.html#modoo">← 포트폴리오로 돌아가기</a>
             <a class="btn btn--primary" href="https://ujin2019-oss.github.io/modoomath/" target="_blank" rel="noopener">모두매쓰 사이트 가기 ↗</a>

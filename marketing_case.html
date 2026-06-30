@@ -61,7 +61,7 @@
       --container: 1280px;
       --container-wide: 1440px;
 
-      --radius-sm: 6px; --radius-md: 12px; --radius-lg: 20px; --radius-pill: 999px;
+      --radius-sm: 6px; --radius-md: 8px; --radius-lg: 10px; --radius-pill: 999px;
       --shadow-card: 0 22px 54px rgba(70, 50, 150, 0.12);
       --shadow-soft: 0 12px 32px rgba(70, 50, 150, 0.08);
       --ease: cubic-bezier(0.16, 1, 0.3, 1);
@@ -170,9 +170,9 @@
 
     /* 히어로 비주얼 — 상세페이지 포스터 + 제품 인서트 + 완판 배지 */
     .hero__visual { position: relative; width: 100%; max-width: 380px; margin: 0 auto; aspect-ratio: 1 / 1.05; }
-    .hero__poster { position: absolute; left: 8%; top: 2%; width: 72%; border-radius: 22px; overflow: hidden; box-shadow: 0 34px 70px rgba(60,40,140,0.32); transform: rotate(-4deg); border: 6px solid #fff; }
+    .hero__poster { position: absolute; left: 8%; top: 2%; width: 72%; border-radius: 10px; overflow: hidden; box-shadow: 0 34px 70px rgba(60,40,140,0.32); transform: rotate(-4deg); border: 6px solid #fff; }
     .hero__poster img { width: 100%; display: block; }
-    .hero__insert { position: absolute; right: 2%; bottom: 6%; width: 46%; border-radius: 16px; overflow: hidden; box-shadow: 0 22px 44px rgba(60,40,140,0.28); transform: rotate(5deg); border: 5px solid #fff; background: #fff; }
+    .hero__insert { position: absolute; right: 2%; bottom: 6%; width: 46%; border-radius: 8px; overflow: hidden; box-shadow: 0 22px 44px rgba(60,40,140,0.28); transform: rotate(5deg); border: 5px solid #fff; background: #fff; }
     .hero__insert img { width: 100%; display: block; }
     .hero__badge { position: absolute; left: -2%; bottom: 20%; z-index: 3; display: inline-flex; flex-direction: column; align-items: center; justify-content: center; width: clamp(74px, 9vw, 96px); height: clamp(74px, 9vw, 96px); border-radius: 50%; background: var(--gradient-brand); color: #fff; box-shadow: 0 14px 30px rgba(52,140,170,0.45); transform: rotate(-8deg); }
     .hero__badge b { font-size: clamp(17px, 2vw, 22px); font-weight: var(--fw-black); line-height: 1; }
@@ -234,6 +234,7 @@
     .icard__sub { margin-top: 10px; font-size: var(--fs-small); color: var(--color-text-muted); line-height: 1.6; word-break: keep-all; }
 
     .value { margin-top: var(--block-gap); display: grid; grid-template-columns: 1fr; gap: clamp(18px,2.4vw,28px); }
+    .value__col { display: flex; flex-direction: column; gap: clamp(16px, 2vw, 24px); } /* Core Value 박스 + 그 아래 배지 */
     .value__core { padding: clamp(28px,3.4vw,44px); border-radius: var(--radius-lg); background: var(--color-ink); color: #fff; position: relative; overflow: hidden; }
     .value__core::after { content: ""; position: absolute; right: -60px; top: -60px; width: 220px; height: 220px; border-radius: 50%; background: var(--gradient-brand); opacity: 0.4; filter: blur(20px); }
     .value__core-label { position: relative; z-index: 1; font-size: var(--fs-small); font-weight: var(--fw-bold); letter-spacing: 0.14em; color: rgba(255,255,255,0.7); text-transform: uppercase; }
@@ -283,7 +284,7 @@
     .channels { display: grid; grid-template-columns: 1fr; gap: clamp(16px,2.2vw,24px); margin-bottom: var(--block-gap); }
     .channel { padding: clamp(24px,2.8vw,32px); border-radius: var(--radius-lg); background: #fff; border: 1px solid var(--color-line); box-shadow: var(--shadow-soft); transition: transform var(--ease) .4s; }
     .channel:hover { transform: translateY(-5px); }
-    .channel__ic { width: 60px; height: 60px; border-radius: 16px; overflow: hidden; box-shadow: var(--shadow-soft); margin-bottom: 18px; }
+    .channel__ic { width: 60px; height: 60px; border-radius: 10px; overflow: hidden; box-shadow: var(--shadow-soft); margin-bottom: 18px; }
     .channel__ic img { width: 100%; height: 100%; object-fit: cover; }
     .channel__name { font-size: var(--fs-h3); font-weight: var(--fw-black); }
     .channel__role { margin-top: 4px; font-size: var(--fs-small); font-weight: var(--fw-bold); color: var(--color-primary); }
@@ -291,7 +292,7 @@
 
     .vflow { display: grid; grid-template-columns: 1fr; gap: clamp(14px,2vw,8px); }
     .vstep { display: grid; grid-template-columns: 1fr; border-radius: var(--radius-lg); overflow: hidden; background: #fff; border: 1px solid var(--color-line); box-shadow: var(--shadow-soft); }
-    .vstep__media { position: relative; aspect-ratio: 16/10; overflow: hidden; background: var(--color-light); }
+    .vstep__media { position: relative; aspect-ratio: 16/10; overflow: hidden; background: #fff; }
     .vstep__media img { width: 100%; height: 100%; object-fit: cover; }
     .vstep__no { position: absolute; left: 14px; top: 14px; width: 36px; height: 36px; border-radius: 50%; background: var(--gradient-brand); color: #fff; font-weight: var(--fw-black); display: grid; place-items: center; box-shadow: var(--shadow-soft); }
     .vstep__body { padding: clamp(20px,2.4vw,26px); }
@@ -389,6 +390,250 @@
       .hero__grid { grid-template-columns: 1fr; }
       .hero__visual { order: -1; margin-bottom: 8px; }
     }
+
+    /* =================================================================
+       09) META ADS 퍼포먼스 섹션 (.mads-*)  — 삽입
+       ================================================================= */
+/* ====== 02 Meta Ads 퍼포먼스 케이스 (.mads-*) ====== */
+.mads-top{
+  display:grid;
+  grid-template-columns:minmax(0,0.92fr) minmax(0,1.08fr);
+  gap:clamp(20px,3vw,40px);
+  align-items:stretch;
+}
+
+/* --- 광고 목업 (실제 폰 이미지) --- */
+.mads-phone{
+  display:flex; align-items:center; justify-content:center;
+  padding:clamp(0px,1vw,12px) 0;
+}
+.mads-phone img{
+  width:auto; max-width:100%;
+  max-height:clamp(460px,56vw,660px);
+  filter:drop-shadow(0 26px 54px rgba(70,50,150,.22));
+}
+
+/* --- 프로젝트 개요 --- */
+.mads-overview{
+  background:var(--color-white);
+  border:1px solid var(--color-line);
+  border-radius:var(--radius-lg);
+  box-shadow:var(--shadow-soft);
+  padding:clamp(24px,3.4vw,44px);
+  display:flex; flex-direction:column;
+}
+.mads-overview__title{
+  font-size:var(--fs-h3); font-weight:var(--fw-bold); letter-spacing:-.01em;
+  padding-bottom:18px; margin-bottom:6px;
+  border-bottom:1px solid var(--color-line);
+}
+.mads-ov-list{ display:flex; flex-direction:column; flex:1; justify-content:center; }
+.mads-ov-row{
+  display:grid; grid-template-columns:128px 1fr; gap:18px;
+  align-items:baseline; padding:18px 0;
+  border-bottom:1px solid var(--color-line);
+}
+.mads-ov-row:last-child{ border-bottom:0; }
+.mads-ov-row dt{
+  font-size:var(--fs-small); font-weight:var(--fw-bold);
+  color:var(--color-primary); letter-spacing:.01em;
+}
+.mads-ov-row dd{ font-size:var(--fs-body); font-weight:var(--fw-medium); color:var(--color-text); line-height:1.5; }
+.mads-ov-row dd em{ font-style:normal; color:var(--color-text-muted); font-weight:var(--fw-regular); }
+.mads-ov-tag{
+  display:inline-block; margin-left:6px;
+  background:var(--color-light); color:var(--color-primary-deep);
+  font-size:12px; font-weight:var(--fw-semibold);
+  padding:3px 9px; border-radius:var(--radius-pill);
+}
+
+/* --- KPI strip --- */
+.mads-kpis{
+  display:grid; grid-template-columns:repeat(5,1fr);
+  gap:clamp(12px,1.4vw,18px);
+  margin-top:var(--block-gap);
+}
+.mads-kpi{
+  background:var(--color-white);
+  border:1px solid var(--color-line);
+  border-radius:var(--radius-lg);
+  box-shadow:var(--shadow-soft);
+  padding:clamp(20px,2vw,26px) clamp(16px,1.6vw,22px);
+  display:flex; flex-direction:column; gap:10px;
+  transition:transform .3s var(--ease), box-shadow .3s var(--ease);
+}
+.mads-kpi:hover{ transform:translateY(-4px); box-shadow:var(--shadow-card); }
+.mads-kpi__ico{
+  width:40px; height:40px; border-radius:var(--radius-md);
+  display:inline-flex; align-items:center; justify-content:center;
+  background:var(--color-light); color:var(--color-primary);
+}
+.mads-kpi__num{
+  font-size:clamp(24px,2.6vw,36px); font-weight:var(--fw-black);
+  letter-spacing:-.03em; line-height:1.05; color:var(--color-text);
+}
+.mads-kpi__num i{ font-style:normal; font-size:.42em; font-weight:var(--fw-bold); color:var(--color-text-muted); margin-left:3px; }
+.mads-kpi__label{ font-size:var(--fs-small); font-weight:var(--fw-semibold); color:var(--color-text-muted); }
+.mads-kpi__label small{ font-weight:var(--fw-medium); }
+.mads-kpi--hl{ background:var(--gradient-brand); border-color:transparent; box-shadow:0 18px 40px rgba(70,50,150,.24); }
+.mads-kpi--hl .mads-kpi__ico{ background:rgba(255,255,255,.22); color:#fff; }
+.mads-kpi--hl .mads-kpi__num{ color:#fff; }
+.mads-kpi--hl .mads-kpi__num i,
+.mads-kpi--hl .mads-kpi__label{ color:rgba(255,255,255,.9); }
+
+/* --- analytics row --- */
+.mads-analytics{
+  display:grid; grid-template-columns:minmax(0,0.86fr) minmax(0,1.14fr);
+  gap:clamp(18px,2.4vw,32px);
+  margin-top:var(--block-gap);
+}
+.mads-card{
+  background:var(--color-white);
+  border:1px solid var(--color-line);
+  border-radius:var(--radius-lg);
+  box-shadow:var(--shadow-card);
+  padding:clamp(24px,3vw,40px);
+  display:flex; flex-direction:column;
+}
+.mads-card__ey{
+  font-size:var(--fs-small); font-weight:var(--fw-bold);
+  letter-spacing:.1em; text-transform:uppercase; color:var(--color-primary);
+  margin-bottom:18px;
+}
+
+/* 도넛 */
+.mads-funnel__body{ flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:22px; }
+.mads-donut{ position:relative; width:clamp(180px,18vw,220px); aspect-ratio:1/1; }
+/* 죽은 transition 제거 -> .is-inview 시 실제로 채워지는 그리기 애니메이션 */
+.mads-donut__arc{ transition:stroke-dashoffset 1.2s var(--ease); }
+.mads-funnel.is-inview .mads-donut__arc{ stroke-dashoffset:0; }
+.mads-donut__center{
+  position:absolute; inset:0;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  text-align:center;
+}
+.mads-donut__center strong{
+  font-size:clamp(40px,5vw,56px); font-weight:var(--fw-black); line-height:1;
+  letter-spacing:-.03em;
+  background:var(--gradient-brand); -webkit-background-clip:text; background-clip:text; color:transparent;
+}
+.mads-donut__center strong i{ font-style:normal; font-size:.45em; }
+.mads-donut__center span{ margin-top:8px; font-size:var(--fs-small); font-weight:var(--fw-semibold); color:var(--color-text-muted); line-height:1.4; }
+.mads-funnel__text{ text-align:center; display:flex; flex-direction:column; align-items:center; gap:14px; }
+.mads-funnel__cap{ font-size:var(--fs-body); font-weight:var(--fw-medium); color:var(--color-text); line-height:1.6; max-width:34ch; }
+.mads-badge{
+  display:inline-flex; align-items:center; gap:7px;
+  background:var(--color-light); color:var(--color-primary-deep);
+  font-size:var(--fs-small); font-weight:var(--fw-bold);
+  padding:9px 16px; border-radius:var(--radius-pill);
+}
+
+/* 연령 막대 (인라인 SVG + 진짜 베이스라인) */
+.mads-ages__title{ font-size:var(--fs-h3); font-weight:var(--fw-bold); line-height:1.35; letter-spacing:-.01em; word-break:keep-all; margin-bottom:24px; }
+.mads-ages__title em{ font-style:normal; background:var(--gradient-brand); -webkit-background-clip:text; background-clip:text; color:transparent; }
+.mads-bars{ display:flex; flex-direction:column; gap:10px; }
+.mads-bars__svg{
+  display:block; width:100%;
+  height:clamp(180px,20vw,224px);
+}
+/* 모든 막대: 바닥(y=200) 기준으로 scaleY 0 -> 1 성장 */
+.mads-bar{
+  transform:scaleY(0);
+  transform-origin:center 200px;
+  transition:transform 1s var(--ease);
+}
+.mads-ages.is-inview .mads-bar{ transform:scaleY(1); }
+.mads-ages.is-inview .mads-bar:nth-of-type(1){ transition-delay:.05s; }
+.mads-ages.is-inview .mads-bar:nth-of-type(2){ transition-delay:.12s; }
+.mads-ages.is-inview .mads-bar:nth-of-type(3){ transition-delay:.19s; }
+.mads-ages.is-inview .mads-bar:nth-of-type(4){ transition-delay:.26s; }
+.mads-ages.is-inview .mads-bar--top{ transition-delay:.33s; }
+.mads-ages.is-inview .mads-bar:nth-of-type(6){ transition-delay:.4s; }
+.mads-bar--top{ filter:drop-shadow(0 10px 20px rgba(70,50,150,.28)); }
+.mads-bars__labels{
+  display:grid; grid-template-columns:repeat(6,1fr);
+  gap:clamp(4px,1vw,12px);
+  text-align:center;
+}
+.mads-bars__labels li{
+  font-size:12px; font-weight:var(--fw-semibold);
+  color:var(--color-text-muted); white-space:nowrap;
+}
+.mads-bars__lab--top{ color:var(--color-primary) !important; font-weight:var(--fw-bold) !important; }
+.mads-ages__note{ margin-top:auto; padding-top:20px; border-top:1px solid var(--color-line); font-size:var(--fs-small); line-height:1.7; color:var(--color-text-muted); word-break:keep-all; }
+
+/* --- 우측 컬럼 (개요 + 요약) --- */
+.mads-top__col{ display:flex; flex-direction:column; gap:clamp(16px,2vw,24px); }
+
+/* --- Summary (개요 옆 · 강조 다크 카드) --- */
+.mads-summary{
+  flex:1;
+  position:relative; overflow:hidden;
+  background:var(--color-ink); color:#fff;
+  border-radius:var(--radius-lg);
+  box-shadow:var(--shadow-card);
+  padding:clamp(24px,2.6vw,36px);
+  display:flex; flex-direction:column; justify-content:center; gap:14px;
+}
+.mads-summary::before{ content:""; position:absolute; inset:0; background:var(--gradient-brand); opacity:.14; }
+.mads-summary::after{ content:""; position:absolute; left:0; top:0; bottom:0; width:6px; background:var(--gradient-brand); }
+.mads-summary__ey{ position:relative; font-size:var(--fs-small); font-weight:var(--fw-bold); letter-spacing:.16em; text-transform:uppercase; color:var(--color-mint); }
+.mads-summary__txt{ position:relative; font-size:clamp(17px,1.7vw,22px); font-weight:var(--fw-semibold); line-height:1.62; letter-spacing:-.01em; color:#fff; word-break:keep-all; }
+.mads-summary__txt b{ font-weight:var(--fw-black); color:var(--color-mint); }
+
+/* --- PART 1 : 서브 히어로 (밝고 시원한 인트로) --- */
+.mads-hero{ position:relative; }
+.mads-hero > *{ position:relative; z-index:1; }
+.mads-hero::before, .mads-hero::after{ content:""; position:absolute; border-radius:50%; filter:blur(72px); z-index:0; pointer-events:none; opacity:.5; }
+.mads-hero::before{ width:38vw; height:38vw; top:-12vw; right:-7vw; background:radial-gradient(circle, rgba(52,198,168,.5), transparent 70%); }
+.mads-hero::after{ width:34vw; height:34vw; bottom:-14vw; left:-8vw; background:radial-gradient(circle, rgba(107,75,230,.34), transparent 70%); }
+.mads-hero .head{ max-width:none; margin-bottom:clamp(36px,5vw,68px); }
+.mads-hero .section-title{ font-size:clamp(34px,5.6vw,70px); line-height:1.08; }
+.mads-hero .lead{ font-size:clamp(16px,1.35vw,21px); max-width:58ch; }
+
+/* --- PART 2 : 성과 리포트 패널 (KPI + 차트를 한 덩어리로) --- */
+.mads-report{ margin-top:clamp(44px,6vw,84px); background:var(--color-white); border:1px solid var(--color-line); border-radius:var(--radius-lg); box-shadow:var(--shadow-card); padding:clamp(22px,3.2vw,46px); }
+.mads-report__head{ display:flex; align-items:flex-end; justify-content:space-between; gap:14px 24px; flex-wrap:wrap; padding-bottom:clamp(18px,2.2vw,26px); margin-bottom:clamp(22px,3vw,34px); border-bottom:1px solid var(--color-line); }
+.mads-report__ey{ font-size:var(--fs-small); font-weight:var(--fw-bold); letter-spacing:.14em; text-transform:uppercase; color:var(--color-primary); display:inline-flex; align-items:center; gap:10px; }
+.mads-report__ey::before{ content:""; width:22px; height:2px; border-radius:2px; background:var(--gradient-brand); }
+.mads-report__title{ margin-top:10px; font-size:var(--fs-h3); font-weight:var(--fw-black); letter-spacing:-.01em; }
+.mads-report__meta{ font-size:var(--fs-small); font-weight:var(--fw-semibold); color:var(--color-text-muted); }
+.mads-report .mads-kpis{ margin-top:0; }
+.mads-report .mads-analytics{ margin-top:clamp(16px,2.2vw,28px); }
+.mads-report .mads-kpi{ background:var(--color-light); border-color:transparent; box-shadow:none; }
+.mads-report .mads-kpi:hover{ box-shadow:var(--shadow-soft); }
+.mads-report .mads-kpi__ico{ background:var(--color-white); }
+.mads-report .mads-kpi--hl{ background:var(--gradient-brand); }
+.mads-report .mads-kpi--hl .mads-kpi__ico{ background:rgba(255,255,255,.22); }
+.mads-report .mads-card{ background:var(--color-light); border-color:transparent; box-shadow:none; }
+.mads-report .mads-kpi__num{ white-space:nowrap; font-size:clamp(20px,2.3vw,33px); letter-spacing:-.04em; }
+
+/* 모션 최소화 환경: 차트도 즉시 최종 상태로 */
+@media (prefers-reduced-motion: reduce){
+  .mads-donut__arc{ stroke-dashoffset:0 !important; transition:none !important; }
+  .mads-bar{ transform:scaleY(1) !important; transition:none !important; }
+}
+
+/* ===== responsive ===== */
+@media (max-width:1024px){
+  .mads-kpis{ grid-template-columns:repeat(3,1fr); }
+}
+@media (max-width:980px){
+  .mads-top{ grid-template-columns:1fr; }
+  .mads-phone img{ max-height:clamp(420px,82vw,560px); }
+  .mads-analytics{ grid-template-columns:1fr; }
+}
+@media (max-width:768px){
+  .mads-kpis{ grid-template-columns:repeat(2,1fr); }
+  .mads-kpi--hl{ grid-column:span 2; }
+  .mads-ov-row{ grid-template-columns:104px 1fr; gap:12px; }
+}
+@media (max-width:480px){
+  .mads-kpis{ grid-template-columns:1fr; }
+  .mads-kpi--hl{ grid-column:auto; }
+  .mads-ov-row{ grid-template-columns:1fr; gap:4px; }
+  .mads-bars__labels li{ font-size:11px; }
+}
   </style>
 </head>
 
@@ -470,18 +715,18 @@
             <div class="pillar__body">
               <ul class="pillar__list">
                 <li>SNS 채널 기획<small>블로그 · 인스타그램 · 카페 설계</small></li>
-                <li>체험단 바이럴 마케팅<small>모집 · 가이드 · 발행 운영</small></li>
-                <li>SNS 발행 / 상위 노출<small>네이버 로직 기반 콘텐츠</small></li>
+                <li>SNS 발행 · 체험단 운영 · 상위 노출<small>네이버 로직 기반 콘텐츠</small></li>
+                <li>건축시공 계약 오픈하우스 모객<small>Meta Ads 기반 신규 고객 확보</small></li>
               </ul>
             </div>
           </article>
           <article class="pillar">
-            <div class="pillar__head"><span class="pillar__no">03</span><span class="pillar__name">오프라인 캠페인</span></div>
+            <div class="pillar__head"><span class="pillar__no">03</span><span class="pillar__name">오프라인 연계 캠페인</span></div>
             <div class="pillar__body">
               <ul class="pillar__list">
-                <li>BTL 마케팅 기획 · 연출<small>판촉 · 캠페인 · 콘서트 · 시상식</small></li>
+                <li>박람회 전시부스 홍보 및 운영<small>전시부스/제작물 디자인 · 아르바이트생 운영</small></li>
+                <li>BTL 마케팅 기획 · 연출<small>판촉 · 사회공헌 · 콘서트 · 시상식</small></li>
                 <li>계열사 및 협업 광고<small>그룹사 제휴 · 사회공헌</small></li>
-                <li>대학생 기자단 운영<small>SNS 채널 · 서포터즈 관리</small></li>
               </ul>
             </div>
           </article>
@@ -567,19 +812,21 @@
         </div>
 
         <div class="value">
-          <div class="value__core" data-reveal>
-            <p class="value__core-label">Core Value · 핵심가치</p>
-            <p class="value__core-text">신생아에게도 가장 <em>‘안전’</em>한<br />유모차 온열시트</p>
+          <div class="value__col">
+            <div class="value__core" data-reveal>
+              <p class="value__core-label">Core Value · 핵심가치</p>
+              <p class="value__core-text">신생아에게도 가장 <em>‘안전’</em>한<br />유모차 온열시트</p>
+            </div>
+            <div class="vbadges" data-reveal>
+              <span class="vbadge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>특허 제품</span>
+              <span class="vbadge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>극세사 보온</span>
+              <span class="vbadge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>한국탄소기술원 지원 제작</span>
+            </div>
           </div>
           <div class="vlist" data-reveal data-stagger>
             <div class="vitem"><span class="vitem__no">1</span><p class="vitem__t">저온 화상 걱정 없는 온열시트</p></div>
             <div class="vitem"><span class="vitem__no">2</span><p class="vitem__t">신생아에게도 전자파 걱정 없는 제품</p></div>
             <div class="vitem"><span class="vitem__no">3</span><p class="vitem__t">아기 몸에 딱 맞는 최적의 시트 온도</p></div>
-            <div class="vbadges">
-              <span class="vbadge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>특허 제품</span>
-              <span class="vbadge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>극세사 보온</span>
-              <span class="vbadge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>한국탄소기술원 지원 제작</span>
-            </div>
           </div>
         </div>
       </div>
@@ -738,6 +985,191 @@
             </div>
           </div>
         </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         02 — Meta Ads 퍼포먼스 케이스 (건축시공 오픈하우스 신규 고객 모객)
+         - 100% 인라인 SVG (외부 이미지 없음) / .mads-* 프리픽스
+         - 도넛·연령 막대 차트 모두 인라인 SVG, .is-inview 시 실제로 채워짐
+         ===================================================================== -->
+    <section class="section section--soft" id="meta-ads">
+      <div class="container">
+
+        <!-- HEAD -->
+        <!-- PART 1 · 서브 히어로 -->
+        <div class="mads-hero">
+        <div class="head" data-reveal>
+          <p class="eyebrow">02 — Meta Ads 퍼포먼스</p>
+          <h2 class="section-title">오픈하우스로 모은 <em>건축 신규 고객</em></h2>
+          <p class="lead">Facebook · Instagram 광고를 직접 기획·운영해, 건축시공 오픈하우스 방문·상담을 데이터 기반으로 확보했습니다.</p>
+        </div>
+
+        <!-- ROW 1 : IG 광고 목업  |  프로젝트 개요 -->
+        <div class="mads-top" data-stagger>
+
+          <!-- IG 광고 목업 (실제 폰 목업 이미지) -->
+          <figure class="mads-phone" data-reveal-scale>
+            <img src="./images/marketing/ad_mockup.png" alt="Instagram 광고 — 이 집, 얼마예요? 상세 견적까지 한번에 해결. 건축 오픈하우스 광고 소재" />
+          </figure>
+
+          <!-- 오른쪽 컬럼: 프로젝트 개요 + 요약(Summary) -->
+          <div class="mads-top__col">
+            <!-- 프로젝트 개요 -->
+            <article class="mads-overview" data-reveal>
+              <h3 class="mads-overview__title">Project Overview</h3>
+              <dl class="mads-ov-list">
+                <div class="mads-ov-row">
+                  <dt>운영 채널</dt>
+                  <dd>Meta <span class="mads-ov-tag">Facebook</span><span class="mads-ov-tag">Instagram</span></dd>
+                </div>
+                <div class="mads-ov-row">
+                  <dt>운영 기간</dt>
+                  <dd>2024.10</dd>
+                </div>
+                <div class="mads-ov-row">
+                  <dt>목표</dt>
+                  <dd>오픈하우스 방문·상담 예약 확보 <em>(신규 고객 + 브랜드 인지도)</em></dd>
+                </div>
+                <div class="mads-ov-row">
+                  <dt>운영 역할</dt>
+                  <dd>광고 기획 · 세팅 · 운영 · 성과 분석 · 리포팅</dd>
+                </div>
+              </dl>
+            </article>
+
+            <!-- SUMMARY (개요와 한 묶음 · 강조) -->
+            <div class="mads-summary" data-reveal-scale>
+              <p class="mads-summary__ey">Summary · 핵심 성과</p>
+              <p class="mads-summary__txt">Meta 광고를 직접 운영해 약 <b>4만 회 노출</b>, <b>1,524회 클릭</b>, <b>40건의 오픈하우스 상담</b>을 확보했으며, 데이터 기반으로 성과를 분석·관리했습니다.</p>
+            </div>
+          </div>
+        </div>
+        </div><!-- /mads-hero -->
+
+        <!-- PART 2 · 성과 리포트 패널 -->
+        <div class="mads-report" data-reveal>
+          <div class="mads-report__head">
+            <div>
+              <p class="mads-report__ey">Performance Report</p>
+              <h3 class="mads-report__title">데이터로 본 캠페인 성과</h3>
+            </div>
+            <span class="mads-report__meta">Meta Ads · 2024.10</span>
+          </div>
+
+        <!-- KPI STRIP (5-up) -->
+        <ul class="mads-kpis" data-stagger>
+          <li class="mads-kpi" data-reveal>
+            <span class="mads-kpi__ico" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="22" height="22"><path d="M1.5 12S5 5 12 5s10.5 7 10.5 7-3.5 7-10.5 7S1.5 12 1.5 12Z" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="12" cy="12" r="3.2" fill="none" stroke="currentColor" stroke-width="1.7"/></svg>
+            </span>
+            <span class="mads-kpi__num">39,862<i>회</i></span>
+            <span class="mads-kpi__label">노출수</span>
+          </li>
+          <li class="mads-kpi" data-reveal>
+            <span class="mads-kpi__ico" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="22" height="22"><path d="M5 3 19 12l-6 1.6L16 21l-3 1.2-3-7.2L5 19V3Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>
+            </span>
+            <span class="mads-kpi__num">1,524<i>회</i></span>
+            <span class="mads-kpi__label">클릭수</span>
+          </li>
+          <li class="mads-kpi mads-kpi--hl" data-reveal>
+            <span class="mads-kpi__ico" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="22" height="22"><path d="M20 6 9 17l-5-5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+            <span class="mads-kpi__num">40<i>건</i></span>
+            <span class="mads-kpi__label">상담 예약 <small>(전환)</small></span>
+          </li>
+          <li class="mads-kpi" data-reveal>
+            <span class="mads-kpi__ico" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="22" height="22"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M14.5 9.2C14 8.2 13 7.7 12 7.7c-1.7 0-2.6 1-2.6 2 0 2.6 5.2 1.4 5.2 4 0 1.1-1 2.1-2.6 2.1-1.2 0-2.2-.5-2.7-1.6M12 6.3v1.4M12 16.3v1.4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            </span>
+            <span class="mads-kpi__num">892,894<i>원</i></span>
+            <span class="mads-kpi__label">총 광고비</span>
+          </li>
+          <li class="mads-kpi" data-reveal>
+            <span class="mads-kpi__ico" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="22" height="22"><path d="M3 20V8M9 20V4M15 20v-7M21 20v-10" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg>
+            </span>
+            <span class="mads-kpi__num">22,322<i>원</i></span>
+            <span class="mads-kpi__label">전환당 비용 <small>(CPA)</small></span>
+          </li>
+        </ul>
+
+        <!-- ANALYTICS ROW : 도넛 퍼널  |  연령 막대 -->
+        <div class="mads-analytics" data-stagger>
+
+          <!-- 도넛 퍼널 -->
+          <article class="mads-card mads-funnel" data-reveal>
+            <p class="mads-card__ey">Conversion Funnel</p>
+            <div class="mads-funnel__body">
+              <div class="mads-donut" role="img" aria-label="Meta 광고가 전체 상담의 52%에 기여">
+                <svg viewBox="0 0 200 200" width="100%" height="100%" aria-hidden="true">
+                  <defs>
+                    <linearGradient id="madsArc" x1="0" y1="0" x2="1" y2="1">
+                      <stop offset="0" stop-color="#34C6A8"/><stop offset=".5" stop-color="#3C9BD8"/><stop offset="1" stop-color="#6B4BE6"/>
+                    </linearGradient>
+                  </defs>
+                  <circle cx="100" cy="100" r="80" fill="none" stroke="rgba(19,16,34,.08)" stroke-width="22"/>
+                  <!-- 52% : 둘레 502.65, dash = 261.4 / 초기 offset 261.4 -> .is-inview 시 0 으로 그려짐 -->
+                  <circle class="mads-donut__arc" cx="100" cy="100" r="80" fill="none"
+                    stroke="url(#madsArc)" stroke-width="22" stroke-linecap="round"
+                    stroke-dasharray="261.4 502.65" stroke-dashoffset="261.4"
+                    transform="rotate(-90 100 100)"/>
+                </svg>
+                <div class="mads-donut__center">
+                  <strong>52<i>%</i></strong>
+                  <span>전체 상담의<br>50% 이상 기여</span>
+                </div>
+              </div>
+              <div class="mads-funnel__text">
+                <p class="mads-funnel__cap">Meta 광고 하나로 전체 상담의 절반 이상을 만들어냈습니다.</p>
+                <span class="mads-badge">
+                  <svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+                  효율적인 예산으로 최대 성과 달성
+                </span>
+              </div>
+            </div>
+          </article>
+
+          <!-- 연령 막대 (인라인 SVG) -->
+          <article class="mads-card mads-ages" data-reveal>
+            <p class="mads-card__ey">Target Analysis · 연령대 성과</p>
+            <h3 class="mads-ages__title">55~64세 <em>(실수요 건축주)</em> 타겟이 가장 높은 성과</h3>
+
+            <div class="mads-bars" role="img" aria-label="연령대별 성과: 18~24세 28, 25~34세 42, 35~44세 56, 45~54세 72, 55~64세 100(최고), 65세 이상 50">
+              <svg class="mads-bars__svg" viewBox="0 0 360 220" preserveAspectRatio="none" aria-hidden="true">
+                <defs>
+                  <linearGradient id="madsBarHot" x1="0" y1="1" x2="0" y2="0">
+                    <stop offset="0" stop-color="#34C6A8"/><stop offset=".5" stop-color="#3C9BD8"/><stop offset="1" stop-color="#6B4BE6"/>
+                  </linearGradient>
+                  <linearGradient id="madsBarDim" x1="0" y1="1" x2="0" y2="0">
+                    <stop offset="0" stop-color="#C9BEFF"/><stop offset="1" stop-color="#9780FF"/>
+                  </linearGradient>
+                </defs>
+                <!-- 베이스라인 -->
+                <line x1="0" y1="200" x2="360" y2="200" stroke="rgba(19,16,34,.10)" stroke-width="1.5"/>
+                <!-- 막대: 트랙 높이 200, scaleY 0->1 (.is-inview) -->
+                <g class="mads-bars__g">
+                  <rect class="mads-bar" x="14"  y="144"  width="34" height="56" rx="5" fill="url(#madsBarDim)" style="--bh:56"/>
+                  <rect class="mads-bar" x="72"  y="116" width="34" height="84"  rx="5" fill="url(#madsBarDim)" style="--bh:84"/>
+                  <rect class="mads-bar" x="130" y="88"  width="34" height="112" rx="5" fill="url(#madsBarDim)" style="--bh:112"/>
+                  <rect class="mads-bar" x="188" y="56"  width="34" height="144" rx="5" fill="url(#madsBarDim)" style="--bh:144"/>
+                  <rect class="mads-bar mads-bar--top" x="246" y="0" width="34" height="200" rx="5" fill="url(#madsBarHot)" style="--bh:200"/>
+                  <rect class="mads-bar" x="304" y="100" width="34" height="100" rx="5" fill="url(#madsBarDim)" style="--bh:100"/>
+                </g>
+              </svg>
+              <ul class="mads-bars__labels" aria-hidden="true">
+                <li>18~24</li><li>25~34</li><li>35~44</li><li>45~54</li>
+                <li class="mads-bars__lab--top">55~64</li><li>65↑</li>
+              </ul>
+            </div>
+
+            <p class="mads-ages__note">예상보다 고연령 실수요층의 반응이 가장 좋았고, 해당 타겟에 예산을 집중하는 전략이 효과적이었습니다. 더 나아가 데이터 기반 지속 최적화로 상담 예약 꾸준히 증가했습니다.</p>
+          </article>
+        </div>
+        </div><!-- /mads-report -->
+
       </div>
     </section>
 

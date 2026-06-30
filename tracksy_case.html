@@ -490,9 +490,6 @@
     .kpi { padding: clamp(24px,3vw,40px); border-radius: var(--radius-lg); background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2); backdrop-filter: blur(4px); }
     .kpi__num { font-size: var(--fs-num); font-weight: var(--fw-black); line-height: 1; letter-spacing: -0.03em; }
     .kpi__label { margin-top: 12px; font-size: var(--fs-small); font-weight: var(--fw-medium); color: rgba(255,255,255,0.9); word-break: keep-all; }
-    .valueflow { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 12px; margin-top: clamp(40px,6vw,72px); }
-    .valueflow span { padding: 12px 22px; border-radius: var(--radius-pill); background: rgba(255,255,255,0.16); border: 1px solid rgba(255,255,255,0.28); font-weight: var(--fw-bold); font-size: var(--fs-small); }
-    .valueflow .arr { background: none; border: none; padding: 0; font-size: 18px; opacity: 0.85; }
 
     /* =================================================================
        12) RETROSPECTIVE
@@ -683,7 +680,7 @@
         <div class="head">
           <span class="eyebrow" data-reveal>UX Research</span>
           <h2 class="section-title" data-reveal>2025년 러닝 인구 <em>1,000만</em> 돌파</h2>
-          <p class="lead" data-reveal>글로벌 앱 접근성 변화로 국내 감성 특화 러닝 서비스 수요가 빠르게 늘고 있습니다. 시장 성장세와 기존 앱 사용자의 불편사항을 함께 분석해 서비스 기회를 정의했습니다.</p>
+          <p class="lead" data-reveal>글로벌 앱 접근성 변화로 국내 감성 특화 러닝 서비스 수요가 빠르게 늘고 있습니다.<br>시장 성장세와 기존 앱 사용자의 불편사항을 함께 분석해 서비스 기회를 정의했습니다.</p>
         </div>
 
         <!-- 기회 요인 스탯 3개 -->
@@ -820,7 +817,7 @@
           <div class="problem__text">
             <span class="eyebrow" data-reveal>Problem Definition</span>
             <h2 class="section-title" data-reveal>러닝 기록은 남지만,<br />경험은 남지 않았다.</h2>
-            <p class="lead" data-reveal>기존 러닝 앱은 거리, 시간, 페이스 등 수치 중심 정보 제공에 집중되어 있습니다. 하지만 사용자는 단순 기록보다 자신의 성취감과 경험을 공유하고 싶어합니다.</p>
+            <p class="lead" data-reveal>기존 러닝 앱은 거리, 시간, 페이스 등 수치 중심 정보 제공에 집중되어 있습니다.<br>하지만 사용자는 단순 기록보다 자신의 성취감과 경험을 공유하고 싶어합니다.</p>
             <!-- 3개 카드: 텍스트 아래 세로 정렬 -->
             <div class="pcards">
               <div class="pcard" data-reveal><p class="pcard__tag">Problem 01</p><h3 class="pcard__title">기록 중심 UI</h3></div>
@@ -847,17 +844,17 @@
           <article class="goal" data-reveal>
             <div class="goal__ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M3 9h18M9 21V9"/></svg></div>
             <p class="goal__no">GOAL 01</p>
-            <h3 class="goal__title">러닝 기록을 콘텐츠로 만든다</h3>
+            <h3 class="goal__title">러닝 기록을 콘텐츠로 만드는 감성 스튜디오</h3>
           </article>
           <article class="goal" data-reveal>
             <div class="goal__ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a4 4 0 0 0-4 4v2a4 4 0 0 0 8 0V6a4 4 0 0 0-4-4z"/><path d="M5 11a7 7 0 0 0 14 0M12 18v4"/></svg></div>
             <p class="goal__no">GOAL 02</p>
-            <h3 class="goal__title">AI 기반 자동 기록 시스템 구축</h3>
+            <h3 class="goal__title">AI 기반 OCR 자동 기록 시스템 구축</h3>
           </article>
           <article class="goal" data-reveal>
             <div class="goal__ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="7" r="3"/><circle cx="17" cy="11" r="2.5"/><path d="M3 21v-1a5 5 0 0 1 5-5h2a5 5 0 0 1 5 5v1M15 17h6"/></svg></div>
             <p class="goal__no">GOAL 03</p>
-            <h3 class="goal__title">러너 간 경험 공유 플랫폼 구축</h3>
+            <h3 class="goal__title">러너 간 경험 공유 기능과 커뮤니티 플랫폼 구축</h3>
           </article>
         </div>
       </div>
@@ -918,15 +915,15 @@
         </div>
         <div class="features">
           <article class="feature" data-reveal>
-            <div class="feature__media"><div class="img-slot" data-label="OCR 화면"><img src="tracksy_img/ocr.png" alt=""></div></div>
+            <div class="feature__media"><div class="img-slot" data-label="OCR 화면"><img src="tracksy_img/key_ocr.png" alt=""></div></div>
             <div class="feature__body"><p class="feature__no">FEATURE 01</p><h3 class="feature__title">OCR 자동 기록</h3><p class="feature__desc">캡처 이미지에서 거리·시간·페이스를 자동 추출</p></div>
           </article>
           <article class="feature" data-reveal>
-            <div class="feature__media"><div class="img-slot" data-label="AI 러닝일지 화면"><img src="tracksy_img/ai.png" alt=""></div></div>
+            <div class="feature__media"><div class="img-slot" data-label="AI 러닝일지 화면"><img src="tracksy_img/key_ai.png" alt=""></div></div>
             <div class="feature__body"><p class="feature__no">FEATURE 02</p><h3 class="feature__title">AI 러닝일지</h3><p class="feature__desc">대화를 통해 오늘의 러닝을 한 줄로 기록</p></div>
           </article>
           <article class="feature" data-reveal>
-            <div class="feature__media"><div class="img-slot" data-label="러닝 카드 스튜디오 화면"><img src="tracksy_img/studio.png" alt=""></div></div>
+            <div class="feature__media"><div class="img-slot" data-label="러닝 카드 스튜디오 화면"><img src="tracksy_img/key_studio.png" alt=""></div></div>
             <div class="feature__body"><p class="feature__no">FEATURE 03</p><h3 class="feature__title">러닝 카드 스튜디오</h3><p class="feature__desc">SNS 공유를 위한 감성 카드 제작 기능</p></div>
           </article>
         </div>
@@ -948,7 +945,7 @@
         </div>
 
         <div class="tabpanel is-active" data-panel="home" data-reveal>
-          <div class="tabpanel__media"><div class="img-slot" data-label="Home 화면"><img src="tracksy_img/home.png" alt=""></div></div>
+          <div class="tabpanel__media"><div class="img-slot" data-label="Home 화면"><img src="tracksy_img/design_home.png" alt=""></div></div>
           <div class="tabpanel__text">
             <h3 class="tabpanel__title">Home</h3>
             <p class="tabpanel__desc">오늘의 러닝과 추천 카드를 한눈에. 사용자가 가장 먼저 ‘무엇을 할지’ 알 수 있도록 핵심 액션을 상단에 배치했습니다.</p>
@@ -956,7 +953,7 @@
           </div>
         </div>
         <div class="tabpanel" data-panel="studio" data-reveal>
-          <div class="tabpanel__media"><div class="img-slot" data-label="Studio 화면"><img src="tracksy_img/studio.png" alt=""></div></div>
+          <div class="tabpanel__media"><div class="img-slot" data-label="Studio 화면"><img src="tracksy_img/design_studio.png" alt=""></div></div>
           <div class="tabpanel__text">
             <h3 class="tabpanel__title">Studio</h3>
             <p class="tabpanel__desc">러닝 카드를 만드는 공간. 템플릿과 감성 요소를 조합해 몇 번의 탭만으로 공유용 콘텐츠를 완성합니다.</p>
@@ -964,7 +961,7 @@
           </div>
         </div>
         <div class="tabpanel" data-panel="community" data-reveal>
-          <div class="tabpanel__media"><div class="img-slot" data-label="Community 화면"><img src="tracksy_img/community.png" alt=""></div></div>
+          <div class="tabpanel__media"><div class="img-slot" data-label="Community 화면"><img src="tracksy_img/design_community.png" alt=""></div></div>
           <div class="tabpanel__text">
             <h3 class="tabpanel__title">Community</h3>
             <p class="tabpanel__desc">러너들의 카드를 둘러보고 영감을 얻는 공간. 경험을 나누며 동기부여로 이어지도록 설계했습니다.</p>
@@ -972,7 +969,7 @@
           </div>
         </div>
         <div class="tabpanel" data-panel="archive" data-reveal>
-          <div class="tabpanel__media"><div class="img-slot" data-label="Archive 화면"><img src="tracksy_img/archive.png" alt=""></div></div>
+          <div class="tabpanel__media"><div class="img-slot" data-label="Archive 화면"><img src="tracksy_img/design_archive.png" alt=""></div></div>
           <div class="tabpanel__text">
             <h3 class="tabpanel__title">Archive</h3>
             <p class="tabpanel__desc">나의 러닝 기록과 카드를 모아보는 공간. 성장의 흐름을 한눈에 확인할 수 있습니다.</p>
@@ -1122,16 +1119,9 @@
         </div>
         <div class="kpis">
           <div class="kpi" data-reveal><div class="kpi__num">3</div><p class="kpi__label">핵심 기능 설계</p></div>
-          <div class="kpi" data-reveal><div class="kpi__num">4</div><p class="kpi__label">서비스 영역 구축</p></div>
+          <div class="kpi" data-reveal><div class="kpi__num">4</div><p class="kpi__label">메뉴 영역 구축</p></div>
           <div class="kpi" data-reveal><div class="kpi__num">AI</div><p class="kpi__label">AI 기능 적용</p></div>
           <div class="kpi" data-reveal><div class="kpi__num">4인</div><p class="kpi__label">팀 프로젝트 진행</p></div>
-        </div>
-        <div class="valueflow" data-reveal>
-          <span>기록 관리</span>
-          <span class="arr" aria-hidden="true">→</span>
-          <span>콘텐츠 제작</span>
-          <span class="arr" aria-hidden="true">→</span>
-          <span>커뮤니티 경험</span>
         </div>
       </div>
     </section>
@@ -1142,7 +1132,7 @@
         <span class="eyebrow" data-reveal style="justify-content:center">Retrospective</span>
         <p class="retro__quote" data-reveal>
           기록을 관리하는 서비스가 아니라 <b>경험을 기록하는 서비스</b>라는 관점을 배웠고,
-          UX 설계만큼 <b>개발 환경과 협업 구조</b> 설계가 중요하다는 것을 경험했습니다.
+          UX 설계만큼 <b>개발 환경과 <br>협업 구조</b> 설계가 중요하다는 것을 경험했습니다.
         </p>
         <div class="retro__cta" data-reveal>
           <a class="btn btn--ghost" href="./index.html#tracksy">← 포트폴리오로 돌아가기</a>
