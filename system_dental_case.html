@@ -54,7 +54,7 @@
       --gradient-brand: linear-gradient(135deg, #D33B3B 0%, #A12D2E 100%);
 
       /* 타이포 (A2Z 우선) */
-      --font-base: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui,
+      --font-base: "A2z", "Pretendard", -apple-system, BlinkMacSystemFont, system-ui,
         "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
       --fs-display: clamp(38px, 7vw, 88px);
       --fs-h1: clamp(28px, 4.6vw, 56px);
@@ -64,7 +64,8 @@
       --fs-small: clamp(13px, 0.95vw, 15px);
       --fs-num: clamp(40px, 6.5vw, 86px);
 
-      --fw-regular: 400; --fw-medium: 500; --fw-semibold: 600; --fw-bold: 700; --fw-black: 800;
+      /* 타입 스케일에 맞춰 2단계 낮춤: HERO 600 / TITLE·UI 500 / BODY 400 */
+      --fw-regular: 400; --fw-medium: 500; --fw-semibold: 600; --fw-bold: 500; --fw-black: 500;
       --lh-tight: 1.12; --lh-normal: 1.6; --lh-loose: 1.85;
 
       /* 레이아웃 / 여백 (Apple 스타일: 넓게) */
@@ -75,7 +76,7 @@
       --container-wide: 1440px;
 
       /* 8px Grid 기반 라운드 */
-      --radius-sm: 12px; --radius-md: 20px; --radius-lg: 32px; --radius-pill: 999px;
+      --radius-sm: 2px; --radius-md: 2px; --radius-lg: 2px; --radius-pill: 999px;
       --shadow-card: 0 24px 60px rgba(60, 25, 25, 0.10);
       --shadow-soft: 0 12px 32px rgba(60, 25, 25, 0.07);
       --ease: cubic-bezier(0.16, 1, 0.3, 1);
@@ -184,14 +185,14 @@
     .hero__copy { display: flex; flex-direction: column; align-items: flex-start; }
     .hero__eyebrow { display: inline-flex; align-items: center; gap: 12px; font-size: 15px; font-weight: var(--fw-bold); letter-spacing: 0.16em; text-transform: uppercase; color: var(--color-burgundy); margin-bottom: 24px; }
     .hero__eyebrow .no { color: var(--color-burgundy); }
-    .hero__title { font-size: clamp(30px, 3.6vw, 48px); font-weight: var(--fw-black); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 24px; word-break: keep-all; }
+    .hero__title { font-size: clamp(30px, 3.6vw, 48px); font-weight: var(--fw-semibold); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 24px; word-break: keep-all; }
     .hero__title em { font-style: normal; background: var(--gradient-brand); -webkit-background-clip: text; background-clip: text; color: transparent; }
     .hero__desc { font-size: clamp(17px, 1.35vw, 22px); font-weight: var(--fw-medium); margin-bottom: 48px; max-width: 520px; color: var(--color-text-muted); line-height: 1.6; word-break: keep-all; }
     /* 스탯 카드 */
     .hero__stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(12px, 1.4vw, 18px); width: 100%; max-width: 560px; }
     .hstat { background: var(--color-white); border: 1px solid var(--color-line); border-radius: var(--radius-md); padding: clamp(16px, 1.6vw, 22px); box-shadow: var(--shadow-soft); transition: transform .3s var(--ease), box-shadow .3s; }
     .hstat:hover { transform: translateY(-4px); box-shadow: var(--shadow-card); }
-    .hstat__ico { width: 38px; height: 38px; border-radius: var(--radius-sm); background: var(--color-light-gray); color: var(--color-burgundy); display: grid; place-items: center; margin-bottom: 16px; }
+    .hstat__ico { width: 38px; height: 38px; border-radius: 12px; /* 아이콘 박스만 이전 라운드(12px) 유지 */ background: var(--color-light-gray); color: var(--color-burgundy); display: grid; place-items: center; margin-bottom: 16px; }
     .hstat__ico svg { width: 19px; height: 19px; }
     .hstat__num { font-size: clamp(26px, 2.8vw, 36px); font-weight: var(--fw-black); color: var(--color-burgundy); line-height: 1; letter-spacing: -0.02em; }
     .hstat__label { font-size: clamp(16px, 1.2vw, 18px); font-weight: var(--fw-bold); color: var(--color-text); margin-top: 8px; }
@@ -338,6 +339,7 @@
     .ia__item { padding: 14px 18px; border-radius: var(--radius-md); background: var(--color-bg-soft); font-weight: var(--fw-semibold); font-size: var(--fs-small); }
     .ia__col--after .ia__item { background: rgba(255,255,255,0.08); }
     .ia__col--after .ia__item:first-child { background: var(--color-soft-red); }
+    .ia__col--after .ia__item:last-child { background: var(--color-burgundy); } /* 디지털 진료 시스템: 다른 레드(버건디)로 강조 */
     .ia__arrow { display: grid; place-items: center; color: var(--color-burgundy); }
     .ia__arrow svg { width: 26px; height: 26px; }
 
@@ -411,10 +413,15 @@
     .bablock { display: flex; flex-wrap: nowrap; transition: transform .55s var(--ease); will-change: transform; }
     .bacase { flex: 0 0 100%; max-width: 100%; }
     .bacase__head { margin-bottom: 18px; }
-    .bacarousel__arrow { position: absolute; top: 58%; transform: translateY(-50%); z-index: 10; width: 44px; height: 44px; border-radius: 50%; background: var(--color-white); border: 1px solid var(--color-line); box-shadow: var(--shadow-soft); color: var(--color-burgundy); font-size: 24px; line-height: 1; display: grid; place-items: center; cursor: pointer; transition: background .2s, color .2s, transform .2s; }
-    .bacarousel__arrow:hover { background: var(--color-burgundy); color: #fff; }
-    .bacarousel__arrow--prev { left: 8px; }
-    .bacarousel__arrow--next { right: 8px; }
+    .bacarousel__arrow { position: absolute; top: 58%; transform: translateY(-50%); z-index: 10; width: 44px; height: 44px; border-radius: 50%; background: var(--color-burgundy); border: 1px solid var(--color-burgundy); box-shadow: 0 6px 16px rgba(0,0,0,0.16); color: #fff; font-size: 24px; line-height: 1; display: grid; place-items: center; cursor: pointer; transition: background .2s, color .2s, border-color .2s, box-shadow .2s, transform .2s; }
+    .bacarousel__arrow:hover { background: var(--color-soft-red); border-color: var(--color-soft-red); color: #fff; box-shadow: 0 10px 22px rgba(0,0,0,0.22); transform: translateY(-50%) scale(1.06); }
+    .bacarousel__arrow--prev { left: -60px; }   /* 이미지 바깥 왼쪽 */
+    .bacarousel__arrow--next { right: -60px; }  /* 이미지 바깥 오른쪽 */
+    /* 좁은 화면: 양옆 공간 부족 → 다시 이미지 안쪽으로 */
+    @media (max-width: 880px) {
+      .bacarousel__arrow--prev { left: 8px; }
+      .bacarousel__arrow--next { right: 8px; }
+    }
     .bacarousel__dots { display: flex; justify-content: center; gap: 8px; margin-top: 20px; }
     .bacarousel__dot { width: 9px; height: 9px; border-radius: 50%; background: var(--color-line); border: none; padding: 0; cursor: pointer; transition: background .2s, width .2s; }
     .bacarousel__dot.is-active { background: var(--color-burgundy); width: 24px; border-radius: 5px; }
@@ -432,7 +439,7 @@
     .ai-badge__name { font-size: 13px; font-weight: var(--fw-bold); color: var(--color-text); }
     .bacase__no { font-size: var(--fs-small); font-weight: var(--fw-bold); letter-spacing: 0.12em; color: var(--color-soft-red); }
     .bacase__title { margin-top: 6px; font-size: clamp(22px,3vw,34px); font-weight: var(--fw-black); }
-    .ba { position: relative; width: 100%; border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-card); user-select: none; touch-action: pan-y; aspect-ratio: 16/9; background: #000; }
+    .ba { position: relative; width: 100%; border-radius: var(--radius-lg); border: 1px solid #E9E6E2; overflow: hidden; box-shadow: var(--shadow-card); user-select: none; touch-action: pan-y; aspect-ratio: 16/9; background: #000; }
     .ba__layer { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: var(--fs-h2); font-weight: var(--fw-black); letter-spacing: 0.1em; }
     .ba__layer--before { background: #D8D2CD; color: #fff; }
     .ba__after { position: absolute; inset: 0; width: 50%; overflow: hidden; }
@@ -610,14 +617,14 @@
           <!-- 좌측: 카피 -->
           <div class="hero__copy">
             <span class="hero__eyebrow" data-reveal>Project Summary</span>
-            <h1 class="hero__title" data-reveal>가격이 아닌 <em>신뢰</em>를 전하는<br />시스템치과 홈페이지 리뉴얼</h1>
+            <h1 class="hero__title" data-reveal>가격이 아닌 <em>신뢰</em>를 전하는<br />시스템치과 UI/UX 리뉴얼</h1>
             <p class="hero__desc" data-reveal>21년 운영된 시스템치과의 온라인 경험을 분석해,<br />브랜드 신뢰를 높인 UX/UI 리디자인 프로젝트입니다.</p>
             <div class="hero__stats" data-reveal>
               <div class="hstat">
                 <span class="hstat__ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v9l7 4"/><circle cx="12" cy="12" r="9"/></svg></span>
                 <div class="hstat__num">50%</div>
                 <div class="hstat__label">기획</div>
-                <p class="hstat__desc">UX 리서치 · 정보 구조</p>
+                <p class="hstat__desc">UX · 정보 구조 · CTA 개선</p>
               </div>
               <div class="hstat">
                 <span class="hstat__ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></span>
@@ -694,8 +701,8 @@
       </div>
     </section>
 
-    <!-- ============ 04 COMPETITIVE ANALYSIS ============ -->
-    <section class="section section--gray">
+    <!-- ============ 04 COMPETITIVE ANALYSIS (숨김) ============ -->
+    <section class="section section--gray" style="display: none">
       <div class="container">
         <div class="head">
           <span class="label" data-reveal>Competitive Analysis</span>
@@ -754,8 +761,8 @@
       </div>
     </section>
 
-    <!-- ============ UX STRATEGY ============ -->
-    <section class="section" id="strategy">
+    <!-- ============ UX STRATEGY (숨김) ============ -->
+    <section class="section" id="strategy" style="display: none">
       <div class="container">
         <div class="head">
           <span class="label" data-reveal>UX Strategy</span>
@@ -1031,7 +1038,7 @@
             </div>
             <div class="comp-card">
               <div class="comp-body"><div class="mini-card"><strong>진료 안내</strong><span>임플란트 · 교정 · 일반진료</span></div></div>
-              <div class="comp-cap">Card · radius 20</div>
+              <div class="comp-cap">Card · radius 2</div>
             </div>
             <div class="comp-card">
               <div class="comp-body"><span class="btn-ds btn-ds--primary">상담 신청하기 →</span></div>
