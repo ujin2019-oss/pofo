@@ -1519,6 +1519,17 @@ html {
   .fb-card:nth-child(2n) { margin-top: 22px; }
 }
 
+/* ===== PRINT DESIGN 탭 : 대형 히어로 + 4×2 그리드 ===== */
+.print-showcase { display: flex; flex-direction: column; gap: clamp(14px, 1.6vw, 26px); }
+.print-hero { display: block; border-radius: 2px; overflow: hidden; aspect-ratio: 1720 / 779; background: var(--color-bg-gray); }
+.print-hero img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform var(--duration-slow) var(--ease-out); }
+.print-hero:hover img { transform: scale(1.03); }
+.print-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(12px, 1.4vw, 22px); }
+.print-card { display: block; border-radius: 2px; overflow: hidden; aspect-ratio: 400 / 311; background: var(--color-bg-gray); }
+.print-card img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform var(--duration-slow) var(--ease-out); }
+.print-card:hover img { transform: scale(1.04); }
+@media (max-width: 768px) { .print-grid { grid-template-columns: repeat(2, 1fr); } }
+
 /* 애플(Safari) 브라우저 창 목업 — 첫 슬롯 등 강조용 */
 .ap-card--browser { display: flex; flex-direction: column; }
 .ap-card__media { position: relative; aspect-ratio: 4 / 3; border-radius: 2px; overflow: hidden; }
