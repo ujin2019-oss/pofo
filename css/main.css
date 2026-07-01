@@ -1389,7 +1389,7 @@ html {
    - 링크 변경  : .ap-card 의 href 수정
    ===================================================== */
 .all-project {
-  padding-block: var(--section-gap) 0; /* 아래 패딩 제거 → 마케팅 위 패딩(160px)과 이중으로 겹치지 않게 */
+  padding-block: var(--section-gap) clamp(56px, 7vw, 96px); /* 하단 여백 → 아래 브릿지와 시각적으로 분리 */
 }
 .all-project__inner {
   max-width: var(--container-max);
@@ -1642,14 +1642,87 @@ html {
 }
 
 /* =====================================================
+   BRIDGE : ALL PROJECT → MARKETING 전환 유도
+   - 결과물 나열 섹션에서 마케팅 디자이너 클로징으로 시선을 넘김
+   - 전환 카피(옅은 회색 → 퍼플) + 아래로 흐르는 라인/점/화살표
+   ===================================================== */
+.bridge {
+  padding-top: var(--section-gap);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(20px, 2.6vw, 36px);
+  text-align: center;
+}
+.bridge__lead {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: var(--fs-h3);
+  font-weight: var(--fw-bold);
+  line-height: 1.45;
+  letter-spacing: -0.01em;
+  word-break: keep-all;
+}
+.bridge__lead-top { color: var(--color-text-sub); }
+.bridge__lead-bot { color: var(--color-main); }
+.bridge__flow {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  color: var(--color-main);
+  text-decoration: none;
+}
+.bridge__line {
+  position: relative;
+  width: 2px;
+  height: clamp(48px, 7vw, 84px);
+  border-radius: 2px;
+  background: linear-gradient(to bottom, rgba(151,128,255,0) 0%, rgba(151,128,255,.55) 42%, var(--color-main) 100%);
+  overflow: hidden;
+}
+.bridge__dot {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 6px;
+  height: 6px;
+  margin-left: -3px;
+  border-radius: 50%;
+  background: var(--color-main);
+  box-shadow: 0 0 10px rgba(55,0,255,.55);
+  animation: bridge-drip 2s ease-in-out infinite;
+}
+@keyframes bridge-drip {
+  0%   { transform: translateY(-6px); opacity: 0; }
+  22%  { opacity: 1; }
+  78%  { opacity: 1; }
+  100% { transform: translateY(84px); opacity: 0; }
+}
+.bridge__chev {
+  width: clamp(22px, 2.4vw, 30px);
+  height: auto;
+  animation: bridge-bounce 2s ease-in-out infinite;
+}
+@keyframes bridge-bounce {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(5px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .bridge__dot, .bridge__chev { animation: none; }
+}
+
+/* =====================================================
    SECTION : MARKETING (마케팅 디자이너 — 구체 CTA / 클로징)
    - 중앙 정렬: 이아브로 → 제목 → 부제 → 구체(closing.png) 안 CTA
    - CTA 링크: .marketing__orb 의 href
    ===================================================== */
 .marketing {
   /* 아래 여백 제거 + 음수 마진으로 푸터를 구체 바로 아래까지 끌어올림
-     (구체 하단의 거의 안 보이는 옅은 반사 영역이 푸터 상단 여백과 겹침 → 공백 제거, 잘림 X) */
-  padding: var(--section-gap) 0 0;
+     (구체 하단의 거의 안 보이는 옅은 반사 영역이 푸터 상단 여백과 겹침 → 공백 제거, 잘림 X)
+     · 위 여백(브릿지 화살표 ~ 이아브로 사이 간격) */
+  padding: clamp(72px, 9vw, 128px) 0 0;
   margin-bottom: clamp(-44px, -3.4vw, -26px);
   text-align: center;
 }
@@ -1670,12 +1743,6 @@ html {
   font-weight: var(--fw-bold);
   color: var(--color-main);
   letter-spacing: -0.01em;
-}
-.marketing__sub {
-  margin-top: 12px;
-  font-size: var(--fs-h3);
-  color: var(--color-text);
-  word-break: keep-all;
 }
 /* 구체 + 배경 타이포 무대 */
 .marketing__stage {
@@ -1766,6 +1833,7 @@ html {
   font-weight: var(--fw-bold);
   color: var(--color-main);
   line-height: 1.2;
+  text-shadow: 0 1px 3px rgba(255,255,255,.95), 0 2px 12px rgba(255,255,255,.85);
 }
 /* 2줄: 연퍼플 · 작게 + 화살표 아이콘 */
 .marketing__cta-go {
@@ -1773,12 +1841,13 @@ html {
   align-items: center;
   gap: 4px;
   font-size: clamp(14px, 1.15vw, 17px);
-  font-weight: var(--fw-medium);
-  color: var(--color-sub);
+  font-weight: var(--fw-bold);
+  color: var(--color-main);
   line-height: 1.2;
+  text-shadow: 0 1px 3px rgba(255,255,255,.9), 0 2px 10px rgba(255,255,255,.8);
 }
 .marketing__cta-arrow { width: 1em; height: 1em; flex: none; }
-.marketing__orb:hover .marketing__cta-go { color: var(--color-main); }
+.marketing__orb:hover .marketing__cta-go { color: var(--color-main1); }
 .marketing__orb:hover { transform: scale(1.03); }
 @keyframes mkt-float {
   0%, 100% { transform: translateY(0); }

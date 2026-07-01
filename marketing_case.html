@@ -159,7 +159,7 @@
     .hero__eyebrow::before { content: ""; width: 30px; height: 2px; border-radius: 2px; background: var(--gradient-brand); }
     .hero__title { font-size: clamp(32px, 4.4vw, 62px); font-weight: var(--fw-black); line-height: 1.14; letter-spacing: -0.025em; word-break: keep-all; }
     .hero__title em { font-style: normal; background: var(--gradient-brand); -webkit-background-clip: text; background-clip: text; color: transparent; }
-    .hero__desc { margin-top: 24px; max-width: 540px; font-size: clamp(16px, 1.3vw, 21px); font-weight: var(--fw-medium); color: var(--color-text-muted); line-height: 1.7; word-break: keep-all; }
+    .hero__desc { margin-top: 24px; max-width: 540px; font-size: clamp(16px, 1.3vw, 21px); font-weight: var(--fw-medium); color: var(--color-text-muted); line-height: 1.7; word-break: keep-all; text-wrap: balance; }
     .hero__stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(12px, 1.4vw, 18px); width: 100%; max-width: 580px; margin-top: var(--block-gap); }
     .hstat { background: rgba(255,255,255,0.72); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); border: 1px solid rgba(255,255,255,0.7); border-radius: var(--radius-md); padding: clamp(16px, 1.6vw, 22px); box-shadow: var(--shadow-soft); transition: transform .3s var(--ease), box-shadow .3s; }
     .hstat:hover { transform: translateY(-4px); box-shadow: var(--shadow-card); }
@@ -174,9 +174,10 @@
     .hero__poster img { width: 100%; display: block; }
     .hero__insert { position: absolute; right: 2%; bottom: 6%; width: 46%; border-radius: 8px; overflow: hidden; box-shadow: 0 22px 44px rgba(60,40,140,0.28); transform: rotate(5deg); border: 5px solid #fff; background: #fff; }
     .hero__insert img { width: 100%; display: block; }
-    .hero__badge { position: absolute; left: -2%; bottom: 20%; z-index: 3; display: inline-flex; flex-direction: column; align-items: center; justify-content: center; width: clamp(74px, 9vw, 96px); height: clamp(74px, 9vw, 96px); border-radius: 50%; background: var(--gradient-brand); color: #fff; box-shadow: 0 14px 30px rgba(52,140,170,0.45); transform: rotate(-8deg); }
-    .hero__badge b { font-size: clamp(17px, 2vw, 22px); font-weight: var(--fw-black); line-height: 1; }
-    .hero__badge span { font-size: 10px; font-weight: var(--fw-bold); letter-spacing: 0.12em; margin-top: 3px; opacity: 0.92; }
+    .hero__badge { position: absolute; left: -2%; bottom: 20%; z-index: 3; display: inline-flex; flex-direction: column; align-items: center; justify-content: center; width: clamp(90px, 11vw, 118px); height: clamp(90px, 11vw, 118px); color: #fff; transform: rotate(-8deg); }
+    .hero__badge-shape { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; filter: drop-shadow(0 12px 20px rgba(52,140,170,0.42)); }
+    .hero__badge b { position: relative; z-index: 1; font-size: clamp(19px, 2.2vw, 25px); font-weight: var(--fw-black); line-height: 1; }
+    .hero__badge span { position: relative; z-index: 1; font-size: 11px; font-weight: var(--fw-bold); letter-spacing: 0.12em; margin-top: 3px; opacity: 0.92; }
 
     /* =================================================================
        02) APPROACH (3 PILLAR — PPT INDEX 계승)
@@ -475,7 +476,7 @@
 .mads-kpi__num i{ font-style:normal; font-size:.42em; font-weight:var(--fw-bold); color:var(--color-text-muted); margin-left:3px; }
 .mads-kpi__label{ font-size:var(--fs-small); font-weight:var(--fw-semibold); color:var(--color-text-muted); }
 .mads-kpi__label small{ font-weight:var(--fw-medium); }
-.mads-kpi--hl{ background:var(--gradient-brand); border-color:transparent; box-shadow:0 18px 40px rgba(70,50,150,.24); }
+.mads-kpi--hl{ background:var(--gradient-brand); border:none; box-shadow:0 18px 40px rgba(70,50,150,.24); }
 .mads-kpi--hl .mads-kpi__ico{ background:rgba(255,255,255,.22); color:#fff; }
 .mads-kpi--hl .mads-kpi__num{ color:#fff; }
 .mads-kpi--hl .mads-kpi__num i,
@@ -634,6 +635,49 @@
   .mads-ov-row{ grid-template-columns:1fr; gap:4px; }
   .mads-bars__labels li{ font-size:11px; }
 }
+
+/* ====== 03 연간 광고비 효율 (.yads-*) — 채널별 비교 ====== */
+.yads-tot{ display:grid; grid-template-columns:repeat(3,1fr); gap:clamp(12px,1.4vw,20px); margin-top:clamp(30px,3.8vw,56px); }
+.yads-tot__item{ background:var(--color-light); border-radius:var(--radius-lg); padding:clamp(20px,2.3vw,32px); display:flex; flex-direction:column; gap:10px; }
+.yads-tot__item--hl{ background:var(--gradient-brand); color:#fff; }
+.yads-tot__lbl{ font-size:var(--fs-small); font-weight:var(--fw-semibold); color:var(--color-text-muted); }
+.yads-tot__item--hl .yads-tot__lbl{ color:rgba(255,255,255,.85); }
+.yads-tot__num{ font-size:clamp(26px,3.4vw,46px); font-weight:var(--fw-black); letter-spacing:-.03em; line-height:1; font-variant-numeric:tabular-nums; }
+.yads-tot__num i{ font-style:normal; font-size:.4em; font-weight:var(--fw-bold); margin-left:5px; color:var(--color-text-muted); }
+.yads-tot__item--hl .yads-tot__num i{ color:rgba(255,255,255,.85); }
+
+.yads-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:clamp(12px,1.4vw,20px); margin-top:clamp(14px,1.6vw,20px); }
+.yads-card{ background:var(--color-white); border:1px solid var(--color-line); border-radius:var(--radius-lg); padding:clamp(18px,2vw,26px); display:flex; flex-direction:column; gap:14px; box-shadow:var(--shadow-soft); }
+.yads-card--hl{ background:var(--gradient-brand); border:none; color:#fff; box-shadow:var(--shadow-card); }
+.yads-card__top{ display:flex; align-items:center; justify-content:space-between; }
+.yads-card__ch{ font-size:var(--fs-h3); font-weight:var(--fw-black); letter-spacing:-.01em; }
+.yads-card__badge{ font-size:11px; font-weight:var(--fw-bold); letter-spacing:.06em; padding:4px 9px; border-radius:var(--radius-pill); background:rgba(255,255,255,.22); color:#fff; }
+.yads-card__conv{ display:flex; align-items:baseline; gap:6px; }
+.yads-card__conv b{ font-size:clamp(34px,4vw,52px); font-weight:var(--fw-black); letter-spacing:-.03em; line-height:1; font-variant-numeric:tabular-nums; }
+.yads-card__conv i{ font-style:normal; font-size:var(--fs-small); font-weight:var(--fw-bold); color:var(--color-text-muted); }
+.yads-card--hl .yads-card__conv i{ color:rgba(255,255,255,.85); }
+.yads-card__bar{ height:6px; border-radius:999px; background:rgba(19,16,34,.08); overflow:hidden; }
+.yads-card--hl .yads-card__bar{ background:rgba(255,255,255,.28); }
+.yads-card__bar span{ display:block; height:100%; border-radius:999px; background:var(--gradient-brand); }
+.yads-card--hl .yads-card__bar span{ background:#fff; }
+.yads-card__dl{ display:flex; flex-direction:column; gap:8px; margin-top:2px; }
+.yads-card__dl > div{ display:flex; align-items:baseline; justify-content:space-between; gap:10px; }
+.yads-card__dl dt{ font-size:var(--fs-small); color:var(--color-text-muted); }
+.yads-card--hl .yads-card__dl dt{ color:rgba(255,255,255,.8); }
+.yads-card__dl dd{ font-size:var(--fs-small); font-weight:var(--fw-bold); font-variant-numeric:tabular-nums; }
+.yads-card__dl dd.best{ color:var(--color-primary); font-weight:var(--fw-black); }
+.yads-card--hl .yads-card__dl dd.best{ color:#fff; }
+.yads-card__dl dd.none{ color:var(--color-text-muted); font-weight:var(--fw-semibold); }
+
+@media (max-width:860px){
+  .yads-tot{ grid-template-columns:1fr 1fr; }
+  .yads-tot__item--hl{ grid-column:1 / -1; }
+  .yads-grid{ grid-template-columns:repeat(2,1fr); }
+}
+@media (max-width:520px){
+  .yads-tot{ grid-template-columns:1fr; }
+  .yads-grid{ grid-template-columns:1fr; }
+}
   </style>
 </head>
 
@@ -647,9 +691,9 @@
       <span class="fab__label">메인으로 가기</span>
       <span class="fab__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M19 12H5M11 6l-6 6 6 6"/></svg></span>
     </a>
-    <a class="float-menu__btn float-menu__btn--live" href="mailto:ujin2019@gmail.com" aria-label="이메일 문의하기">
-      <span class="fab__label">문의하기</span>
-      <span class="fab__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 6h16v12H4z"/><path d="m4 7 8 6 8-6"/></svg></span>
+    <a class="float-menu__btn float-menu__btn--live" href="tel:01020774869" aria-label="전화 연락하기">
+      <span class="fab__label">연락하기</span>
+      <span class="fab__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg></span>
     </a>
   </div>
 
@@ -661,7 +705,7 @@
           <div class="hero__intro">
             <span class="hero__eyebrow" data-reveal>On·Off Line Brand · Marketing</span>
             <h1 class="hero__title" data-reveal>온·오프라인을 잇는<br /><em>브랜드 마케팅</em></h1>
-            <p class="hero__desc" data-reveal>상품 기획부터 카피라이팅, 온라인 바이럴, 오프라인 캠페인까지.<br />데이터로 문제를 찾고 감성으로 설득해, ‘팔리는 경험’을 설계합니다.</p>
+            <p class="hero__desc" data-reveal>상품 기획부터 카피라이팅, 온라인 바이럴, 오프라인 캠페인까지. 데이터로 문제를 찾고 감성으로 설득해, ‘팔리는 경험’을 설계합니다.</p>
             <div class="hero__stats" data-reveal data-stagger>
               <div class="hstat">
                 <div class="hstat__num">0 → 완판</div>
@@ -684,7 +728,7 @@
           <div class="hero__visual" data-reveal-scale>
             <div class="hero__poster"><img src="./images/marketing/detail_2.png" alt="‘마미온’ 유모차 온열시트 상세페이지 — 한국탄소기술원에서도 인정한 국민 온열라이너" /></div>
             <div class="hero__insert"><img src="./images/marketing/product.png" alt="‘마미온’ 유모차 온열시트 제품" /></div>
-            <span class="hero__badge" aria-hidden="true"><b>완판</b><span>SOLD OUT</span></span>
+            <span class="hero__badge" aria-hidden="true"><svg class="hero__badge-shape" viewBox="0 0 100 100" aria-hidden="true"><defs><linearGradient id="heroBadgeGrad" gradientUnits="userSpaceOnUse" x1="8" y1="8" x2="92" y2="78"><stop offset="0" stop-color="#34C6A8" /><stop offset="0.46" stop-color="#3C9BD8" /><stop offset="1" stop-color="#6B4BE6" /></linearGradient></defs><path fill="url(#heroBadgeGrad)" d="M 92.20 50.00 C 92.20 51.21 91.87 52.46 91.40 53.62 C 90.93 54.78 90.10 55.89 89.39 56.95 C 88.68 58.00 87.78 58.95 87.13 59.95 C 86.49 60.95 85.90 61.88 85.52 62.93 C 85.14 63.98 84.99 65.07 84.84 66.25 C 84.70 67.43 84.77 68.74 84.64 70.00 C 84.51 71.26 84.43 72.65 84.04 73.84 C 83.65 75.02 83.10 76.20 82.33 77.13 C 81.55 78.05 80.49 78.80 79.38 79.38 C 78.28 79.97 76.93 80.29 75.71 80.64 C 74.49 80.99 73.19 81.14 72.05 81.49 C 70.92 81.84 69.87 82.18 68.90 82.74 C 67.93 83.29 67.12 84.03 66.25 84.84 C 65.38 85.65 64.60 86.70 63.68 87.59 C 62.77 88.47 61.81 89.48 60.76 90.14 C 59.70 90.80 58.52 91.35 57.33 91.56 C 56.14 91.77 54.84 91.66 53.62 91.40 C 52.40 91.14 51.16 90.52 50.00 90.00 C 48.84 89.48 47.74 88.76 46.65 88.30 C 45.56 87.84 44.54 87.42 43.44 87.23 C 42.34 87.03 41.24 87.07 40.05 87.13 C 38.86 87.19 37.59 87.50 36.32 87.59 C 35.05 87.68 33.67 87.84 32.44 87.66 C 31.20 87.49 29.95 87.15 28.90 86.55 C 27.85 85.94 26.93 85.02 26.16 84.04 C 25.40 83.06 24.85 81.78 24.29 80.64 C 23.73 79.50 23.36 78.24 22.82 77.18 C 22.27 76.13 21.76 75.15 21.04 74.30 C 20.33 73.44 19.46 72.77 18.51 72.05 C 17.56 71.33 16.39 70.75 15.36 70.00 C 14.33 69.25 13.17 68.49 12.34 67.56 C 11.50 66.63 10.76 65.57 10.34 64.43 C 9.93 63.30 9.82 62.00 9.86 60.76 C 9.90 59.51 10.30 58.18 10.61 56.95 C 10.91 55.71 11.44 54.51 11.70 53.35 C 11.97 52.19 12.20 51.12 12.20 50.00 C 12.20 48.88 11.97 47.81 11.70 46.65 C 11.44 45.49 10.91 44.29 10.61 43.05 C 10.30 41.82 9.90 40.49 9.86 39.24 C 9.82 38.00 9.93 36.70 10.34 35.57 C 10.76 34.43 11.50 33.37 12.34 32.44 C 13.17 31.51 14.33 30.75 15.36 30.00 C 16.39 29.25 17.56 28.67 18.51 27.95 C 19.46 27.23 20.33 26.56 21.04 25.70 C 21.76 24.85 22.27 23.87 22.82 22.82 C 23.36 21.76 23.73 20.50 24.29 19.36 C 24.85 18.22 25.40 16.94 26.16 15.96 C 26.93 14.98 27.85 14.06 28.90 13.45 C 29.95 12.85 31.20 12.51 32.44 12.34 C 33.67 12.16 35.05 12.32 36.32 12.41 C 37.59 12.50 38.86 12.81 40.05 12.87 C 41.24 12.93 42.34 12.97 43.44 12.77 C 44.54 12.58 45.56 12.16 46.65 11.70 C 47.74 11.24 48.84 10.52 50.00 10.00 C 51.16 9.48 52.40 8.86 53.62 8.60 C 54.84 8.34 56.14 8.23 57.33 8.44 C 58.52 8.65 59.70 9.20 60.76 9.86 C 61.81 10.52 62.77 11.53 63.68 12.41 C 64.60 13.30 65.38 14.35 66.25 15.16 C 67.12 15.97 67.93 16.71 68.90 17.26 C 69.87 17.82 70.92 18.16 72.05 18.51 C 73.19 18.86 74.49 19.01 75.71 19.36 C 76.93 19.71 78.28 20.03 79.38 20.62 C 80.49 21.20 81.55 21.95 82.33 22.87 C 83.10 23.80 83.65 24.98 84.04 26.16 C 84.43 27.35 84.51 28.74 84.64 30.00 C 84.77 31.26 84.70 32.57 84.84 33.75 C 84.99 34.93 85.14 36.02 85.52 37.07 C 85.90 38.12 86.49 39.05 87.13 40.05 C 87.78 41.05 88.68 42.00 89.39 43.05 C 90.10 44.11 90.93 45.22 91.40 46.38 C 91.87 47.54 92.20 48.79 92.20 50.00 Z" /></svg><b>완판</b><span>SOLD OUT</span></span>
           </div>
         </div>
       </div>
@@ -696,7 +740,7 @@
         <div class="head">
           <p class="eyebrow" data-reveal>Approach</p>
           <h2 class="section-title" data-reveal>기획 · 온라인 · 오프라인,<br /><em>세 축으로 브랜드를 키웁니다</em></h2>
-          <p class="lead" data-reveal>하나의 상품을 시장에 안착시키기 위해 ‘무엇을 팔지’부터 ‘어떻게 알릴지’, ‘어디서 만날지’까지. 세 영역을 유기적으로 연결해 결과를 만들었습니다.</p>
+          <p class="lead" data-reveal>하나의 상품을 시장에 안착시키기 위해 ‘마케팅 기획’부터 ‘어떻게 알릴지’, <br> ‘어디서 결제할지’까지. 세 영역을 유기적으로 연결해 결과를 만들었습니다.</p>
         </div>
 
         <div class="pillars" data-reveal data-stagger>
@@ -705,7 +749,7 @@
             <div class="pillar__body">
               <ul class="pillar__list">
                 <li>팔리는 상품 기획<small>세일즈 포인트 분석 · 리포지셔닝</small></li>
-                <li>브랜드 / 카피라이팅 기획<small>고객 욕구 분석 · 핵심가치 도출</small></li>
+                <li>브랜드 카피라이팅 기획<small>고객 욕구 분석 · 핵심가치 도출</small></li>
                 <li>상세페이지 디자인 제작<small>설득 프로세스 기반 구성</small></li>
               </ul>
             </div>
@@ -716,7 +760,7 @@
               <ul class="pillar__list">
                 <li>SNS 채널 기획<small>블로그 · 인스타그램 · 카페 설계</small></li>
                 <li>SNS 발행 · 체험단 운영 · 상위 노출<small>네이버 로직 기반 콘텐츠</small></li>
-                <li>건축시공 계약 오픈하우스 모객<small>Meta Ads 기반 신규 고객 확보</small></li>
+                <li>연간 광고비 효율 개선<small>새로운 채널 도입 및 효율적인 광고 운영</small></li>
               </ul>
             </div>
           </article>
@@ -724,7 +768,7 @@
             <div class="pillar__head"><span class="pillar__no">03</span><span class="pillar__name">오프라인 연계 캠페인</span></div>
             <div class="pillar__body">
               <ul class="pillar__list">
-                <li>박람회 전시부스 홍보 및 운영<small>전시부스/제작물 디자인 · 아르바이트생 운영</small></li>
+                <li>기업 자체 행사 참가자 모객<small>Meta Ads 기반 신규 고객 확보</small></li>
                 <li>BTL 마케팅 기획 · 연출<small>판촉 · 사회공헌 · 콘서트 · 시상식</small></li>
                 <li>계열사 및 협업 광고<small>그룹사 제휴 · 사회공헌</small></li>
               </ul>
@@ -739,13 +783,13 @@
       <div class="container">
         <div class="head">
           <p class="eyebrow" data-reveal>01 — 마케팅 기획 · Case Study</p>
-          <h2 class="section-title" data-reveal>악성재고 0개를,<br /><em>‘마미온’ 유모차 온열시트 완판</em>으로</h2>
-          <p class="lead" data-reveal>판매량 0개의 악성재고였던 유모차 온열시트. 타겟·신뢰·카피·상세페이지 네 가지 ‘세일즈 포인트’를 다시 설계해, 완판이라는 결과로 바꿨습니다.</p>
+          <h2 class="section-title" data-reveal>악성재고 였던<br /><em>‘마미온’ 유모차 온열시트 완판</em>으로</h2>
+          <p class="lead" data-reveal>판매량 0개의 악성재고였던 유모차 온열시트. 타겟·신뢰·카피·상세페이지<br>네 가지 ‘세일즈 포인트’를 다시 설계해, 완판이라는 결과로 바꿨습니다.</p>
         </div>
 
         <div class="ba" data-reveal>
           <figure class="ba__card">
-            <span class="ba__tag ba__tag--before">BEFORE · 0개 악성재고</span>
+            <span class="ba__tag ba__tag--before">BEFORE · 악성재고</span>
             <img src="./images/marketing/product.png" alt="리뉴얼 전 — 판매량 0개의 유모차 온열시트 제품 사진" />
             <figcaption class="ba__cap">기능은 좋지만 ‘왜 사야 하는지’가 보이지 않던 제품</figcaption>
           </figure>
@@ -785,14 +829,14 @@
         <div class="head">
           <p class="eyebrow" data-reveal>01 — 브랜드 기획</p>
           <h2 class="section-title" data-reveal>고객의 ‘욕구’에서<br /><em>브랜드 가치</em>를 끌어냅니다</h2>
-          <p class="lead" data-reveal>타겟이 진짜 결핍을 느끼는 지점을 분석하고, 경쟁사와 자사를 비교해 우리만 말할 수 있는 가치를 정의했습니다.</p>
+          <p class="lead" data-reveal>타겟이 진짜 결핍을 느끼는 지점을 분석하고, <br>경쟁사와 자사를 비교해 우리만 말할 수 있는 가치를 정의했습니다.</p>
         </div>
 
         <div class="insight-grid" data-reveal data-stagger>
           <article class="icard">
             <span class="icard__label">타겟 연령</span>
             <p class="icard__body">30대 남녀, 아기가 있는<br /><em>젊은 부부 및 지인 가족</em></p>
-            <p class="icard__sub">선물·직접 구매가 모두 일어나는 육아 초기 세대</p>
+            <p class="icard__sub">선물·직접 구매가 모두 일어나는 핵심 구매 타겟</p>
           </article>
           <article class="icard">
             <span class="icard__label">욕구 분석</span>
@@ -838,7 +882,7 @@
         <div class="head">
           <p class="eyebrow" data-reveal>01 — 카피라이팅 기획</p>
           <h2 class="section-title" data-reveal>고객 ‘심리’를 파악한<br /><em>한 줄의 설득</em></h2>
-          <p class="lead" data-reveal>기능을 나열하던 문장을, 불안을 건드리고 신뢰로 끝맺는 카피로 다시 썼습니다. 같은 제품, 다른 한 줄.</p>
+          <p class="lead" data-reveal>기능을 나열하던 문장을, 불안을 건드리고 신뢰로 끝맺는 카피로 다시 썼습니다. </p>
         </div>
 
         <div class="copies" data-reveal data-stagger>
@@ -872,7 +916,7 @@
         <div class="head">
           <p class="eyebrow" data-reveal>01 — 상세페이지 디자인 제작</p>
           <h2 class="section-title" data-reveal>설득 순서대로 읽히는<br /><em>상세페이지</em></h2>
-          <p class="lead" data-reveal>복잡한 설명은 덜어내고, 고객이 설득되는 순서대로 화면을 구성했습니다. 핵심 메시지는 폰트와 컬러로 또렷하게.</p>
+          <p class="lead" data-reveal>복잡한 설명은 덜어내고, 고객이 설득되는 순서대로 화면을 구성했습니다.</p>
         </div>
 
         <div class="detail-grid" data-reveal data-stagger>
@@ -885,12 +929,12 @@
           <article class="dnote">
             <span class="dnote__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h10M4 18h7"/></svg></span>
             <h3 class="dnote__t">구성</h3>
-            <p class="dnote__d">복잡한 설명은 삭제하고 심플한 상품 설명으로. 고객 설득 프로세스에 맞춰 상세페이지 순서를 구성했습니다.</p>
+            <p class="dnote__d">복잡한 설명은 삭제하고 심플한 상품 설명으로, 고객 설득 프로세스에 맞춰 상세페이지 순서를 구성했습니다.</p>
           </article>
           <article class="dnote">
             <span class="dnote__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7V5h16v2M9 19h6M12 5v14"/></svg></span>
             <h3 class="dnote__t">문구</h3>
-            <p class="dnote__d">편안하고 가독성 있는 폰트를 선정. KEY Message가 되는 카피에 주목할 수 있도록 크기·굵기를 차별화했습니다.</p>
+            <p class="dnote__d">편안하고 가독성 있는 폰트를 선정, KEY Message가 되는 카피에 주목할 수 있도록 크기·굵기를 차별화했습니다.</p>
           </article>
           <article class="dnote">
             <span class="dnote__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 0 0 18"/></svg></span>
@@ -913,7 +957,7 @@
         <div class="head">
           <p class="eyebrow" data-reveal>02 — 온라인 마케팅</p>
           <h2 class="section-title" data-reveal>검색의 접점에서<br /><em>신뢰를 만드는 SNS</em></h2>
-          <p class="lead" data-reveal>구매를 고민하는 순간 고객이 머무는 채널을 찾아, 신뢰는 블로그로 쌓고 확산은 카페·인스타그램으로 설계했습니다.</p>
+          <p class="lead" data-reveal>구매를 고민하는 순간 고객이 머무는 채널을 찾아,<br>블로그로 신뢰를 쌓고 카페·인스타그램으로 확산시켰습니다.</p>
         </div>
 
         <div class="channels" data-reveal data-stagger>
@@ -921,13 +965,13 @@
             <div class="channel__ic"><img src="./images/marketing/ch_blog.png" alt="네이버 블로그" /></div>
             <h3 class="channel__name">네이버 블로그</h3>
             <p class="channel__role">신뢰 · 상위노출</p>
-            <p class="channel__desc">구매 접점에 있는 네이버 검색 고객을 찾아 홍보. 가장 신뢰도를 줄 수 있는 육아 블로그를 중심으로 운영합니다.</p>
+            <p class="channel__desc">구매 접점에 있는 네이버 검색 고객을 찾아 홍보하고, 가장 신뢰도를 줄 수 있는 육아 블로그를 중심으로 운영합니다.</p>
           </article>
           <article class="channel">
             <div class="channel__ic"><img src="./images/marketing/ch_insta.png" alt="인스타그램" /></div>
             <h3 class="channel__name">인스타그램</h3>
             <p class="channel__role">확산 · 브랜딩</p>
-            <p class="channel__desc">감성 비주얼과 이벤트로 브랜드를 노출. 저장·공유가 일어나도록 콘텐츠를 기획해 확산을 만듭니다.</p>
+            <p class="channel__desc">감성 비주얼과 이벤트로 브랜드를 노출·저장·공유가 일어나도록 콘텐츠를 기획해 확산을 만듭니다.</p>
           </article>
           <article class="channel">
             <div class="channel__ic"><img src="./images/marketing/ch_cafe.png" alt="네이버 카페" /></div>
@@ -965,7 +1009,7 @@
         <div class="head">
           <p class="eyebrow" data-reveal>02 — SNS 발행 / 상위 노출</p>
           <h2 class="section-title" data-reveal>네이버 로직을 적용한,<br /><em>상위노출 글쓰기</em></h2>
-          <p class="lead" data-reveal>온라인 마케팅 대행 1위 ‘이상한마케팅’의 블로그 글쓰기 단(프블단)에 참여해, 네이버 블로그 로직을 적용한 콘텐츠로 상위노출을 만들었습니다.</p>
+          <p class="lead" data-reveal>온라인 마케팅 대행 1위 ‘이상한마케팅’의 블로그 글쓰기 단(프블단)에 참여해, <br>네이버 블로그 로직을 적용한 콘텐츠로 상위노출을 만들었습니다.</p>
         </div>
 
         <div class="rank">
@@ -988,8 +1032,64 @@
       </div>
     </section>
 
+    <!-- ============ 03 연간 광고비 효율 (채널별 비교) ============ -->
+    <section class="section" id="annual-ads">
+      <div class="container">
+        <div class="head">
+          <p class="eyebrow" data-reveal>02 — 연간 광고비 효율</p>
+          <h2 class="section-title" data-reveal>광고비 효율을 위해<br /><em>새로운 채널 확장</em>을 주도하다</h2>
+          <p class="lead" data-reveal>기존 네이버·구글·다음 채널의 낮은 전환 효율을 개선하기 위해,<br><strong>새로운 채널로 메타 광고를 직접 도입하고 확장을 주도</strong>했습니다. 그 결과 메타는 전체 예산의<br>약 10%만으로 전환의 80%를 만들며, 가장 높은 전환과 압도적인 효율을 기록했습니다.</p>
+        </div>
+
+        <div class="yads-tot" data-reveal>
+          <div class="yads-tot__item"><span class="yads-tot__lbl">총 광고비</span><span class="yads-tot__num">55,928,075<i>원</i></span></div>
+          <div class="yads-tot__item"><span class="yads-tot__lbl">총 전환수</span><span class="yads-tot__num">477<i>건</i></span></div>
+          <div class="yads-tot__item yads-tot__item--hl"><span class="yads-tot__lbl">메타 전환 비중</span><span class="yads-tot__num">80.7<i>%</i></span></div>
+        </div>
+
+        <div class="yads-grid" data-reveal>
+          <article class="yads-card">
+            <div class="yads-card__top"><span class="yads-card__ch">네이버</span></div>
+            <div class="yads-card__conv"><b>92</b><i>전환</i></div>
+            <div class="yads-card__bar"><span style="width:19.3%"></span></div>
+            <div class="yads-card__dl">
+              <div><dt>연 광고비</dt><dd>41,761,941원</dd></div>
+              <div><dt>전환당 비용</dt><dd>453,934원</dd></div>
+            </div>
+          </article>
+          <article class="yads-card">
+            <div class="yads-card__top"><span class="yads-card__ch">구글</span></div>
+            <div class="yads-card__conv"><b>0</b><i>전환</i></div>
+            <div class="yads-card__bar"><span style="width:0%"></span></div>
+            <div class="yads-card__dl">
+              <div><dt>연 광고비</dt><dd>5,469,000원</dd></div>
+              <div><dt>전환당 비용</dt><dd class="none">전환 없음</dd></div>
+            </div>
+          </article>
+          <article class="yads-card">
+            <div class="yads-card__top"><span class="yads-card__ch">다음</span></div>
+            <div class="yads-card__conv"><b>0</b><i>전환</i></div>
+            <div class="yads-card__bar"><span style="width:0%"></span></div>
+            <div class="yads-card__dl">
+              <div><dt>연 광고비</dt><dd>3,053,093원</dd></div>
+              <div><dt>전환당 비용</dt><dd class="none">전환 없음</dd></div>
+            </div>
+          </article>
+          <article class="yads-card yads-card--hl">
+            <div class="yads-card__top"><span class="yads-card__ch">메타</span><span class="yads-card__badge">BEST</span></div>
+            <div class="yads-card__conv"><b>385</b><i>전환</i></div>
+            <div class="yads-card__bar"><span style="width:80.7%"></span></div>
+            <div class="yads-card__dl">
+              <div><dt>연 광고비</dt><dd>5,644,041원</dd></div>
+              <div><dt>전환당 비용</dt><dd class="best">14,660원</dd></div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
     <!-- =====================================================================
-         02 — Meta Ads 퍼포먼스 케이스 (건축시공 오픈하우스 신규 고객 모객)
+         03 — Meta Ads 퍼포먼스 케이스 (건축시공 오픈하우스 신규 고객 모객)
          - 100% 인라인 SVG (외부 이미지 없음) / .mads-* 프리픽스
          - 도넛·연령 막대 차트 모두 인라인 SVG, .is-inview 시 실제로 채워짐
          ===================================================================== -->
@@ -1000,9 +1100,9 @@
         <!-- PART 1 · 서브 히어로 -->
         <div class="mads-hero">
         <div class="head" data-reveal>
-          <p class="eyebrow">02 — Meta Ads 퍼포먼스</p>
-          <h2 class="section-title">오픈하우스로 모은 <em>건축 신규 고객</em></h2>
-          <p class="lead">Facebook · Instagram 광고를 직접 기획·운영해, 건축시공 오픈하우스 방문·상담을 데이터 기반으로 확보했습니다.</p>
+          <p class="eyebrow">03 — Meta Ads 퍼포먼스</p>
+          <h2 class="section-title">계약 희망자만 모아 <em>자체 행사 초대</em></h2>
+          <p class="lead">Facebook · Instagram 광고를 직접 기획·운영해, <br>건축시공 오픈하우스 방문·상담을 데이터 기반으로 확보했습니다.</p>
         </div>
 
         <!-- ROW 1 : IG 광고 목업  |  프로젝트 개요 -->
@@ -1029,7 +1129,7 @@
                 </div>
                 <div class="mads-ov-row">
                   <dt>목표</dt>
-                  <dd>오픈하우스 방문·상담 예약 확보 <em>(신규 고객 + 브랜드 인지도)</em></dd>
+                  <dd>오픈하우스 방문·상담 예약 확보 <br><em>(신규 고객 + 브랜드 인지도)</em></dd>
                 </div>
                 <div class="mads-ov-row">
                   <dt>운영 역할</dt>
@@ -1123,7 +1223,7 @@
                 </div>
               </div>
               <div class="mads-funnel__text">
-                <p class="mads-funnel__cap">Meta 광고 하나로 전체 상담의 절반 이상을 만들어냈습니다.</p>
+                <p class="mads-funnel__cap">Meta 광고 하나로 전체 상담의<br>절반 이상을 만들어냈습니다.</p>
                 <span class="mads-badge">
                   <svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
                   효율적인 예산으로 최대 성과 달성
@@ -1165,7 +1265,7 @@
               </ul>
             </div>
 
-            <p class="mads-ages__note">예상보다 고연령 실수요층의 반응이 가장 좋았고, 해당 타겟에 예산을 집중하는 전략이 효과적이었습니다. 더 나아가 데이터 기반 지속 최적화로 상담 예약 꾸준히 증가했습니다.</p>
+            <p class="mads-ages__note">예상보다 고연령 실수요층의 반응이 가장 좋았고, 타겟에 예산을 집중하는 전략이 효과적이었습니다. 추후 데이터 기반 최적화로 전환이 꾸준히 증가했습니다.</p>
           </article>
         </div>
         </div><!-- /mads-report -->
@@ -1179,11 +1279,11 @@
         <div class="head">
           <p class="eyebrow" data-reveal>03 — 오프라인 캠페인</p>
           <h2 class="section-title" data-reveal>브랜드를 ‘경험’으로<br /><em>오프라인 BTL</em></h2>
-          <p class="lead" data-reveal>판촉·캠페인·콘서트·시상식·포럼까지. 아모레퍼시픽, 르노삼성자동차, SK플래닛 등 브랜드 이미지와 캠페인 목적에 어울리는 컨셉을 제안하고 실행했습니다.</p>
+          <p class="lead" data-reveal>판촉·캠페인·콘서트·시상식·포럼까지. 아모레퍼시픽, 르노삼성자동차, SK플래닛 등 <br>브랜드 이미지와 캠페인 목적에 어울리는 컨셉을 제안하고 실행했습니다.</p>
         </div>
 
         <div class="gal" data-reveal data-stagger>
-          <figure class="gal__item"><img src="./images/marketing/btl_1.png" alt="현장 판촉 캠페인" /><figcaption class="gal__cap">판촉 캠페인</figcaption></figure>
+          <figure class="gal__item"><img src="./images/marketing/btl_1.png" alt="현장 판촉 캠페인" /><figcaption class="gal__cap">사회공헌 캠페인</figcaption></figure>
           <figure class="gal__item"><img src="./images/marketing/btl_2.png" alt="브랜드 전시·부스 운영" /><figcaption class="gal__cap">전시 · 부스</figcaption></figure>
           <figure class="gal__item"><img src="./images/marketing/btl_3.png" alt="브랜드 콘서트 연출" /><figcaption class="gal__cap">콘서트 연출</figcaption></figure>
           <figure class="gal__item"><img src="./images/marketing/btl_4.png" alt="시상식 행사 운영" /><figcaption class="gal__cap">시상식</figcaption></figure>
@@ -1202,7 +1302,7 @@
           </article>
           <article class="ccard">
             <div class="ccard__media"><img src="./images/marketing/collab_2.png" alt="사회공헌 캠페인 업무협약" /></div>
-            <div class="ccard__body"><h4 class="ccard__t">사회공헌 · 협업</h4><p class="ccard__d">서울시 협력 사회공헌 전시회와 그린 캠페인 업무협약 등 공익 연계 협업을 기획·운영했습니다.</p></div>
+            <div class="ccard__body"><h4 class="ccard__t">사회공헌 · 협업</h4><p class="ccard__d">공익 목적의 서울시 협력 사회공헌 전시회와 그린 캠페인 업무협약을 기획·운영했습니다.</p></div>
           </article>
           <article class="ccard">
             <div class="ccard__media"><img src="./images/marketing/collab_3.png" alt="그룹사 제휴 마케팅" /></div>
@@ -1218,12 +1318,12 @@
         <div class="closing__inner">
           <p class="closing__fin" data-reveal>FIN.</p>
           <h2 class="closing__title" data-reveal>보기보다 <em>본질</em>을<br />먼저 생각합니다</h2>
-          <p class="closing__sub" data-reveal>예쁜 디자인보다, 팔리는 이유를 먼저 설계하는 마케터.<br />상품의 본질에서 출발해 온·오프라인을 잇는 경험을 만듭니다.</p>
+          <p class="closing__sub" data-reveal>예쁘기만한 디자인보다, 팔리는 이유를 먼저 설계하는 마케터.<br />상품의 본질에서 출발해 온·오프라인을 잇는 경험을 만듭니다.</p>
           <div class="closing__cta" data-reveal>
             <a class="btn btn--grad" href="./index.html#allproject">다른 프로젝트 보기
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
             </a>
-            <a class="btn btn--ghost" href="mailto:ujin2019@gmail.com">이메일로 문의하기</a>
+            <a class="btn btn--ghost" href="tel:01020774869">지원자에게 연락하기</a>
           </div>
         </div>
       </div>
