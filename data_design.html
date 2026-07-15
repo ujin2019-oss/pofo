@@ -91,12 +91,14 @@
     }
     .dd-card__preview iframe {
       position: absolute;
-      top: 0;
+      /* 위로 끌어올려 PDF 뷰어가 페이지 상단에 만드는 검은 띠(그림자/여백)를
+         카드 영역(overflow:hidden) 바깥으로 잘라냄 */
+      top: -14px;
       left: 0;
       /* 컨테이너보다 넓고 길게 만들어, PDF 뷰어의 세로 스크롤바(우측)와
-         하단 여백이 overflow:hidden 바깥으로 잘려나가도록 함 */
+         상·하단 여백이 overflow:hidden 바깥으로 잘려나가도록 함 */
       width: calc(100% + 28px);
-      height: calc(100% + 70px);
+      height: calc(100% + 90px);
       border: 0;
       pointer-events: none;      /* 미리보기는 클릭 통과 (카드 링크 우선) */
     }
