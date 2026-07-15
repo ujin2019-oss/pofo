@@ -91,13 +91,14 @@
     }
     .dd-card__preview iframe {
       position: absolute;
-      top: -8px; left: 0;
-      width: 100%;
-      height: calc(100% + 40px);
+      top: 0;
+      left: 0;
+      /* 컨테이너보다 넓고 길게 만들어, PDF 뷰어의 세로 스크롤바(우측)와
+         하단 여백이 overflow:hidden 바깥으로 잘려나가도록 함 */
+      width: calc(100% + 28px);
+      height: calc(100% + 70px);
       border: 0;
       pointer-events: none;      /* 미리보기는 클릭 통과 (카드 링크 우선) */
-      transform: scale(1.02);
-      transform-origin: top center;
     }
     .dd-card__index {
       position: absolute;
@@ -235,7 +236,7 @@
             <div class="dd-card__preview">
               <span class="dd-card__index">01</span>
               <iframe
-                src="./data/강수량정보.pdf#toolbar=0&navpanes=0&scrollbar=0&view=FitH"
+                src="./data/paju-weather.pdf#toolbar=0&navpanes=0&scrollbar=0&view=FitH"
                 title="파주 재난안전 기상정보 대시보드 미리보기"
                 loading="lazy"
               ></iframe>
@@ -267,7 +268,7 @@
                   <span class="dd-meta__label">차트 갱신</span>
                 </div>
               </div>
-              <a class="dd-card__link" href="./data/강수량정보.pdf" target="_blank" rel="noopener">
+              <a class="dd-card__link" href="./data/paju-weather.pdf" target="_blank" rel="noopener">
                 원본 보기 →
               </a>
             </div>
@@ -278,7 +279,7 @@
             <div class="dd-card__preview">
               <span class="dd-card__index">02</span>
               <iframe
-                src="./data/학습 보드 사용자 페이지.pdf#toolbar=0&navpanes=0&scrollbar=0&view=FitH"
+                src="./data/modoo-board.pdf#toolbar=0&navpanes=0&scrollbar=0&view=FitH"
                 title="MODOO 학습 데이터 플랫폼 미리보기"
                 loading="lazy"
               ></iframe>
@@ -310,7 +311,7 @@
                   <span class="dd-meta__label">내 콘텐츠</span>
                 </div>
               </div>
-              <a class="dd-card__link" href="./data/학습 보드 사용자 페이지.pdf" target="_blank" rel="noopener">
+              <a class="dd-card__link" href="./data/modoo-board.pdf" target="_blank" rel="noopener">
                 원본 보기 →
               </a>
             </div>
@@ -321,7 +322,7 @@
             <div class="dd-card__preview">
               <span class="dd-card__index">03</span>
               <iframe
-                src="./data/[완성] 위(Wee) 클래스 2021.03.22 (PDF).pdf#toolbar=0&navpanes=0&scrollbar=0&view=FitH"
+                src="./data/wee-class-guide.pdf#toolbar=0&navpanes=0&scrollbar=0&view=FitH"
                 title="위(Wee) 클래스 안내 가이드 미리보기"
                 loading="lazy"
               ></iframe>
@@ -353,7 +354,7 @@
                   <span class="dd-meta__label">연계 기관</span>
                 </div>
               </div>
-              <a class="dd-card__link" href="./data/[완성] 위(Wee) 클래스 2021.03.22 (PDF).pdf" target="_blank" rel="noopener">
+              <a class="dd-card__link" href="./data/wee-class-guide.pdf" target="_blank" rel="noopener">
                 원본 보기 →
               </a>
             </div>
