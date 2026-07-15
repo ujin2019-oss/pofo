@@ -91,14 +91,13 @@
     }
     .dd-card__preview iframe {
       position: absolute;
-      /* 위로 끌어올려 PDF 뷰어가 페이지 상단에 만드는 검은 띠(그림자/여백)를
-         카드 영역(overflow:hidden) 바깥으로 잘라냄 */
+      /* iframe을 컨테이너보다 상·하·좌·우로 모두 넘치게 만들어,
+         PDF 뷰어가 페이지 가장자리에 만드는 여백/그림자 띠와 스크롤바가
+         카드 영역(overflow:hidden) 바깥으로 잘려나가도록 함 */
       top: -14px;
-      left: 0;
-      /* 컨테이너보다 넓고 길게 만들어, PDF 뷰어의 세로 스크롤바(우측)와
-         상·하단 여백이 overflow:hidden 바깥으로 잘려나가도록 함 */
-      width: calc(100% + 28px);
-      height: calc(100% + 90px);
+      left: -16px;
+      width: calc(100% + 44px);   /* 좌 16 + 우 28 넘침 */
+      height: calc(100% + 90px);  /* 상 14 + 하 76 넘침 */
       border: 0;
       pointer-events: none;      /* 미리보기는 클릭 통과 (카드 링크 우선) */
     }
@@ -222,7 +221,7 @@
         <span class="dd-hero__eyebrow">DATA · DESIGN</span>
         <h1 class="dd-hero__title">데이터를 <span>보기 쉽게</span> 설계한 작업</h1>
         <p class="dd-hero__desc">
-          실시간 기상 데이터 대시보드, AI 학습 데이터 플랫폼, 상담 현황 인포그래픽까지.
+          실시간 기상 데이터 대시보드, AI 학습 데이터 플랫폼, 상담 현황 인포그래픽까지.<br>
           복잡한 데이터를 한눈에 읽히도록 정리한 디자인 작업을 모았습니다.
         </p>
       </div>
